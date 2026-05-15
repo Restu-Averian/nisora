@@ -1,0 +1,31 @@
+@layer components {
+  .form-control {
+    width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid #d6cbbd;
+    background: rgb(250 246 240 / 0.75);
+    padding-inline: 0.625rem;
+    font-size: 0.875rem;
+    color: #141118;
+    box-shadow: 0 1px 2px rgb(20 17 24 / 0.05);
+    outline: none;
+    transition:
+      border-color 160ms ease,
+      box-shadow 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .form-control::placeholder {
+    color: #8f8880;
+  }
+
+  .form-control:focus {
+    border-color: #8fa8c7;
+    box-shadow: 0 0 0 2px rgb(143 168 199 / 0.25);
+  }
+
+  .drawer-fieldset {
+    display: grid;
+    gap: 1rem;
+  }
+}
