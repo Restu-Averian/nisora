@@ -3,17 +3,18 @@ import { Tabs as TabsPrimitive } from "radix-ui";
 import { cn } from "@/lib/utils";
 
 /**
+ * @typedef {React.ComponentProps<typeof TabsPrimitive.Root>} TabsProps
+ * @typedef {React.ComponentProps<typeof TabsPrimitive.List>} TabsListProps
+ * @typedef {React.ComponentProps<typeof TabsPrimitive.Trigger>} TabsTriggerProps
+ * @typedef {React.ComponentProps<typeof TabsPrimitive.Content>} TabsContentProps
+ */
+
+/**
  * Tabs root container built on Radix Tabs primitive.
  * Manages the active tab state.
  *
  * @component
- * @param {string}  [className]       - Additional Tailwind classes to merge.
- * @param {string}  [value]           - Controlled active tab value.
- * @param {string}  [defaultValue]    - Default active tab value (uncontrolled).
- * @param {(value: string) => void} [onValueChange] - Callback when active tab changes.
- * @param {"horizontal"|"vertical"} [orientation="horizontal"] - Tabs orientation.
- * @param {"automatic"|"manual"} [activationMode="automatic"] - Whether tab activates on focus or click.
- * @param {*} props - Additional Radix Tabs.Root props spread to the root element.
+ * @param {TabsProps} props
  * @returns {React.JSX.Element}
  *
  * @example
@@ -42,9 +43,7 @@ function Tabs({ className, ...props }) {
  * Wraps Radix Tabs.List.
  *
  * @component
- * @param {string}  [className] - Additional Tailwind classes.
- * @param {boolean} [loop]      - When true, keyboard navigation loops from last to first tab.
- * @param {*} props - Additional Radix Tabs.List props.
+ * @param {TabsListProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -63,10 +62,7 @@ function TabsList({ className, ...props }) {
  * Wraps Radix Tabs.Trigger.
  *
  * @component
- * @param {string}  [className] - Additional Tailwind classes.
- * @param {string}   value       - The value identifying this trigger (required).
- * @param {boolean} [disabled]  - When true, the trigger cannot be interacted with.
- * @param {*} props - Additional Radix Tabs.Trigger props.
+ * @param {TabsTriggerProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -88,10 +84,7 @@ function TabsTrigger({ className, ...props }) {
  * Wraps Radix Tabs.Content.
  *
  * @component
- * @param {string}  [className]  - Additional Tailwind classes.
- * @param {string}   value        - The value linking to a TabsTrigger (required).
- * @param {boolean} [forceMount] - Always render content in DOM even when not active.
- * @param {*} props - Additional Radix Tabs.Content props.
+ * @param {TabsContentProps} props
  * @returns {React.JSX.Element}
  */
 

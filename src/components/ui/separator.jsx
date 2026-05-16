@@ -1,19 +1,19 @@
 "use client";
 
-import * as React from "react";
 import { Separator as SeparatorPrimitive } from "radix-ui";
 
 import { cn } from "@/lib/utils";
+
+/**
+ * @typedef {React.ComponentProps<typeof SeparatorPrimitive.Root>} SeparatorProps
+ */
 
 /**
  * Separator component built on Radix Separator primitive.
  * Renders an accessible horizontal or vertical divider.
  *
  * @component
- * @param {string}                [className]         - Additional Tailwind classes to merge.
- * @param {"horizontal"|"vertical"} [orientation="horizontal"] - Axis of the separator.
- * @param {boolean}               [decorative=true]   - When true, hides from accessibility tree.
- * @param {*} props - Additional props (id, aria attributes, etc.) spread to the Radix Separator.Root element.
+ * @param {SeparatorProps} props
  * @returns {React.JSX.Element}
  *
  * @example

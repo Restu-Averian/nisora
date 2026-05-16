@@ -8,8 +8,7 @@ import { Separator } from "@/components/ui/separator";
  * FieldSet — `<fieldset>` wrapper for grouping related fields.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {*} props - Native `<fieldset>` attributes (disabled, form, etc.) spread to the root element.
+ * @param {FieldSetProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -30,9 +29,7 @@ function FieldSet({ className, ...props }) {
  * FieldLegend — `<legend>` inside a FieldSet.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {"legend"|"label"} [variant="legend"] - Style variant.
- * @param {*} props - Native `<legend>` attributes.
+ * @param {FieldLegendProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -55,8 +52,7 @@ function FieldLegend({ className, variant = "legend", ...props }) {
  * Supports responsive orientation via `@container` queries.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {*} props - Native `<div>` attributes.
+ * @param {FieldGroupProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -92,13 +88,30 @@ const fieldVariants = cva(
 );
 
 /**
+ * @typedef {import("class-variance-authority").VariantProps<typeof fieldVariants>} FieldVariantProps
+ * @typedef {React.ComponentProps<"fieldset">} FieldSetProps
+ * @typedef {React.ComponentProps<"legend"> & {
+ *   variant?: "legend" | "label"
+ * }} FieldLegendProps
+ * @typedef {React.ComponentProps<"div">} FieldGroupProps
+ * @typedef {React.ComponentProps<"div"> & FieldVariantProps} FieldProps
+ * @typedef {React.ComponentProps<"div">} FieldContentProps
+ * @typedef {React.ComponentProps<typeof Label>} FieldLabelProps
+ * @typedef {React.ComponentProps<"div">} FieldTitleProps
+ * @typedef {React.ComponentProps<"p">} FieldDescriptionProps
+ * @typedef {React.ComponentProps<"div">} FieldSeparatorProps
+ * @typedef {{ message?: string }} FieldErrorItem
+ * @typedef {React.ComponentProps<"div"> & {
+ *   errors?: FieldErrorItem[]
+ * }} FieldErrorProps
+ */
+
+/**
  * Field — single form field wrapper with label/content layout.
  * Orientation is controlled via `fieldVariants` CVA.
  *
  * @component
- * @param {string}                      [className]             - Additional Tailwind classes.
- * @param {"vertical"|"horizontal"|"responsive"} [orientation="vertical"] - Layout direction.
- * @param {*} props - Native `<div>` attributes.
+ * @param {FieldProps} props
  * @returns {React.JSX.Element}
  *
  * @example
@@ -127,8 +140,7 @@ function Field({ className, orientation = "vertical", ...props }) {
  * FieldContent — wrapper for the input / control part of a Field.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {*} props - Native `<div>` attributes.
+ * @param {FieldContentProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -149,8 +161,7 @@ function FieldContent({ className, ...props }) {
  * FieldLabel — label for a field, built on the `Label` component.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {*} props - Label props (htmlFor, children, etc.) spread to the Label element.
+ * @param {FieldLabelProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -172,8 +183,7 @@ function FieldLabel({ className, ...props }) {
  * FieldTitle — unstyled title text used inside a FieldLabel or standalone.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {*} props - Native `<div>` attributes.
+ * @param {FieldTitleProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -194,8 +204,7 @@ function FieldTitle({ className, ...props }) {
  * FieldDescription — helper text displayed below a field input.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {*} props - Native `<p>` attributes.
+ * @param {FieldDescriptionProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -218,9 +227,7 @@ function FieldDescription({ className, ...props }) {
  * FieldSeparator — horizontal divider with optional label, used between field groups.
  *
  * @component
- * @param {string}  [className] - Additional Tailwind classes.
- * @param {*} [children] - Optional label rendered inside the separator.
- * @param {*} props - Native `<div>` attributes.
+ * @param {FieldSeparatorProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -254,10 +261,7 @@ function FieldSeparator({ children, className, ...props }) {
  * Deduplicates errors by message.
  *
  * @component
- * @param {string}  [className] - Additional Tailwind classes.
- * @param {*}       [children]  - Static error content (overrides `errors`).
- * @param {{message?: string}[]} [errors] - Array of error objects, each with an optional `message`.
- * @param {*} props - Native `<div>` attributes.
+ * @param {FieldErrorProps} props
  * @returns {React.JSX.Element|null}
  *
  * @example

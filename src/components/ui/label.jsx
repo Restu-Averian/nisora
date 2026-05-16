@@ -1,16 +1,17 @@
-import * as React from "react";
 import { Label as LabelPrimitive } from "radix-ui";
 
 import { cn } from "@/lib/utils";
+
+/**
+ * @typedef {React.ComponentProps<typeof LabelPrimitive.Root>} LabelProps
+ */
 
 /**
  * Label component built on Radix Label primitive.
  * Supports `htmlFor` for associating with form controls.
  *
  * @component
- * @param {string}  [className] - Additional Tailwind classes to merge.
- * @param {string}  [htmlFor]   - ID of the form element this label is bound to.
- * @param {*} props - Native `<label>` attributes (children, etc.) spread to the root element.
+ * @param {LabelProps} props
  * @returns {React.JSX.Element}
  *
  * @example

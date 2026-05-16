@@ -1,23 +1,26 @@
-import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 
 import { cn } from "@/lib/utils"
+
+/**
+ * @typedef {React.ComponentProps<typeof DrawerPrimitive.Root>} DrawerProps
+ * @typedef {React.ComponentProps<typeof DrawerPrimitive.Trigger>} DrawerTriggerProps
+ * @typedef {React.ComponentProps<typeof DrawerPrimitive.Portal>} DrawerPortalProps
+ * @typedef {React.ComponentProps<typeof DrawerPrimitive.Close>} DrawerCloseProps
+ * @typedef {React.ComponentProps<typeof DrawerPrimitive.Overlay>} DrawerOverlayProps
+ * @typedef {React.ComponentProps<typeof DrawerPrimitive.Content>} DrawerContentProps
+ * @typedef {React.ComponentProps<"div">} DrawerHeaderProps
+ * @typedef {React.ComponentProps<"div">} DrawerFooterProps
+ * @typedef {React.ComponentProps<typeof DrawerPrimitive.Title>} DrawerTitleProps
+ * @typedef {React.ComponentProps<typeof DrawerPrimitive.Description>} DrawerDescriptionProps
+ */
 
 /**
  * Drawer root — Vaul drawer container.
  * Manages open state, direction, snap points, and gesture behavior.
  *
  * @component
- * @param {boolean}  [open]                  - Controlled open state.
- * @param {(open: boolean) => void} [onOpenChange] - Callback when open state changes.
- * @param {"bottom"|"top"|"left"|"right"} [direction="bottom"] - Drawer entrance direction.
- * @param {boolean}  [modal=true]            - When true, interaction with rest of page is blocked.
- * @param {string[]|number[]} [snapPoints]   - Snap positions as percentages or pixels.
- * @param {boolean}  [dismissible=true]      - When true, can be dismissed via backdrop press / escape.
- * @param {boolean}  [noBodyStyles=false]    - Prevents Vaul from setting body styles.
- * @param {boolean}  [shouldScaleBackground] - Scales the background when drawer opens.
- * @param {boolean}  [nested]                - When true, renders as a nested drawer.
- * @param {*} props - Additional Vaul Drawer.Root props.
+ * @param {DrawerProps} props
  * @returns {React.JSX.Element}
  *
  * @see https://github.com/emilkowalski/vaul
@@ -34,8 +37,7 @@ function Drawer({
  * Wraps Vaul Drawer.Trigger.
  *
  * @component
- * @param {boolean} [asChild] - When true, renders children via Radix Slot instead of a `<button>`.
- * @param {*} props - Additional Vaul Drawer.Trigger props.
+ * @param {DrawerTriggerProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -50,9 +52,7 @@ function DrawerTrigger({
  * Wraps Vaul Drawer.Portal.
  *
  * @component
- * @param {HTMLElement} [container] - DOM element to portal into (defaults to document.body).
- * @param {boolean}     [forceMount] - Always mount children in DOM.
- * @param {*} props - Additional Vaul Drawer.Portal props.
+ * @param {DrawerPortalProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -67,8 +67,7 @@ function DrawerPortal({
  * Wraps Vaul Drawer.Close.
  *
  * @component
- * @param {boolean} [asChild] - When true, renders children via Radix Slot instead of a `<button>`.
- * @param {*} props - Additional Vaul Drawer.Close props.
+ * @param {DrawerCloseProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -83,9 +82,7 @@ function DrawerClose({
  * Wraps Vaul Drawer.Overlay.
  *
  * @component
- * @param {string}  [className]  - Additional Tailwind classes.
- * @param {boolean} [forceMount] - Always mount in DOM.
- * @param {*} props - Additional Vaul Drawer.Overlay props.
+ * @param {DrawerOverlayProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -109,10 +106,7 @@ function DrawerOverlay({
  * Wraps Vaul Drawer.Content.
  *
  * @component
- * @param {string}  [className]  - Additional Tailwind classes.
- * @param {*} [children] - Content rendered inside the drawer panel.
- * @param {boolean} [forceMount] - Always mount in DOM.
- * @param {*} props - Additional Vaul Drawer.Content props.
+ * @param {DrawerContentProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -144,8 +138,7 @@ function DrawerContent({
  * Text is centered for bottom/top drawers on mobile, left-aligned on desktop.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {*} props - Native `<div>` attributes.
+ * @param {DrawerHeaderProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -168,8 +161,7 @@ function DrawerHeader({
  * DrawerFooter — wrapper for action buttons at the bottom of the drawer panel.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {*} props - Native `<div>` attributes.
+ * @param {DrawerFooterProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -190,8 +182,7 @@ function DrawerFooter({
  * Wraps Vaul Drawer.Title for accessibility.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {*} props - Additional Vaul Drawer.Title props.
+ * @param {DrawerTitleProps} props
  * @returns {React.JSX.Element}
  */
 
@@ -215,8 +206,7 @@ function DrawerTitle({
  * Wraps Vaul Drawer.Description for accessibility.
  *
  * @component
- * @param {string} [className] - Additional Tailwind classes.
- * @param {*} props - Additional Vaul Drawer.Description props.
+ * @param {DrawerDescriptionProps} props
  * @returns {React.JSX.Element}
  */
 

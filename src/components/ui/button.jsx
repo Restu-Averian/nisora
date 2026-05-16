@@ -1,4 +1,3 @@
-import * as React from "react";
 import { cva } from "class-variance-authority";
 import { Slot } from "radix-ui";
 
@@ -7,14 +6,6 @@ import { cn } from "@/lib/utils";
 /**
  * Button component with multiple variants and sizes.
  * Uses Radix Slot.Root for polymorphic `asChild` support.
- *
- * @component
- * @param {string}        [className]       - Additional Tailwind classes to merge.
- * @param {"default"|"outline"|"secondary"|"ghost"|"destructive"|"link"} [variant="default"] - Visual style variant.
- * @param {"default"|"xs"|"sm"|"lg"|"icon"|"icon-xs"|"icon-sm"|"icon-lg"} [size="default"] - Size preset.
- * @param {boolean}       [asChild=false]   - When true, renders children via Radix Slot instead of a `<button>`.
- * @param {*} props - Native button props (type, disabled, onClick, children, etc.) spread to the root element.
- * @returns {React.JSX.Element}
  *
  * @example
  * <Button variant="outline" size="sm" onClick={handleClick}>
@@ -62,6 +53,18 @@ const buttonVariants = cva(
   },
 );
 
+/**
+ * @typedef {import("class-variance-authority").VariantProps<typeof buttonVariants>} ButtonVariantProps
+ * @typedef {import("react").ComponentPropsWithoutRef<"button"> &
+ *   ButtonVariantProps & {
+ *     asChild?: boolean
+ *   }} ButtonProps
+ */
+
+/**
+ * @param {ButtonProps} props
+ * @returns {React.JSX.Element}
+ */
 function Button({
   className,
   variant = "default",
