@@ -1,6 +1,5 @@
 import { Book, ChevronLeft, Menu, Search, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Field, FieldContent } from "../ui/field";
 
 export default function Header() {
   return (
@@ -13,18 +12,6 @@ export default function Header() {
               Nisora
             </p>
           </div>
-
-          <Field className="gap-1.5">
-            <FieldContent className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                className="form-control h-8 pl-9"
-                id="search-book"
-                placeholder="Cari Koleksi"
-                type="text"
-              />
-            </FieldContent>
-          </Field>
         </div>
 
         <nav aria-label="Navigasi halaman" className="flex items-center gap-3">

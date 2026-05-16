@@ -52,10 +52,7 @@ function TabsList({ className, ...props }) {
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
-      className={cn(
-        "flex flex-wrap items-end gap-2 border-b border-border",
-        className,
-      )}
+      className={cn("flex flex-wrap items-end gap-2 border-border", className)}
       {...props}
     />
   );
