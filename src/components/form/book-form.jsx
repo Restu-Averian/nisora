@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plus, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DrawerClose } from "@/components/ui/drawer";
@@ -11,7 +11,14 @@ import {
 
 export default function BookForm() {
   const [coverFile, setCoverFile] = useState(null);
-  const [coverPreview, setCoverPreview] = useState("");
+
+  const coverPreview = useMemo(() => {
+    if (!coverFile) {
+      return "";
+    }
+
+    return URL.createObjectURL(coverFile);
+  }, [coverFile]);
 
   function handleCoverChange(event) {
     const file = event.target.files?.[0];
@@ -19,16 +26,12 @@ export default function BookForm() {
   }
 
   useEffect(() => {
-    if (!coverFile) {
-      setCoverPreview("");
+    if (!coverPreview) {
       return;
     }
 
-    const objectUrl = URL.createObjectURL(coverFile);
-    setCoverPreview(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [coverFile]);
+    return () => URL.revokeObjectURL(coverPreview);
+  }, [coverPreview]);
 
   return (
     <form>
