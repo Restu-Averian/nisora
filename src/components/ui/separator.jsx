@@ -5,15 +5,11 @@ import { Separator as SeparatorPrimitive } from "radix-ui";
 import { cn } from "@/lib/utils";
 
 /**
- * @typedef {React.ComponentProps<typeof SeparatorPrimitive.Root>} SeparatorProps
- */
-
-/**
  * Separator component built on Radix Separator primitive.
  * Renders an accessible horizontal or vertical divider.
  *
  * @component
- * @param {SeparatorProps} props
+ * @param {React.ComponentProps<typeof SeparatorPrimitive.Root>} props
  * @returns {React.JSX.Element}
  *
  * @example

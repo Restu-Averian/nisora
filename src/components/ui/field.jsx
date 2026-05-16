@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
  * FieldSet — `<fieldset>` wrapper for grouping related fields.
  *
  * @component
- * @param {FieldSetProps} props
+ * @param {React.ComponentProps<"fieldset">} props
  * @returns {React.JSX.Element}
  */
 
@@ -29,7 +29,7 @@ function FieldSet({ className, ...props }) {
  * FieldLegend — `<legend>` inside a FieldSet.
  *
  * @component
- * @param {FieldLegendProps} props
+ * @param {React.ComponentProps<"legend"> & { variant?: "legend" | "label" }} props
  * @returns {React.JSX.Element}
  */
 
@@ -52,7 +52,7 @@ function FieldLegend({ className, variant = "legend", ...props }) {
  * Supports responsive orientation via `@container` queries.
  *
  * @component
- * @param {FieldGroupProps} props
+ * @param {React.ComponentProps<"div">} props
  * @returns {React.JSX.Element}
  */
 
@@ -88,30 +88,13 @@ const fieldVariants = cva(
 );
 
 /**
- * @typedef {import("class-variance-authority").VariantProps<typeof fieldVariants>} FieldVariantProps
- * @typedef {React.ComponentProps<"fieldset">} FieldSetProps
- * @typedef {React.ComponentProps<"legend"> & {
- *   variant?: "legend" | "label"
- * }} FieldLegendProps
- * @typedef {React.ComponentProps<"div">} FieldGroupProps
- * @typedef {React.ComponentProps<"div"> & FieldVariantProps} FieldProps
- * @typedef {React.ComponentProps<"div">} FieldContentProps
- * @typedef {React.ComponentProps<typeof Label>} FieldLabelProps
- * @typedef {React.ComponentProps<"div">} FieldTitleProps
- * @typedef {React.ComponentProps<"p">} FieldDescriptionProps
- * @typedef {React.ComponentProps<"div">} FieldSeparatorProps
- * @typedef {{ message?: string }} FieldErrorItem
- * @typedef {React.ComponentProps<"div"> & {
- *   errors?: FieldErrorItem[]
- * }} FieldErrorProps
- */
-
-/**
  * Field — single form field wrapper with label/content layout.
  * Orientation is controlled via `fieldVariants` CVA.
  *
  * @component
- * @param {FieldProps} props
+ * @param {React.ComponentProps<"div"> &
+ *   import("class-variance-authority").VariantProps<typeof fieldVariants>
+ * } props
  * @returns {React.JSX.Element}
  *
  * @example
@@ -140,7 +123,7 @@ function Field({ className, orientation = "vertical", ...props }) {
  * FieldContent — wrapper for the input / control part of a Field.
  *
  * @component
- * @param {FieldContentProps} props
+ * @param {React.ComponentProps<"div">} props
  * @returns {React.JSX.Element}
  */
 
@@ -161,7 +144,7 @@ function FieldContent({ className, ...props }) {
  * FieldLabel — label for a field, built on the `Label` component.
  *
  * @component
- * @param {FieldLabelProps} props
+ * @param {React.ComponentProps<typeof Label>} props
  * @returns {React.JSX.Element}
  */
 
@@ -183,7 +166,7 @@ function FieldLabel({ className, ...props }) {
  * FieldTitle — unstyled title text used inside a FieldLabel or standalone.
  *
  * @component
- * @param {FieldTitleProps} props
+ * @param {React.ComponentProps<"div">} props
  * @returns {React.JSX.Element}
  */
 
@@ -204,7 +187,7 @@ function FieldTitle({ className, ...props }) {
  * FieldDescription — helper text displayed below a field input.
  *
  * @component
- * @param {FieldDescriptionProps} props
+ * @param {React.ComponentProps<"p">} props
  * @returns {React.JSX.Element}
  */
 
@@ -227,7 +210,7 @@ function FieldDescription({ className, ...props }) {
  * FieldSeparator — horizontal divider with optional label, used between field groups.
  *
  * @component
- * @param {FieldSeparatorProps} props
+ * @param {React.ComponentProps<"div">} props
  * @returns {React.JSX.Element}
  */
 
@@ -261,7 +244,7 @@ function FieldSeparator({ children, className, ...props }) {
  * Deduplicates errors by message.
  *
  * @component
- * @param {FieldErrorProps} props
+ * @param {React.ComponentProps<"div"> & { errors?: { message?: string }[] }} props
  * @returns {React.JSX.Element|null}
  *
  * @example

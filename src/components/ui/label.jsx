@@ -3,15 +3,11 @@ import { Label as LabelPrimitive } from "radix-ui";
 import { cn } from "@/lib/utils";
 
 /**
- * @typedef {React.ComponentProps<typeof LabelPrimitive.Root>} LabelProps
- */
-
-/**
  * Label component built on Radix Label primitive.
  * Supports `htmlFor` for associating with form controls.
  *
  * @component
- * @param {LabelProps} props
+ * @param {React.ComponentProps<typeof LabelPrimitive.Root>} props
  * @returns {React.JSX.Element}
  *
  * @example

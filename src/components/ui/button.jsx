@@ -54,15 +54,10 @@ const buttonVariants = cva(
 );
 
 /**
- * @typedef {import("class-variance-authority").VariantProps<typeof buttonVariants>} ButtonVariantProps
- * @typedef {import("react").ComponentPropsWithoutRef<"button"> &
- *   ButtonVariantProps & {
+ * @param {import("react").ComponentPropsWithoutRef<"button"> &
+ *   import("class-variance-authority").VariantProps<typeof buttonVariants> & {
  *     asChild?: boolean
- *   }} ButtonProps
- */
-
-/**
- * @param {ButtonProps} props
+ *   }} props
  * @returns {React.JSX.Element}
  */
 function Button({

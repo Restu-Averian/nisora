@@ -3,18 +3,11 @@ import { Tabs as TabsPrimitive } from "radix-ui";
 import { cn } from "@/lib/utils";
 
 /**
- * @typedef {React.ComponentProps<typeof TabsPrimitive.Root>} TabsProps
- * @typedef {React.ComponentProps<typeof TabsPrimitive.List>} TabsListProps
- * @typedef {React.ComponentProps<typeof TabsPrimitive.Trigger>} TabsTriggerProps
- * @typedef {React.ComponentProps<typeof TabsPrimitive.Content>} TabsContentProps
- */
-
-/**
  * Tabs root container built on Radix Tabs primitive.
  * Manages the active tab state.
  *
  * @component
- * @param {TabsProps} props
+ * @param {React.ComponentProps<typeof TabsPrimitive.Root>} props
  * @returns {React.JSX.Element}
  *
  * @example
@@ -43,7 +36,7 @@ function Tabs({ className, ...props }) {
  * Wraps Radix Tabs.List.
  *
  * @component
- * @param {TabsListProps} props
+ * @param {React.ComponentProps<typeof TabsPrimitive.List>} props
  * @returns {React.JSX.Element}
  */
 
@@ -62,7 +55,7 @@ function TabsList({ className, ...props }) {
  * Wraps Radix Tabs.Trigger.
  *
  * @component
- * @param {TabsTriggerProps} props
+ * @param {React.ComponentProps<typeof TabsPrimitive.Trigger>} props
  * @returns {React.JSX.Element}
  */
 
@@ -84,7 +77,7 @@ function TabsTrigger({ className, ...props }) {
  * Wraps Radix Tabs.Content.
  *
  * @component
- * @param {TabsContentProps} props
+ * @param {React.ComponentProps<typeof TabsPrimitive.Content>} props
  * @returns {React.JSX.Element}
  */
 

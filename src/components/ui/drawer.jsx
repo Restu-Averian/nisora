@@ -3,24 +3,11 @@ import { Drawer as DrawerPrimitive } from "vaul"
 import { cn } from "@/lib/utils"
 
 /**
- * @typedef {React.ComponentProps<typeof DrawerPrimitive.Root>} DrawerProps
- * @typedef {React.ComponentProps<typeof DrawerPrimitive.Trigger>} DrawerTriggerProps
- * @typedef {React.ComponentProps<typeof DrawerPrimitive.Portal>} DrawerPortalProps
- * @typedef {React.ComponentProps<typeof DrawerPrimitive.Close>} DrawerCloseProps
- * @typedef {React.ComponentProps<typeof DrawerPrimitive.Overlay>} DrawerOverlayProps
- * @typedef {React.ComponentProps<typeof DrawerPrimitive.Content>} DrawerContentProps
- * @typedef {React.ComponentProps<"div">} DrawerHeaderProps
- * @typedef {React.ComponentProps<"div">} DrawerFooterProps
- * @typedef {React.ComponentProps<typeof DrawerPrimitive.Title>} DrawerTitleProps
- * @typedef {React.ComponentProps<typeof DrawerPrimitive.Description>} DrawerDescriptionProps
- */
-
-/**
  * Drawer root — Vaul drawer container.
  * Manages open state, direction, snap points, and gesture behavior.
  *
  * @component
- * @param {DrawerProps} props
+ * @param {React.ComponentProps<typeof DrawerPrimitive.Root>} props
  * @returns {React.JSX.Element}
  *
  * @see https://github.com/emilkowalski/vaul
@@ -37,7 +24,7 @@ function Drawer({
  * Wraps Vaul Drawer.Trigger.
  *
  * @component
- * @param {DrawerTriggerProps} props
+ * @param {React.ComponentProps<typeof DrawerPrimitive.Trigger>} props
  * @returns {React.JSX.Element}
  */
 
@@ -52,7 +39,7 @@ function DrawerTrigger({
  * Wraps Vaul Drawer.Portal.
  *
  * @component
- * @param {DrawerPortalProps} props
+ * @param {React.ComponentProps<typeof DrawerPrimitive.Portal>} props
  * @returns {React.JSX.Element}
  */
 
@@ -67,7 +54,7 @@ function DrawerPortal({
  * Wraps Vaul Drawer.Close.
  *
  * @component
- * @param {DrawerCloseProps} props
+ * @param {React.ComponentProps<typeof DrawerPrimitive.Close>} props
  * @returns {React.JSX.Element}
  */
 
@@ -82,7 +69,7 @@ function DrawerClose({
  * Wraps Vaul Drawer.Overlay.
  *
  * @component
- * @param {DrawerOverlayProps} props
+ * @param {React.ComponentProps<typeof DrawerPrimitive.Overlay>} props
  * @returns {React.JSX.Element}
  */
 
@@ -106,7 +93,7 @@ function DrawerOverlay({
  * Wraps Vaul Drawer.Content.
  *
  * @component
- * @param {DrawerContentProps} props
+ * @param {React.ComponentProps<typeof DrawerPrimitive.Content>} props
  * @returns {React.JSX.Element}
  */
 
@@ -138,7 +125,7 @@ function DrawerContent({
  * Text is centered for bottom/top drawers on mobile, left-aligned on desktop.
  *
  * @component
- * @param {DrawerHeaderProps} props
+ * @param {React.ComponentProps<"div">} props
  * @returns {React.JSX.Element}
  */
 
@@ -161,7 +148,7 @@ function DrawerHeader({
  * DrawerFooter — wrapper for action buttons at the bottom of the drawer panel.
  *
  * @component
- * @param {DrawerFooterProps} props
+ * @param {React.ComponentProps<"div">} props
  * @returns {React.JSX.Element}
  */
 
@@ -182,7 +169,7 @@ function DrawerFooter({
  * Wraps Vaul Drawer.Title for accessibility.
  *
  * @component
- * @param {DrawerTitleProps} props
+ * @param {React.ComponentProps<typeof DrawerPrimitive.Title>} props
  * @returns {React.JSX.Element}
  */
 
@@ -206,7 +193,7 @@ function DrawerTitle({
  * Wraps Vaul Drawer.Description for accessibility.
  *
  * @component
- * @param {DrawerDescriptionProps} props
+ * @param {React.ComponentProps<typeof DrawerPrimitive.Description>} props
  * @returns {React.JSX.Element}
  */
 
