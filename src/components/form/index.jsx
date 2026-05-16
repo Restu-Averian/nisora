@@ -1,6 +1,4 @@
 import { Plus } from "lucide-react";
-
-import { AddBookForm } from "@/components/AddBookForm";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -10,8 +8,9 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import BookForm from "./book-form";
 
-export function AddBookDrawer() {
+export default function FormBookDrawer() {
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>
@@ -32,7 +31,7 @@ export function AddBookDrawer() {
           </DrawerDescription>
         </DrawerHeader>
 
-        <AddBookForm />
+        <BookForm />
       </DrawerContent>
     </Drawer>
   );

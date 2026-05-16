@@ -1,9 +1,7 @@
-import { AddBookDrawer } from "@/components/AddBookDrawer";
-import { BookGrid } from "@/components/BookGrid";
-import { BookTabs } from "@/components/BookTabs";
-import { Header } from "@/components/Header";
 import { Tabs } from "@/components/ui/tabs";
-import { books } from "@/data/books";
+import ListBooks from "./components/list-books";
+import Header from "./components/header";
+import FormBookDrawer from "./components/form";
 
 function App() {
   return (
@@ -17,11 +15,10 @@ function App() {
               Koleksi Buku
             </h1>
 
-            <AddBookDrawer />
+            <FormBookDrawer />
           </div>
 
-          <BookTabs />
-          <BookGrid books={books} />
+          <ListBooks />
         </Tabs>
       </section>
     </main>

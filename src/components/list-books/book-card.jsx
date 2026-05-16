@@ -13,7 +13,7 @@ function BookMeta({ label, value }) {
   );
 }
 
-export function BookCard({ book }) {
+export default function BookCard({ book }) {
   return (
     <article className="rounded-lg border border-border bg-background/72 p-3 shadow-card">
       <div className="grid grid-cols-[92px_1fr] gap-3">

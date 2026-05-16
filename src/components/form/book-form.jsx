@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Plus, Upload } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { DrawerClose } from "@/components/ui/drawer";
 import {
@@ -10,9 +9,14 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 
-export function AddBookForm() {
+export default function BookForm() {
   const [coverFile, setCoverFile] = useState(null);
   const [coverPreview, setCoverPreview] = useState("");
+
+  function handleCoverChange(event) {
+    const file = event.target.files?.[0];
+    setCoverFile(file ?? null);
+  }
 
   useEffect(() => {
     if (!coverFile) {
@@ -25,11 +29,6 @@ export function AddBookForm() {
 
     return () => URL.revokeObjectURL(objectUrl);
   }, [coverFile]);
-
-  function handleCoverChange(event) {
-    const file = event.target.files?.[0];
-    setCoverFile(file ?? null);
-  }
 
   return (
     <form>

@@ -1,8 +1,8 @@
-import { BookCard } from "@/components/BookCard";
 import { TabsContent } from "@/components/ui/tabs";
 import { TABS } from "@/data/books";
+import BookCard from "./book-card";
 
-export function BookGrid({ books }) {
+export default function BookGrid({ books }) {
   return (
     <>
       {TABS.map((tab) => {

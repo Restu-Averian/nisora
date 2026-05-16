@@ -1,7 +1,7 @@
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TABS } from "@/data/books";
 
-export function BookTabs() {
+export default function BooksTabs() {
   return (
     <TabsList className="mt-4">
       {TABS.map((tab) => (

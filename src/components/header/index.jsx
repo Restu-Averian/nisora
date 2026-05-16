@@ -1,9 +1,8 @@
 import { Book, ChevronLeft, Menu, Search, UserCircle } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import { Field, FieldContent } from "./ui/field";
+import { Field, FieldContent } from "../ui/field";
 
-export function Header() {
+export default function Header() {
   return (
     <header className="border-b border-border bg-background/90">
       <div className="mx-auto flex h-header max-w-content items-center justify-between px-6 lg:px-10">
