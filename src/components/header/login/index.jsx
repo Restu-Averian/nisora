@@ -29,7 +29,7 @@ export default function LoginContent() {
   }
 
   return (
-    <section className="w-full max-w-126 rounded-lg px-8 py-10 text-primary-text">
+    <section className="w-full max-w-126 rounded-lg px-8 py-10 text-primary-text overflow-y-scroll md:overflow-y-visible">
       <div className="mx-auto max-w-107.5">
         <header className="mb-7 text-center">
           <h2 className="font-heading text-[28px] font-bold leading-tight text-[#17131b]">

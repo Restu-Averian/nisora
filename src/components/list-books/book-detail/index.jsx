@@ -14,7 +14,7 @@ export default function BookDetail({ book }) {
   }
 
   return (
-    <section className="w-full text-primary-text overflow-y-scroll md:overflow-y-visible">
+    <section className="w-full text-primary-text overflow-y-scroll md:overflow-y-scroll">
       <div className="grid gap-8 p-6 md:grid-cols-[330px_1fr] md:p-8">
         <img
           alt={`Sampul ${book.title}`}

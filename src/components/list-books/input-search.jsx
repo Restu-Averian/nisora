@@ -1,10 +1,15 @@
 import { Search } from "lucide-react";
 import { Field, FieldContent } from "../ui/field";
+import { useBreakpoint } from "@/js-toolkit/src/react";
 
 export default function InputSearch() {
+  const { xs } = useBreakpoint();
   return (
     <Field className="gap-1.5 flex-1 ">
-      <FieldContent className="relative ml-auto" style={{ width: 360 }}>
+      <FieldContent
+        className="relative ml-auto"
+        style={{ width: xs ? "100%" : 360 }}
+      >
         <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
         <input

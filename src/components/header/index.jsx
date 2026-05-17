@@ -11,10 +11,20 @@ import {
 } from "../ui/dialog";
 import LoginContent from "./login";
 import DetailProfile from "./detail-profile";
+import { useBreakpoint } from "@/js-toolkit/src/react";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "../ui/drawer";
 
 export default function Header() {
   const [loginInfo, setLoginInfo] = useState(null);
   const [showHeaderInfo, setShowHeaderInfo] = useState(false);
+
+  const { xs } = useBreakpoint();
 
   const isLogin = Boolean(loginInfo);
 
@@ -96,18 +106,41 @@ export default function Header() {
         </div>
       </header>
 
-      <Dialog open={showHeaderInfo} onOpenChange={setShowHeaderInfo}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="sr-only">
-              {isLogin ? "Detail Profile" : "Login"}
-            </DialogTitle>
-            <DialogDescription>
-              {isLogin ? <DetailProfile user={loginInfo} /> : <LoginContent />}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+      {xs ? (
+        <Drawer open={showHeaderInfo} onOpenChange={setShowHeaderInfo}>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle className="sr-only">
+                {isLogin ? "Detail Profile" : "Login"}
+              </DrawerTitle>
+              <DrawerDescription>
+                {isLogin ? (
+                  <DetailProfile user={loginInfo} />
+                ) : (
+                  <LoginContent />
+                )}
+              </DrawerDescription>
+            </DrawerHeader>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <Dialog open={showHeaderInfo} onOpenChange={setShowHeaderInfo}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="sr-only">
+                {isLogin ? "Detail Profile" : "Login"}
+              </DialogTitle>
+              <DialogDescription>
+                {isLogin ? (
+                  <DetailProfile user={loginInfo} />
+                ) : (
+                  <LoginContent />
+                )}
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }

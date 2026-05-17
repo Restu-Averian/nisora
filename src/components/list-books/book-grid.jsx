@@ -12,9 +12,23 @@ import { TABS } from "@/data/books";
 import BookCard from "./book-card";
 import BookDetail from "./book-detail";
 import { objKeys } from "@/js-toolkit/src";
+import { useBreakpoint } from "@/js-toolkit/src/react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../ui/drawer";
+import { Button } from "../ui/button";
 
 export default function BookGrid({ books }) {
   const [selectedBook, setSelectedBook] = useState({});
+
+  const { xs } = useBreakpoint();
 
   return (
     <>
@@ -47,27 +61,51 @@ export default function BookGrid({ books }) {
         );
       })}
 
-      <Dialog
-        open={objKeys(selectedBook)?.length > 0}
-        onOpenChange={(open) => {
-          if (!open) {
-            setSelectedBook({});
-          }
-        }}
-      >
-        <DialogContent className="max-h-[calc(100vh-3rem)] w-[min(1160px,calc(100%-2rem))] max-w-[min(1160px,calc(100%-2rem))] gap-0 overflow-y-auto p-0 sm:max-w-[min(1160px,calc(100%-2rem))]">
-          <DialogHeader className="border-b border-border px-6 py-7 text-center">
-            <DialogTitle className="font-heading font-bold normal-case tracking-normal text-primary-text">
-              Detail Buku
-            </DialogTitle>
-            <DialogDescription className="sr-only">
-              Detail buku yang dipilih dari koleksi.
-            </DialogDescription>
-          </DialogHeader>
+      {xs ? (
+        <Drawer
+          open={objKeys(selectedBook)?.length > 0}
+          onOpenChange={(open) => {
+            if (!open) {
+              setSelectedBook({});
+            }
+          }}
+        >
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle className="font-heading font-bold normal-case tracking-normal text-primary-text">
+                Detail Buku
+              </DrawerTitle>
+              <DrawerDescription className="sr-only">
+                Detail buku yang dipilih dari koleksi.
+              </DrawerDescription>
+            </DrawerHeader>
 
-          <BookDetail book={selectedBook} />
-        </DialogContent>
-      </Dialog>
+            <BookDetail book={selectedBook}>{() => {}}</BookDetail>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <Dialog
+          open={objKeys(selectedBook)?.length > 0}
+          onOpenChange={(open) => {
+            if (!open) {
+              setSelectedBook({});
+            }
+          }}
+        >
+          <DialogContent className="max-h-[calc(100vh-3rem)] w-[min(1160px,calc(100%-2rem))] max-w-[min(1160px,calc(100%-2rem))] gap-0 overflow-y-auto p-0 sm:max-w-[min(1160px,calc(100%-2rem))]">
+            <DialogHeader className="border-b border-border px-6 py-7 text-center">
+              <DialogTitle className="font-heading font-bold normal-case tracking-normal text-primary-text">
+                Detail Buku
+              </DialogTitle>
+              <DialogDescription className="sr-only">
+                Detail buku yang dipilih dari koleksi.
+              </DialogDescription>
+            </DialogHeader>
+
+            <BookDetail book={selectedBook} />
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }
