@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Plus, Upload } from "lucide-react";
@@ -46,14 +46,6 @@ export default function BookForm() {
   function onSubmit(data) {
     console.log(data);
   }
-
-  useEffect(() => {
-    if (!coverPreview) {
-      return;
-    }
-
-    return () => URL.revokeObjectURL(coverPreview);
-  }, [coverPreview]);
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>

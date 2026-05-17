@@ -1,7 +1,33 @@
 import { Book, ChevronLeft, Menu, Search, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import supabase from "@/lib/supabase";
+import { useEffect } from "react";
 
 export default function Header() {
+  const handleSignInWithEmail = async () => {
+    const { data, error } = await supabase.auth.signInWithOtp({
+      email: "restuaverianputra123@gmail.com",
+      options: {
+        emailRedirectTo: "http://localhost:5173",
+      },
+    });
+
+    console.log("data sign in otp", data, error);
+    console.log("error sign in otp", data, error);
+  };
+
+  const getUser = async () => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+
+    console.log("user", user);
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <header className="border-b border-border bg-background/90">
       <div className="mx-auto flex h-header max-w-content items-center justify-between px-6 lg:px-10">
@@ -41,6 +67,14 @@ export default function Header() {
           </Button>
         </nav>
       </div>
+
+      <Button
+        onClick={() => {
+          handleSignInWithEmail();
+        }}
+      >
+        Login with Google
+      </Button>
     </header>
   );
 }
