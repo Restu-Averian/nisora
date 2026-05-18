@@ -61,7 +61,7 @@ export default function LoginContent({ onSuccess }) {
       action: {
         label: "Buka Email",
         onClick: () => {
-          window.location.href = "mailto:";
+          window.open("https://mail.google.com/mail/u/0/#inbox", "_blank");
         },
       },
       position: toastPosition,

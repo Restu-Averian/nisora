@@ -103,7 +103,12 @@ export default function Header() {
               </DrawerTitle>
 
               {isLogin ? (
-                <DetailProfile user={loginInfo} />
+                <DetailProfile
+                  user={loginInfo}
+                  onLogoutSuccess={() => {
+                    setShowHeaderInfo(false);
+                  }}
+                />
               ) : (
                 <LoginContent
                   onSuccess={() => {
@@ -124,7 +129,12 @@ export default function Header() {
             </DialogHeader>
 
             {isLogin ? (
-              <DetailProfile user={loginInfo} />
+              <DetailProfile
+                user={loginInfo}
+                onLogoutSuccess={() => {
+                  setShowHeaderInfo(false);
+                }}
+              />
             ) : (
               <LoginContent
                 onSuccess={() => {

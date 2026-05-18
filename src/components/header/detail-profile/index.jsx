@@ -1,6 +1,10 @@
-import { Camera, Pencil } from "lucide-react";
+import { useState } from "react";
+import { Camera, Loader2, Pencil } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useBreakpoint } from "@/js-toolkit/src/react";
+import supabase from "@/lib/supabase";
+import { toast } from "sonner";
 
 const DEFAULT_AVATAR =
   "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=256&q=80";
@@ -37,7 +41,9 @@ function ProfileField({ id, label, type = "text", value }) {
   );
 }
 
-export default function DetailProfile({ user }) {
+export default function DetailProfile({ onLogoutSuccess, user }) {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { xs } = useBreakpoint();
   const metadata = user?.user_metadata ?? {};
   const fullName =
     metadata.full_name ??
@@ -48,6 +54,30 @@ export default function DetailProfile({ user }) {
   const email = user?.email ?? "-";
   const avatarUrl = metadata.avatar_url ?? metadata.picture ?? DEFAULT_AVATAR;
   const joinedDate = formatJoinDate(user?.created_at);
+
+  const onLogout = async () => {
+    setIsLoggingOut(true);
+
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      toast.error("Gagal keluar dari akun", {
+        description: error.message,
+        position: xs ? "top-center" : "top-right",
+      });
+
+      setIsLoggingOut(false);
+      return;
+    }
+
+    toast.success("Berhasil logout", {
+      description: "Sampai jumpa lagi di Nisora.",
+      position: xs ? "top-center" : "top-right",
+    });
+
+    onLogoutSuccess?.();
+    setIsLoggingOut(false);
+  };
 
   return (
     <section className="w-full max-w-94 px-6 pb-6 pt-8 text-center text-primary-text ">
@@ -73,11 +103,7 @@ export default function DetailProfile({ user }) {
       </h2>
 
       <form className="space-y-3 text-left">
-        <ProfileField
-          id="profile-name"
-          label="Nama Lengkap"
-          value={fullName}
-        />
+        <ProfileField id="profile-name" label="Nama Lengkap" value={fullName} />
         <ProfileField
           id="profile-email"
           label="Email"
@@ -103,9 +129,20 @@ export default function DetailProfile({ user }) {
           </Button>
           <Button
             className="h-10 w-full rounded-md bg-[#c92121] text-[15px] font-bold normal-case tracking-normal text-white hover:bg-[#a91616]"
+            disabled={isLoggingOut}
             type="button"
+            onClick={() => {
+              onLogout();
+            }}
           >
-            Keluar (Logout)
+            {isLoggingOut ? (
+              <>
+                Keluar...
+                <Loader2 className="size-4 animate-spin" />
+              </>
+            ) : (
+              <>Keluar (Logout)</>
+            )}
           </Button>
         </div>
       </form>
