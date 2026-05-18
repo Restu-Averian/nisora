@@ -2,23 +2,11 @@ import { Book, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import supabase from "@/lib/supabase";
 import { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+import { useBreakpoint } from "@/js-toolkit/src/react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import LoginContent from "./login";
 import DetailProfile from "./detail-profile";
-import { useBreakpoint } from "@/js-toolkit/src/react";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "../ui/drawer";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
 
 export default function Header() {
   const [loginInfo, setLoginInfo] = useState(null);
@@ -113,13 +101,16 @@ export default function Header() {
               <DrawerTitle className="sr-only">
                 {isLogin ? "Detail Profile" : "Login"}
               </DrawerTitle>
-              <DrawerDescription>
-                {isLogin ? (
-                  <DetailProfile user={loginInfo} />
-                ) : (
-                  <LoginContent />
-                )}
-              </DrawerDescription>
+
+              {isLogin ? (
+                <DetailProfile user={loginInfo} />
+              ) : (
+                <LoginContent
+                  onSuccess={() => {
+                    setShowHeaderInfo(false);
+                  }}
+                />
+              )}
             </DrawerHeader>
           </DrawerContent>
         </Drawer>
@@ -130,14 +121,17 @@ export default function Header() {
               <DialogTitle className="sr-only">
                 {isLogin ? "Detail Profile" : "Login"}
               </DialogTitle>
-              <DialogDescription>
-                {isLogin ? (
-                  <DetailProfile user={loginInfo} />
-                ) : (
-                  <LoginContent />
-                )}
-              </DialogDescription>
             </DialogHeader>
+
+            {isLogin ? (
+              <DetailProfile user={loginInfo} />
+            ) : (
+              <LoginContent
+                onSuccess={() => {
+                  setShowHeaderInfo(false);
+                }}
+              />
+            )}
           </DialogContent>
         </Dialog>
       )}
