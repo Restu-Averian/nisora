@@ -33,11 +33,6 @@ export default function DetailProfile({ onLogoutSuccess, user }) {
     return avatarUrl;
   }, [avatarFile, avatarUrl]);
 
-  useEffect(() => {
-    if (!avatarPreview || avatarFile) return;
-    return () => URL.revokeObjectURL(avatarPreview);
-  }, [avatarPreview, avatarFile]);
-
   const joinedDate = formatJoinDate(user?.created_at);
 
   const form = useForm({
@@ -45,7 +40,7 @@ export default function DetailProfile({ onLogoutSuccess, user }) {
     defaultValues: getProfileDefaultValues({ metadata, user }),
   });
 
-  const toastPosition = xs ? "top-center" : "top-right";
+  const toastPosition = useMemo(() => (xs ? "top-center" : "top-right"), [xs]);
 
   const onAvatarChange = (file) => {
     setAvatarFile(file);
@@ -161,6 +156,11 @@ export default function DetailProfile({ onLogoutSuccess, user }) {
     onLogoutSuccess?.();
     setIsLoggingOut(false);
   };
+
+  useEffect(() => {
+    if (!avatarPreview || avatarFile) return;
+    return () => URL.revokeObjectURL(avatarPreview);
+  }, [avatarPreview, avatarFile]);
 
   return (
     <section className="w-full max-w-94 px-6 pb-6 pt-8 text-center text-primary-text ">
