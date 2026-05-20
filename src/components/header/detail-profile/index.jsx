@@ -15,8 +15,9 @@ import {
   getProfileDefaultValues,
   profileSchema,
 } from "./utils/profile";
+import { fmtToString } from "@/js-toolkit/src";
 
-export default function DetailProfile({ onLogoutSuccess, user }) {
+export default function DetailProfile({ onCloseHeaderInfo, user }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -30,8 +31,9 @@ export default function DetailProfile({ onLogoutSuccess, user }) {
     if (avatarFile) {
       return URL.createObjectURL(avatarFile);
     }
+
     return avatarUrl;
-  }, [avatarFile, avatarUrl]);
+  }, [avatarFile, metadata]);
 
   const joinedDate = formatJoinDate(user?.created_at);
 
@@ -47,9 +49,7 @@ export default function DetailProfile({ onLogoutSuccess, user }) {
     form.setValue("avatar", file);
   };
 
-  async function onSubmit(data) {
-    setIsSaving(true);
-
+  const onCheckSession = async () => {
     const {
       data: { session },
       error: sessionError,
@@ -61,49 +61,70 @@ export default function DetailProfile({ onLogoutSuccess, user }) {
         position: toastPosition,
       });
       setIsSaving(false);
-      return;
+      return {};
     }
 
-    let newAvatarUrl = metadata.avatar_url ?? null;
+    return session;
+  };
 
-    if (data.avatar) {
-      const filePath = createAvatarPath({
-        file: data.avatar,
-        userId: session.user.id,
+  const onUploadAvatar = async ({ formValue, session }) => {
+    const filePath = createAvatarPath({
+      file: formValue?.avatar,
+      userId: session?.user.id,
+    });
+
+    const { error: uploadError, data: dataUploaded } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, formValue?.avatar, { upsert: true });
+
+    if (uploadError) {
+      toast.error("Gagal mengunggah foto profil", {
+        description: uploadError.message,
+        position: toastPosition,
       });
-
-      const { error: uploadError, data: dataUploaded } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, data.avatar, { upsert: true });
-
-      if (uploadError) {
-        toast.error("Gagal mengunggah foto profil", {
-          description: uploadError.message,
-          position: toastPosition,
-        });
-        setIsSaving(false);
-        return;
-      }
-
-      const { data: dataSignedURL } = await supabase.storage
-        .from("avatars")
-        .createSignedUrl(dataUploaded?.path, 60 * 60);
-
-      newAvatarUrl = dataSignedURL?.signedUrl;
+      setIsSaving(false);
+      return "";
     }
+
+    const { data: uplaodedAvatar } = supabase.storage
+      .from("avatars")
+      .getPublicUrl(dataUploaded?.path);
+
+    return uplaodedAvatar?.publicUrl;
+  };
+
+  async function onSubmit(data) {
+    const formValue = {
+      ...(data || {}),
+      name: fmtToString(data?.name)?.trim(),
+      email: fmtToString(data?.email)?.trim(),
+    };
+    setIsSaving(true);
+
+    const session = await onCheckSession();
+
+    let newAvatarURL = metadata.avatar_url ?? null;
+
+    if (formValue.avatar) {
+      const publicAvatarURL = await onUploadAvatar({ formValue, session });
+
+      newAvatarURL = publicAvatarURL;
+    }
+
+    const emailChanged = formValue?.email !== session.user.email;
 
     const updatePayload = {
       data: {
-        name: data.name.trim(),
-        ...(newAvatarUrl ? { avatar_url: newAvatarUrl } : {}),
+        name: formValue?.name,
+        ...(newAvatarURL ? { avatar_url: newAvatarURL } : {}),
+        ...(emailChanged && {
+          email: formValue?.email,
+        }),
       },
+      ...(emailChanged && {
+        email: formValue?.email,
+      }),
     };
-
-    const emailChanged = data.email.trim() !== session.user.email;
-
-    if (emailChanged) {
-      updatePayload.email = data.email.trim();
-    }
 
     const { error } = await supabase.auth.updateUser(updatePayload);
 
@@ -153,7 +174,7 @@ export default function DetailProfile({ onLogoutSuccess, user }) {
       position: toastPosition,
     });
 
-    onLogoutSuccess?.();
+    onCloseHeaderInfo?.();
     setIsLoggingOut(false);
   };
 

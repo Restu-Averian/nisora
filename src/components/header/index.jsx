@@ -88,7 +88,7 @@ export default function Header() {
               {isLogin ? (
                 <DetailProfile
                   user={loginInfo}
-                  onLogoutSuccess={() => {
+                  onCloseHeaderInfo={() => {
                     setShowHeaderInfo(false);
                   }}
                 />
@@ -115,7 +115,7 @@ export default function Header() {
             {isLogin ? (
               <DetailProfile
                 user={loginInfo}
-                onLogoutSuccess={() => {
+                onCloseHeaderInfo={() => {
                   setShowHeaderInfo(false);
                 }}
               />
