@@ -3,56 +3,25 @@ import { Button } from "@/components/ui/button";
 import supabase from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import { useBreakpoint } from "@/js-toolkit/src/react";
+import { decryptStoredUserCookie } from "@/js-toolkit/src";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import LoginContent from "./login";
+import AuthForm from "./auth-form";
 import DetailProfile from "./detail-profile";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
 
-function getStoredUser() {
-  try {
-    const cookies = {};
-    document.cookie.split("; ").forEach((c) => {
-      const eq = c.indexOf("=");
-      if (eq === -1) return;
-      cookies[c.slice(0, eq)] = c.slice(eq + 1);
-    });
-
-    const key = supabase.storageKey;
-    if (!key) return null;
-
-    const chunks = [];
-    for (const name of Object.keys(cookies)) {
-      if (name === key) chunks.push({ i: -1, v: cookies[name] });
-      else if (name.startsWith(key + ".")) {
-        const idx = parseInt(name.slice(key.length + 1), 10);
-        if (!isNaN(idx)) chunks.push({ i: idx, v: cookies[name] });
-      }
-    }
-    if (!chunks.length) return null;
-
-    chunks.sort((a, b) => a.i - b.i);
-    const raw = chunks.map((c) => c.v).join("");
-
-    const PREFIX = "base64-";
-    const decoded = raw.startsWith(PREFIX)
-      ? atob(raw.slice(PREFIX.length).replace(/-/g, "+").replace(/_/g, "/"))
-      : raw;
-
-    return JSON.parse(decoded)?.user ?? null;
-  } catch {
-    return null;
-  }
-}
-
 export default function Header() {
-  const [loginInfo, setLoginInfo] = useState(getStoredUser);
+  const [loginInfo, setLoginInfo] = useState(() =>
+    decryptStoredUserCookie(supabase),
+  );
   const [showHeaderInfo, setShowHeaderInfo] = useState(false);
 
   const { xs } = useBreakpoint();
 
   const isLogin = Boolean(loginInfo);
 
-  console.log("log", loginInfo);
+  const handleHeaderInfoChange = (open) => {
+    setShowHeaderInfo(open);
+  };
 
   useEffect(() => {
     const {
@@ -109,11 +78,11 @@ export default function Header() {
       </header>
 
       {xs ? (
-        <Drawer open={showHeaderInfo} onOpenChange={setShowHeaderInfo}>
+        <Drawer open={showHeaderInfo} onOpenChange={handleHeaderInfoChange}>
           <DrawerContent>
             <DrawerHeader>
               <DrawerTitle className="sr-only">
-                {isLogin ? "Detail Profile" : "Login"}
+                {isLogin ? "Detail Profile" : "Authentication"}
               </DrawerTitle>
 
               {isLogin ? (
@@ -124,7 +93,8 @@ export default function Header() {
                   }}
                 />
               ) : (
-                <LoginContent
+                <AuthForm
+                  showHeaderInfo={showHeaderInfo}
                   onSuccess={() => {
                     setShowHeaderInfo(false);
                   }}
@@ -134,11 +104,11 @@ export default function Header() {
           </DrawerContent>
         </Drawer>
       ) : (
-        <Dialog open={showHeaderInfo} onOpenChange={setShowHeaderInfo}>
+        <Dialog open={showHeaderInfo} onOpenChange={handleHeaderInfoChange}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="sr-only">
-                {isLogin ? "Detail Profile" : "Login"}
+                {isLogin ? "Detail Profile" : "Authentication"}
               </DialogTitle>
             </DialogHeader>
 
@@ -150,7 +120,8 @@ export default function Header() {
                 }}
               />
             ) : (
-              <LoginContent
+              <AuthForm
+                showHeaderInfo={showHeaderInfo}
                 onSuccess={() => {
                   setShowHeaderInfo(false);
                 }}
