@@ -27,16 +27,14 @@ export function BookCoverField({
               id="book-cover"
               name={field.name}
               type="file"
-              value={undefined}
               onChange={(event) => {
                 const file = event.target.files?.[0];
 
                 onCoverChange(file ?? null);
                 field.onChange(file ?? undefined);
               }}
-              // onBlur={field.onBlur}
-              // ref={field.ref}
-              {...field}
+              onBlur={field.onBlur}
+              ref={field.ref}
             />
             <label
               className="flex min-h-upload w-full items-center justify-center gap-3 rounded-md border border-dashed border-border bg-background/60 p-3 text-secondary-text transition-colors hover:bg-surface"

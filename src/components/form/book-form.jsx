@@ -33,7 +33,7 @@ export default function BookForm() {
   }
 
   function handleBookSelect(book) {
-    form.setValue("title", book.title, {
+    form?.setValue("title", book.title, {
       shouldDirty: true,
       shouldValidate: true,
     });
