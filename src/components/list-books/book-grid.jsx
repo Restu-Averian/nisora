@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import {
   Dialog,
@@ -13,22 +14,113 @@ import BookCard from "./book-card";
 import BookDetail from "./book-detail";
 import { objKeys } from "@/js-toolkit/src";
 import { useBreakpoint } from "@/js-toolkit/src/react";
+import supabase from "@/lib/supabase";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "../ui/drawer";
-import { Button } from "../ui/button";
 
-export default function BookGrid({ books }) {
+const FALLBACK_COVER_URL =
+  "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1548033656i/42861019.jpg";
+
+function mapBookFromSupabase(book) {
+  return {
+    id: book.id,
+    title: book.title,
+    synopsis: book.synopsis ?? "-",
+    author: book.authors?.join(", ") || "-",
+    year: book.published_year ?? "-",
+    status: book.status,
+    cover: book.cover_url || FALLBACK_COVER_URL,
+  };
+}
+
+export default function BookGrid({ refreshKey }) {
+  const [books, setBooks] = useState([]);
+  const [isFetchingBooks, setIsFetchingBooks] = useState(true);
   const [selectedBook, setSelectedBook] = useState({});
 
   const { xs } = useBreakpoint();
+  const toastPosition = xs ? "top-center" : "top-right";
+
+  const fetchBooks = useCallback(async (userId) => {
+    setIsFetchingBooks(true);
+
+    let activeUserId = userId;
+
+    if (!activeUserId) {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        setBooks([]);
+        setIsFetchingBooks(false);
+        return;
+      }
+
+      activeUserId = session.user.id;
+    }
+
+    const { data, error } = await supabase
+      .from("books")
+      .select(
+        "id,title,authors,synopsis,published_year,cover_url,status,created_at",
+      )
+      .eq("user_id", activeUserId)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      toast.error("Gagal memuat buku", {
+        description: error.message,
+        position: toastPosition,
+      });
+      setBooks([]);
+      setIsFetchingBooks(false);
+      return;
+    }
+
+    setBooks((data ?? []).map(mapBookFromSupabase));
+    setIsFetchingBooks(false);
+  }, [toastPosition]);
+
+  useEffect(() => {
+    fetchBooks();
+  }, [fetchBooks, refreshKey]);
+
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        setBooks([]);
+        setSelectedBook({});
+        setIsFetchingBooks(false);
+        return;
+      }
+
+      fetchBooks(session.user.id);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [fetchBooks]);
+
+  if (isFetchingBooks) {
+    return (
+      <TabsContent
+        className="rounded-md border border-border bg-background/72 p-6 text-center text-sm font-medium text-secondary-text"
+        value="all"
+      >
+        Memuat buku...
+      </TabsContent>
+    );
+  }
 
   return (
     <>
@@ -46,17 +138,23 @@ export default function BookGrid({ books }) {
             key={tab?.value}
             value={tab?.value}
           >
-            {filteredBooks.map((book) => {
-              return (
-                <BookCard
-                  book={book}
-                  key={book.id}
-                  onClick={() => {
-                    setSelectedBook(book);
-                  }}
-                />
-              );
-            })}
+            {filteredBooks.length > 0 ? (
+              filteredBooks.map((book) => {
+                return (
+                  <BookCard
+                    book={book}
+                    key={book.id}
+                    onClick={() => {
+                      setSelectedBook(book);
+                    }}
+                  />
+                );
+              })
+            ) : (
+              <div className="rounded-md border border-border bg-background/72 p-6 text-center text-sm font-medium text-secondary-text sm:col-span-2 xl:col-span-3">
+                Belum ada buku.
+              </div>
+            )}
           </TabsContent>
         );
       })}

@@ -1,12 +1,11 @@
-import { books } from "@/data/books";
 import BooksTabs from "./books-tabs";
 import BookGrid from "./book-grid";
 
-export default function ListBooks() {
+export default function ListBooks({ refreshKey }) {
   return (
     <>
       <BooksTabs />
-      <BookGrid books={books} />
+      <BookGrid refreshKey={refreshKey} />
     </>
   );
 }

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Tabs } from "@/components/ui/tabs";
 import ListBooks from "./components/list-books";
 import Header from "./components/header";
@@ -5,6 +6,12 @@ import FormBookDrawer from "./components/form";
 import { Toaster } from "./components/ui/sonner";
 
 function App() {
+  const [booksRefreshKey, setBooksRefreshKey] = useState(0);
+
+  function refreshBooks() {
+    setBooksRefreshKey((currentKey) => currentKey + 1);
+  }
+
   return (
     <main className="min-h-screen overflow-hidden bg-background text-primary-text">
       <Header />
@@ -16,10 +23,10 @@ function App() {
               Koleksi Buku
             </h1>
 
-            <FormBookDrawer />
+            <FormBookDrawer onBookAdded={refreshBooks} />
           </div>
 
-          <ListBooks />
+          <ListBooks refreshKey={booksRefreshKey} />
         </Tabs>
       </section>
 

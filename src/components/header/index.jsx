@@ -1,7 +1,7 @@
 import { Book, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import supabase from "@/lib/supabase";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useBreakpoint } from "@/js-toolkit/src/react";
 import { decryptStoredUserCookie } from "@/js-toolkit/src";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
@@ -13,6 +13,12 @@ export default function Header() {
   const [loginInfo, setLoginInfo] = useState(() =>
     decryptStoredUserCookie(supabase),
   );
+
+  const avatarURL = useMemo(
+    () => loginInfo?.user_metadata?.avatar_url,
+    [loginInfo?.user_metadata?.avatar_url],
+  );
+
   const [showHeaderInfo, setShowHeaderInfo] = useState(false);
 
   const { xs } = useBreakpoint();
@@ -53,17 +59,28 @@ export default function Header() {
             className="flex items-center gap-3"
           >
             {isLogin ? (
-              <Button
-                aria-label="Profil"
-                className="size-8 rounded-full border-0 bg-transparent p-0 text-primary-text shadow-none hover:bg-surface"
-                size="icon"
-                variant="ghost"
-                onClick={() => {
-                  setShowHeaderInfo(true);
-                }}
-              >
-                <UserCircle className="size-7 fill-primary-text/20" />
-              </Button>
+              avatarURL ? (
+                <img
+                  alt="Foto profil pengguna"
+                  className="size-10 rounded-full border-4 border-background object-cover shadow-[0_0_0_2px_rgba(77,62,44,0.16)] cursor-pointer"
+                  src={avatarURL}
+                  onClick={() => {
+                    setShowHeaderInfo(true);
+                  }}
+                />
+              ) : (
+                <Button
+                  aria-label="Profil"
+                  className="size-8 rounded-full border-0 bg-transparent p-0 text-primary-text shadow-none hover:bg-surface"
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => {
+                    setShowHeaderInfo(true);
+                  }}
+                >
+                  <UserCircle className="size-7 fill-primary-text/20" />
+                </Button>
+              )
             ) : (
               <Button
                 onClick={() => {
