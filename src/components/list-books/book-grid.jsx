@@ -47,8 +47,6 @@ export default function BookGrid({ refreshKey }) {
   const toastPosition = xs ? "top-center" : "top-right";
 
   const fetchBooks = useCallback(async (userId) => {
-    setIsFetchingBooks(true);
-
     let activeUserId = userId;
 
     if (!activeUserId) {
