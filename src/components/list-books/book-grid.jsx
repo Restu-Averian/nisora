@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -24,7 +24,7 @@ import {
 } from "../ui/drawer";
 
 const FALLBACK_COVER_URL =
-  "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1548033656i/42861019.jpg";
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJDd23Au450NaCV6pADO2wJxLkN0oic3qktA&s";
 
 function mapBookFromSupabase(book) {
   return {
@@ -42,53 +42,67 @@ export default function BookGrid({ refreshKey }) {
   const [books, setBooks] = useState([]);
   const [isFetchingBooks, setIsFetchingBooks] = useState(true);
   const [selectedBook, setSelectedBook] = useState({});
+  const authRequestIdRef = useRef(0);
+  const initRefreshKeyRef = useRef(refreshKey);
 
   const { xs } = useBreakpoint();
-  const toastPosition = xs ? "top-center" : "top-right";
 
-  const fetchBooks = useCallback(async (userId) => {
-    let activeUserId = userId;
+  const toastPosition = useMemo(() => (xs ? "top-center" : "top-right"), [xs]);
 
-    if (!activeUserId) {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-
-      if (sessionError || !session) {
-        setBooks([]);
-        setIsFetchingBooks(false);
-        return;
+  const updateBooks = useCallback(
+    ({ books: loadedBooks, error }) => {
+      if (error) {
+        toast.error("Gagal memuat buku", {
+          description: error.message,
+          position: toastPosition,
+        });
       }
 
-      activeUserId = session.user.id;
-    }
+      setBooks(loadedBooks);
+      setIsFetchingBooks(false);
+    },
+    [toastPosition],
+  );
 
+  async function loadBooksByUserId(userId) {
     const { data, error } = await supabase
       .from("books")
       .select(
         "id,title,authors,synopsis,published_year,cover_url,status,created_at",
       )
-      .eq("user_id", activeUserId)
+      .eq("user_id", userId)
       .order("created_at", { ascending: false });
 
-    if (error) {
-      toast.error("Gagal memuat buku", {
-        description: error.message,
-        position: toastPosition,
-      });
-      setBooks([]);
-      setIsFetchingBooks(false);
+    return {
+      books: (data ?? []).map((book) => mapBookFromSupabase(book)),
+      error,
+    };
+  }
+
+  async function loadBooks(userId) {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+
+    if (sessionError || !session) {
+      return { books: [], error: sessionError };
+    }
+
+    if (userId) {
+      return loadBooksByUserId(userId);
+    }
+
+    return loadBooksByUserId(session?.user?.id);
+  }
+
+  useEffect(() => {
+    if (refreshKey === initRefreshKeyRef.current) {
       return;
     }
 
-    setBooks((data ?? []).map(mapBookFromSupabase));
-    setIsFetchingBooks(false);
-  }, [toastPosition]);
-
-  useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks, refreshKey]);
+    loadBooks().then(updateBooks);
+  }, [refreshKey, updateBooks]);
 
   useEffect(() => {
     const {
@@ -101,13 +115,23 @@ export default function BookGrid({ refreshKey }) {
         return;
       }
 
-      fetchBooks(session.user.id);
+      const requestId = authRequestIdRef.current + 1;
+      authRequestIdRef.current = requestId;
+
+      loadBooks(session.user.id).then(({ books: loadedBooks, error }) => {
+        if (authRequestIdRef.current !== requestId) {
+          return;
+        }
+
+        updateBooks({ books: loadedBooks, error });
+      });
     });
 
     return () => {
+      authRequestIdRef.current += 1;
       subscription.unsubscribe();
     };
-  }, [fetchBooks]);
+  }, [updateBooks]);
 
   if (isFetchingBooks) {
     return (

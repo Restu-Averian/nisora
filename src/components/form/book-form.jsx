@@ -40,11 +40,17 @@ export default function BookForm({ onSuccess }) {
       shouldDirty: true,
       shouldValidate: true,
     });
+
     form.setValue("synopsis", book.synopsis ?? "", { shouldDirty: true });
+
     form.setValue("author", book.author ?? "", { shouldDirty: true });
+
     form.setValue("year", book.year ?? undefined, { shouldDirty: true });
+
     form.setValue("cover", book.cover || undefined, { shouldDirty: true });
+
     setCoverFile(book.cover || null);
+
     resetBookSearch();
   }
 

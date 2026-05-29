@@ -8,10 +8,6 @@ import { Toaster } from "./components/ui/sonner";
 function App() {
   const [booksRefreshKey, setBooksRefreshKey] = useState(0);
 
-  function refreshBooks() {
-    setBooksRefreshKey((currentKey) => currentKey + 1);
-  }
-
   return (
     <main className="min-h-screen overflow-hidden bg-background text-primary-text">
       <Header />
@@ -23,7 +19,7 @@ function App() {
               Koleksi Buku
             </h1>
 
-            <FormBookDrawer onBookAdded={refreshBooks} />
+            <FormBookDrawer setBooksRefreshKey={setBooksRefreshKey} />
           </div>
 
           <ListBooks refreshKey={booksRefreshKey} />

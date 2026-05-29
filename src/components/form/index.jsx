@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -12,25 +12,10 @@ import {
 import BookForm from "./book-form";
 import { useBreakpoint } from "@/js-toolkit/src/react";
 
-export default function FormBookDrawer({ onBookAdded }) {
+export default function FormBookDrawer({ setBooksRefreshKey }) {
   const [open, setOpen] = useState(false);
-  const shouldRefreshAfterCloseRef = useRef(false);
 
   const { xs } = useBreakpoint();
-
-  function handleBookAdded() {
-    shouldRefreshAfterCloseRef.current = true;
-    setOpen(false);
-  }
-
-  useEffect(() => {
-    if (open || !shouldRefreshAfterCloseRef.current) {
-      return;
-    }
-
-    onBookAdded?.();
-    shouldRefreshAfterCloseRef.current = false;
-  }, [onBookAdded, open]);
 
   return (
     <Drawer
@@ -56,7 +41,11 @@ export default function FormBookDrawer({ onBookAdded }) {
           </DrawerDescription>
         </DrawerHeader>
 
-        <BookForm onSuccess={handleBookAdded} />
+        <BookForm
+          onSuccess={() => {
+            setBooksRefreshKey((prev) => prev + 1);
+          }}
+        />
       </DrawerContent>
     </Drawer>
   );

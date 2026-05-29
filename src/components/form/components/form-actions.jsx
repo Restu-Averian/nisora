@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { LoaderCircle, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DrawerClose } from "@/components/ui/drawer";
 
@@ -10,9 +10,15 @@ export function FormActions({ isSubmitting, onCancel }) {
         disabled={isSubmitting}
         type="submit"
       >
-        <Plus className="size-4" />
+        {isSubmitting ? (
+          <LoaderCircle className="size-4 animate-spin" />
+        ) : (
+          <Plus className="size-4" />
+        )}
+
         {isSubmitting ? "Menambahkan..." : "Tambah Buku"}
       </Button>
+
       <DrawerClose asChild>
         <button
           className="h-8 px-2 text-13 font-medium text-secondary-text transition-colors hover:text-primary-text"
