@@ -26,16 +26,18 @@ import {
 import { useShallow } from "zustand/shallow";
 
 export default function BookGrid({ refreshKey }) {
-  const { books, isFetchingBooks, fetchBooks, clearBooks } = useBooksStore(
-    useShallow((state) => {
-      return {
-        books: state?.books,
-        isFetchingBooks: state?.isFetchingBooks,
-        fetchBooks: state?.fetchBooks,
-        clearBooks: state?.clearBooks,
-      };
-    }),
-  );
+  const { books, isFetchingBooks, fetchBooks, clearBooks, updateBookStatus } =
+    useBooksStore(
+      useShallow((state) => {
+        return {
+          books: state?.books,
+          isFetchingBooks: state?.isFetchingBooks,
+          fetchBooks: state?.fetchBooks,
+          clearBooks: state?.clearBooks,
+          updateBookStatus: state?.updateBookStatus,
+        };
+      }),
+    );
 
   const [selectedBook, setSelectedBook] = useState({});
   const initRefreshKeyRef = useRef(refreshKey);
@@ -54,6 +56,44 @@ export default function BookGrid({ refreshKey }) {
       }
     },
     [toastPosition],
+  );
+
+  const onUpdateBookStatus = useCallback(
+    async (book, newStatusValue) => {
+      const statusLabel = TABS.find(
+        (tab) => tab.value === newStatusValue,
+      )?.label;
+
+      const { error } = await updateBookStatus({
+        bookId: book.id,
+        newStatusValue,
+      });
+
+      if (error) {
+        toast.error("Gagal mengubah status buku", {
+          description: error?.message,
+          position: toastPosition,
+        });
+        return;
+      }
+
+      setSelectedBook((currentBook) => {
+        if (currentBook?.id !== book.id) {
+          return currentBook;
+        }
+
+        return {
+          ...currentBook,
+          status: newStatusValue,
+        };
+      });
+
+      toast.success("Status buku diperbarui", {
+        description: `Buku dipindahkan ke ${statusLabel}.`,
+        position: toastPosition,
+      });
+    },
+    [toastPosition, updateBookStatus],
   );
 
   useEffect(() => {
@@ -84,10 +124,7 @@ export default function BookGrid({ refreshKey }) {
 
   if (isFetchingBooks) {
     return (
-      <TabsContent
-        className="books-grid__loading"
-        value="all"
-      >
+      <TabsContent className="books-grid__loading" value="all">
         Memuat buku...
       </TabsContent>
     );
@@ -118,6 +155,7 @@ export default function BookGrid({ refreshKey }) {
                     onClick={() => {
                       setSelectedBook(book);
                     }}
+                    onStatusChange={onUpdateBookStatus}
                   />
                 );
               })

@@ -35,6 +35,26 @@ async function loadBooksByUserId(userId) {
   };
 }
 
+async function getActiveSession() {
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.getSession();
+
+  if (error) {
+    return { session: null, error };
+  }
+
+  if (!session) {
+    return {
+      session: null,
+      error: new Error("Sesi berakhir. Silakan login ulang."),
+    };
+  }
+
+  return { session, error: null };
+}
+
 const booksStore = create((set) => {
   return {
     books: [],
@@ -77,6 +97,41 @@ const booksStore = create((set) => {
       }
 
       return result;
+    },
+
+    async updateBookStatus({ bookId, newStatusValue }) {
+      const { session, error: sessionError } = await getActiveSession();
+
+      if (sessionError) {
+        return { error: sessionError };
+      }
+
+      const { error } = await supabase
+        .from("books")
+        .update({ status: newStatusValue })
+        .eq("id", bookId)
+        .eq("user_id", session?.user.id);
+
+      if (error) {
+        return { error };
+      }
+
+      set((state) => {
+        return {
+          books: state?.books.map((book) => {
+            if (book.id !== bookId) {
+              return book;
+            }
+
+            return {
+              ...book,
+              status: newStatusValue,
+            };
+          }),
+        };
+      });
+
+      return { error: null };
     },
   };
 });

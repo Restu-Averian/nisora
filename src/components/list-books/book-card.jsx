@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { TABS } from "@/data/books";
-import { useMemo } from "react";
+import { isEmptyValue } from "@/js-toolkit/src";
+import { LoaderCircle } from "lucide-react";
+import { useMemo, useState } from "react";
 
 function BookMeta({ label, value }) {
   return (
@@ -11,16 +13,47 @@ function BookMeta({ label, value }) {
   );
 }
 
-export default function BookCard({ book, onClick }) {
-  const statusText = useMemo(() => {
-    return TABS?.find((tab) => tab?.value === book?.status)?.label;
-  }, [book?.status, TABS]);
+export default function BookCard({ book, onClick, onStatusChange }) {
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  const { btnText, newStatusValue } = useMemo(() => {
+    const newStatusValue = book?.status === "finished" ? "reading" : "finished";
+
+    const nextStatusLabel = TABS?.find(
+      (tab) => tab?.value === newStatusValue,
+    )?.label;
+
+    const statusText = isUpdatingStatus ? "" : nextStatusLabel;
+
+    if (isEmptyValue(statusText)) {
+      return {
+        btnText: "Update status",
+        newStatusValue,
+      };
+    }
+
+    return {
+      btnText: `${isUpdatingStatus ? "Memindahkan..." : "Pindahkan ke"} ${statusText}`,
+      newStatusValue,
+    };
+  }, [isUpdatingStatus]);
+
+  const handleStatusChange = async (event) => {
+    event.stopPropagation();
+
+    setIsUpdatingStatus(true);
+
+    try {
+      await onStatusChange?.(book, newStatusValue);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
 
   return (
-    <article
-      className="book-card"
-      onClick={onClick}
-    >
+    <article className="book-card" onClick={onClick}>
       <div className="book-card__layout">
         <img
           alt={`Sampul ${book.title}`}
@@ -35,20 +68,19 @@ export default function BookCard({ book, onClick }) {
           <BookMeta label="Sinopsis" value={book.synopsis} />
           <BookMeta label="Pengarang" value={book.author} />
 
-          <span className="book-card__year">
-            Tahun: {book.year}
-          </span>
+          <span className="book-card__year">Tahun: {book.year}</span>
         </div>
       </div>
 
       <Button
         className="book-card__action"
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
+        disabled={isUpdatingStatus || !onStatusChange}
+        onClick={handleStatusChange}
         type="button"
       >
-        Pindahkan ke <span className="book-card__action-status">{statusText}</span>
+        {isUpdatingStatus && <LoaderCircle className="animate-spin" />}
+
+        {btnText}
       </Button>
     </article>
   );
