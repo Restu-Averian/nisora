@@ -1,0 +1,165 @@
+@layer components {
+  .site-header {
+    @apply border-b border-border bg-background/90;
+
+    &__inner {
+      @apply mx-auto flex h-header max-w-content items-center justify-between px-6;
+    }
+
+    &__brand-wrap {
+      @apply flex items-center gap-8;
+    }
+
+    &__brand {
+      @apply flex items-center gap-2;
+    }
+
+    &__brand-text {
+      @apply font-heading text-3xl font-semibold italic leading-none;
+    }
+
+    &__nav {
+      @apply flex items-center gap-3;
+    }
+
+    &__avatar {
+      @apply size-10 cursor-pointer rounded-full border-4 border-background object-cover shadow-[0_0_0_2px_rgba(77,62,44,0.16)];
+    }
+
+    &__profile-button {
+      @apply size-8 rounded-full border-0 bg-transparent p-0 text-primary-text shadow-none hover:bg-surface;
+    }
+
+    &__profile-icon {
+      @apply size-7 fill-primary-text/20;
+    }
+  }
+
+  .auth-form {
+    @apply w-full max-w-126 overflow-y-scroll rounded-lg px-8 py-10 text-primary-text;
+
+    &__inner {
+      @apply mx-auto max-w-107.5;
+    }
+
+    &__header {
+      @apply mb-7 text-center;
+    }
+
+    &__title {
+      @apply font-heading text-[28px] font-bold leading-tight text-[#17131b];
+    }
+
+    &__description {
+      @apply mt-3 text-[16px] leading-snug text-[#2f2b33];
+    }
+
+    &__field-group {
+      @apply gap-5;
+    }
+
+    &__field {
+      @apply gap-2;
+    }
+
+    &__input-wrap {
+      @apply relative block;
+    }
+
+    &__input {
+      @apply h-11 w-full rounded-md border border-primary-accent bg-white/70 px-3 pr-11 text-[16px] text-primary-text shadow-[0_0_0_3px_rgba(143,168,199,0.22),0_2px_6px_rgba(77,62,44,0.16)] outline-none placeholder:text-secondary-text focus:border-hover-accent focus:ring-2 focus:ring-primary-accent/40;
+    }
+
+    &__input-icon {
+      @apply pointer-events-none absolute right-3 top-1/2 size-5 -translate-y-1/2 text-secondary-text;
+    }
+
+    &__submit {
+      @apply h-11 w-full rounded-md bg-primary-accent text-[15px] font-bold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent;
+    }
+
+    &__submit-icon {
+      @apply size-4;
+
+      &--loading {
+        @apply animate-spin;
+      }
+    }
+
+    &__footer {
+      @apply mt-6 flex flex-wrap items-center justify-center gap-1 text-center text-sm text-secondary-text;
+    }
+
+    &__link {
+      @apply font-semibold text-primary-accent underline-offset-4 hover:text-hover-accent hover:underline;
+    }
+  }
+
+  .profile-detail {
+    @apply w-full max-w-94 px-6 pb-6 pt-8 text-center text-primary-text;
+
+    &__title {
+      @apply mb-6 font-heading text-[28px] font-medium leading-none text-[#17131b];
+    }
+
+    &__fields {
+      @apply space-y-5;
+    }
+  }
+
+  .profile-avatar {
+    @apply mx-auto mb-5 flex w-fit items-end justify-center;
+
+    &__frame {
+      @apply relative;
+    }
+
+    &__image {
+      @apply size-32 rounded-full border-4 border-background object-cover shadow-[0_0_0_2px_rgba(77,62,44,0.16)];
+    }
+
+    &__button {
+      @apply absolute -bottom-1 -right-1 inline-flex size-11 items-center justify-center rounded-full border-2 border-background bg-soft-accent text-primary-text shadow-[0_3px_10px_rgba(77,62,44,0.2)] transition-colors hover:bg-primary-accent hover:text-white;
+    }
+
+    &__icon {
+      @apply size-5;
+    }
+  }
+
+  .profile-actions {
+    @apply space-y-3 pt-6;
+
+    &__submit {
+      @apply h-10 w-full rounded-md bg-primary-accent text-[15px] font-bold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent;
+    }
+
+    &__logout {
+      @apply h-10 w-full rounded-md bg-[#c92121] text-[15px] font-bold normal-case tracking-normal text-white hover:bg-[#a91616];
+    }
+
+    &__icon {
+      @apply size-4 animate-spin;
+    }
+  }
+
+  .profile-field {
+    @apply gap-1.5;
+
+    &__input {
+      @apply h-9 text-center;
+    }
+  }
+
+  .profile-joined-date {
+    @apply text-center;
+
+    &__label {
+      @apply text-[15px] leading-tight text-secondary-text;
+    }
+
+    &__value {
+      @apply mt-1 text-[16px] leading-tight text-[#17131b];
+    }
+  }
+}
