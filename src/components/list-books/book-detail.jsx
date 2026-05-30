@@ -14,61 +14,50 @@ export default function BookDetail({ book }) {
   }
 
   return (
-    <section className="w-full text-primary-text overflow-y-scroll md:overflow-y-visible">
-      <div className="grid gap-8 p-6 md:grid-cols-[330px_1fr] md:p-8">
+    <section className="book-detail md:overflow-y-visible">
+      <div className="book-detail__layout md:grid-cols-[330px_1fr] md:p-8">
         <img
           alt={`Sampul ${book.title}`}
-          // className="mx-auto aspect-2/3 w-full max-w-82.5 rounded-xl object-cover shadow-[0_8px_20px_rgba(77,62,44,0.2)]"
-          className="mx-auto aspect-2/3 w-full max-w-62 rounded-xl object-cover shadow-[0_8px_20px_rgba(77,62,44,0.2)]"
+          className="book-detail__cover"
           src={book.cover}
         />
 
-        <div className="flex min-w-0 flex-col">
+        <div className="book-detail__content">
           <div>
-            <span className="inline-flex h-8 items-center rounded-md bg-soft-accent px-3 text-[14px] font-bold uppercase leading-none text-[#17131b]">
-              {statusText}
-            </span>
+            <span className="book-detail__status">{statusText}</span>
 
-            <div className="mt-3 flex flex-wrap items-end gap-x-5 gap-y-2">
+            <div className="book-detail__headline">
               <div>
-                <h2 className="font-heading text-[38px] font-bold leading-tight text-primary-text">
-                  {book.title}
-                </h2>
-                <p className="mt-1 text-heading leading-tight text-secondary-text">
-                  {book.author}
-                </p>
+                <h2 className="book-detail__title">{book.title}</h2>
+                <p className="book-detail__author">{book.author}</p>
               </div>
 
-              <span className="mb-1 inline-flex h-8 items-center rounded-md bg-[#d7dde6] px-3 text-[14px] font-bold uppercase leading-none text-[#17131b]">
+              <span className="book-detail__year">
                 Tahun: {book.year}
               </span>
             </div>
           </div>
 
-          <div className="mt-12 border-t border-border pt-6">
-            <h3 className="text-[20px] font-bold leading-tight text-[#17131b]">
-              Sinopsis
-            </h3>
-            <p className="mt-2 text-[16px] leading-tight text-[#17131b]">
-              {book.synopsis}
-            </p>
+          <div className="book-detail__synopsis">
+            <h3 className="book-detail__section-title">Sinopsis</h3>
+            <p className="book-detail__synopsis-text">{book.synopsis}</p>
           </div>
 
-          <div className="mt-5">
+          <div className="book-detail__note">
             <label
-              className="mb-2 block text-[18px] font-bold leading-tight text-[#17131b]"
+              className="book-detail__note-label"
               htmlFor={`book-note-${book.id}`}
             >
               Catatan Pribadi
             </label>
-            <div className="relative">
+            <div className="book-detail__note-control">
               <textarea
-                className="min-h-textarea w-full resize-none rounded-md border border-primary-accent bg-background/70 px-3 py-2 pr-20 text-[16px] leading-snug text-primary-text outline-none focus:border-hover-accent focus:ring-2 focus:ring-primary-accent/30"
+                className="book-detail__note-input"
                 id={`book-note-${book.id}`}
                 placeholder="Tambahkan catatan Anda di sini..."
               />
               <Button
-                className="absolute bottom-3 right-4 text-[15px] font-medium  rounded-full p-5"
+                className="book-detail__note-action"
                 type="button"
               >
                 <Pencil />
@@ -76,22 +65,22 @@ export default function BookDetail({ book }) {
             </div>
           </div>
 
-          <div className="mt-2 grid gap-2 sm:grid-cols-3">
+          <div className="book-detail__actions sm:grid-cols-3">
             <Button
-              className="rounded-md bg-[#c95b50] font-semibold normal-case tracking-normal text-white hover:bg-[#b7493f]"
+              className="book-detail__delete"
               type="button"
             >
               Delete
             </Button>
             <Button
-              className="font-semibold normal-case tracking-normal "
+              className="book-detail__update"
               type="button"
               variant="outline"
             >
               Update
             </Button>
             <Button
-              className="rounded-md bg-primary-accent font-semibold normal-case tracking-normal text-white hover:bg-hover-accent"
+              className="book-detail__status-action"
               type="button"
             >
               Update status '{statusText}'

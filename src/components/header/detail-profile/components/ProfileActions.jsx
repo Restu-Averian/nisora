@@ -4,23 +4,23 @@ import { Button } from "@/components/ui/button";
 
 export default function ProfileActions({ isLoggingOut, isSaving, onLogout }) {
   return (
-    <div className="space-y-3 pt-6">
+    <div className="profile-actions">
       <Button
-        className="h-10 w-full rounded-md bg-primary-accent text-[15px] font-bold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent"
+        className="profile-actions__submit"
         disabled={isSaving}
         type="submit"
       >
         {isSaving ? (
           <>
             Menyimpan...
-            <Loader2 className="size-4 animate-spin" />
+            <Loader2 className="profile-actions__icon" />
           </>
         ) : (
           "Simpan Perubahan"
         )}
       </Button>
       <Button
-        className="h-10 w-full rounded-md bg-[#c92121] text-[15px] font-bold normal-case tracking-normal text-white hover:bg-[#a91616]"
+        className="profile-actions__logout"
         disabled={isLoggingOut}
         type="button"
         onClick={onLogout}
@@ -28,7 +28,7 @@ export default function ProfileActions({ isLoggingOut, isSaving, onLogout }) {
         {isLoggingOut ? (
           <>
             Keluar...
-            <Loader2 className="size-4 animate-spin" />
+            <Loader2 className="profile-actions__icon" />
           </>
         ) : (
           "Keluar (Logout)"

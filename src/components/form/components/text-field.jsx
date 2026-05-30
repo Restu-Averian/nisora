@@ -12,13 +12,13 @@ export function TextField({ control, id, label, name, placeholder }) {
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <Field className="gap-1.5" data-invalid={fieldState.invalid}>
+        <Field className="book-form__field" data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor={id}>{label}</FieldLabel>
           <FieldContent>
             <input
               {...field}
               aria-invalid={fieldState.invalid}
-              className="form-control h-8"
+              className="form-control book-field__text-input"
               id={id}
               placeholder={placeholder}
               type="text"

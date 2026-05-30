@@ -81,36 +81,35 @@ export default function AuthEmailForm({
   };
 
   return (
-    <section className="w-full max-w-126 overflow-y-scroll rounded-lg px-8 py-10 text-primary-text md:overflow-y-visible">
-      <div className="mx-auto max-w-107.5">
-        <header className="mb-7 text-center">
-          <h2 className="font-heading text-[28px] font-bold leading-tight text-[#17131b]">
-            {heading}
-          </h2>
-          <p className="mt-3 text-[16px] leading-snug text-[#2f2b33]">
-            {description}
-          </p>
+    <section className="auth-form md:overflow-y-visible">
+      <div className="auth-form__inner">
+        <header className="auth-form__header">
+          <h2 className="auth-form__title">{heading}</h2>
+          <p className="auth-form__description">{description}</p>
         </header>
 
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup className="gap-5">
+          <FieldGroup className="auth-form__field-group">
             <Controller
               control={form.control}
               name="email"
               render={({ field, fieldState }) => (
-                <Field className="gap-2" data-invalid={fieldState.invalid}>
+                <Field
+                  className="auth-form__field"
+                  data-invalid={fieldState.invalid}
+                >
                   <FieldLabel htmlFor={emailInputId}>Email</FieldLabel>
                   <FieldContent>
-                    <span className="relative block">
+                    <span className="auth-form__input-wrap">
                       <input
                         {...field}
                         aria-invalid={fieldState.invalid}
-                        className="h-11 w-full rounded-md border border-primary-accent bg-white/70 px-3 pr-11 text-[16px] text-primary-text shadow-[0_0_0_3px_rgba(143,168,199,0.22),0_2px_6px_rgba(77,62,44,0.16)] outline-none placeholder:text-secondary-text focus:border-hover-accent focus:ring-2 focus:ring-primary-accent/40"
+                        className="auth-form__input"
                         id={emailInputId}
                         placeholder="you@email.com"
                         type="email"
                       />
-                      <Mail className="pointer-events-none absolute right-3 top-1/2 size-5 -translate-y-1/2 text-secondary-text" />
+                      <Mail className="auth-form__input-icon" />
                     </span>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -121,19 +120,19 @@ export default function AuthEmailForm({
             />
 
             <Button
-              className="h-11 w-full rounded-md bg-primary-accent text-[15px] font-bold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent"
+              className="auth-form__submit"
               disabled={isSubmitting}
               type="submit"
             >
               {isSubmitting ? (
                 <>
                   Sending link...
-                  <Loader2 className="size-4 animate-spin" />
+                  <Loader2 className="auth-form__submit-icon auth-form__submit-icon--loading" />
                 </>
               ) : (
                 <>
                   {submitLabel}
-                  <Send className="size-4" />
+                  <Send className="auth-form__submit-icon" />
                 </>
               )}
             </Button>

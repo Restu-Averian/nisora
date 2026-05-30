@@ -7,10 +7,10 @@ export default function Login({ onSignupClick, onSuccess }) {
       emailInputId="login-email"
       errorTitle="Failed to send sign-in link"
       footer={
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-1 text-center text-sm text-secondary-text">
+        <div className="auth-form__footer">
           <span>Don't have an account?</span>
           <button
-            className="font-semibold text-primary-accent underline-offset-4 hover:text-hover-accent hover:underline"
+            className="auth-form__link"
             onClick={onSignupClick}
             type="button"
           >

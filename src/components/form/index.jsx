@@ -25,18 +25,20 @@ export default function FormBookDrawer({ setBooksRefreshKey }) {
     >
       <DrawerTrigger asChild>
         <Button
-          className="h-auto md:h-9 fixed bottom-5 right-5 md:static rounded-full md:rounded-md bg-primary-accent px-5 py-5 md:py-2 md:px-4 text-xs font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent "
+          className="book-drawer__trigger md:static md:h-9 md:rounded-md md:px-4 md:py-2"
           type="button"
         >
-          <Plus className="size-6 md:size-4" />
+          <Plus className="book-drawer__trigger-icon md:size-4" />
           {!xs && "Tambah Buku"}
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent className="px-10">
+      <DrawerContent className="book-drawer__content">
         <DrawerHeader>
-          <DrawerTitle className="text-center">Tambah Buku Baru</DrawerTitle>
-          <DrawerDescription className="text-center">
+          <DrawerTitle className="book-drawer__title">
+            Tambah Buku Baru
+          </DrawerTitle>
+          <DrawerDescription className="book-drawer__description">
             Form untuk menambahkan buku baru.
           </DrawerDescription>
         </DrawerHeader>

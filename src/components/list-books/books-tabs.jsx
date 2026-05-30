@@ -8,13 +8,13 @@ export default function BooksTabs() {
 
   return (
     <>
-      <div className=" border-b flex justify-between items-end">
-        <TabsList className="mt-4 flex-1 ">
+      <div className="books-tabs">
+        <TabsList className="books-tabs__list">
           {TABS.map((tab) => (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
-              className="cursor-pointer"
+              className="books-tabs__trigger"
             >
               {tab.label}
             </TabsTrigger>

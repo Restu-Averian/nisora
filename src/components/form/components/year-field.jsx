@@ -12,11 +12,11 @@ export function YearField({ control }) {
       control={control}
       name="year"
       render={({ field, fieldState }) => (
-        <Field className="gap-1.5" data-invalid={fieldState.invalid}>
+        <Field className="book-form__field" data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="book-year">Tahun Baca</FieldLabel>
           <FieldContent>
             <input
-              className="form-control h-8 max-w-30"
+              className="form-control book-field__year-input"
               id="book-year"
               type="text"
               aria-invalid={fieldState.invalid}

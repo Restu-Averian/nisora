@@ -18,7 +18,7 @@ import { LoaderCircle } from "lucide-react";
 function BookSearchItem({ book, onBookSelect }) {
   return (
     <CommandItem
-      className="items-start"
+      className="book-search-item"
       value={book.title}
       onSelect={() => {
         onBookSelect(book);
@@ -27,23 +27,21 @@ function BookSearchItem({ book, onBookSelect }) {
       {book.cover ? (
         <img
           alt={`Sampul ${book.title}`}
-          className="h-14 w-10 rounded object-cover shadow-cover"
+          className="book-search-item__cover"
           src={book.cover}
           loading="lazy"
         />
       ) : (
-        <span className="flex h-14 w-10 shrink-0 items-center justify-center rounded bg-surface text-xxs text-secondary-text shadow-cover">
+        <span className="book-search-item__empty-cover">
           No Cover
         </span>
       )}
 
-      <span className="min-w-0 text-left">
-        <span className="block truncate font-semibold text-primary-text">
-          {book.title}
-        </span>
+      <span className="book-search-item__text">
+        <span className="book-search-item__title">{book.title}</span>
 
         {(book.author || book.year) && (
-          <span className="block truncate text-xs text-secondary-text">
+          <span className="book-search-item__meta">
             {[book.author, book.year].filter(Boolean).join(" · ")}
           </span>
         )}
@@ -66,8 +64,8 @@ function BookSearchLists({ bookSearch, isMobile, onBookSelect, title }) {
       }}
       className={
         isMobile
-          ? "mt-2 rounded-md border border-border bg-background"
-          : "absolute left-0 right-0 top-full z-20 mt-2 rounded-md border border-border bg-background shadow-sidebar"
+          ? "book-search-list"
+          : "book-search-list book-search-list--floating"
       }
     >
       {title?.trim().length < 2 && (
@@ -79,12 +77,12 @@ function BookSearchLists({ bookSearch, isMobile, onBookSelect, title }) {
       {bookSearch.isSearching && (
         <CommandItem
           disabled
-          className="flex justify-between items-center"
+          className="book-search-list__loading"
           showCheckIcon={false}
         >
-          <p className="flex-1">Mencari buku...</p>
+          <p className="book-search-list__loading-text">Mencari buku...</p>
 
-          <LoaderCircle className="animate-spin" />
+          <LoaderCircle className="book-search-list__loading-icon" />
         </CommandItem>
       )}
 
@@ -93,7 +91,7 @@ function BookSearchLists({ bookSearch, isMobile, onBookSelect, title }) {
       )}
 
       {notFoundSearch && (
-        <CommandEmpty className="px-4 text-secondary-text">
+        <CommandEmpty className="book-search-list__empty">
           Buku tidak ditemukan. Input ini akan menjadi data baru.
         </CommandEmpty>
       )}
@@ -126,18 +124,18 @@ export function BookTitleField({
       control={control}
       name="title"
       render={({ field, fieldState }) => (
-        <Field className="gap-1.5" data-invalid={fieldState.invalid}>
+        <Field className="book-form__field" data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="book-title">Nama Buku</FieldLabel>
 
           <FieldContent>
             <Command
-              className="relative overflow-visible rounded-md bg-transparent text-primary-text"
+              className="book-title-command"
               shouldFilter={false}
             >
               <CommandInput
                 id="book-title"
                 aria-invalid={fieldState.invalid}
-                className="h-8"
+                className="book-title-command__input"
                 name={field.name}
                 placeholder="Nama Buku"
                 value={field.value}

@@ -12,13 +12,13 @@ export function SynopsisField({ control }) {
       control={control}
       name="synopsis"
       render={({ field, fieldState }) => (
-        <Field className="gap-1.5" data-invalid={fieldState.invalid}>
+        <Field className="book-form__field" data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="book-synopsis">Sinopsis</FieldLabel>
           <FieldContent>
             <textarea
               {...field}
               aria-invalid={fieldState.invalid}
-              className="form-control min-h-textarea resize-none py-2"
+              className="form-control book-field__textarea"
               id="book-synopsis"
               placeholder="Sinopsis"
             />

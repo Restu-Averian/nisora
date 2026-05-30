@@ -1,0 +1,180 @@
+@layer components {
+  .books-tabs {
+    @apply flex items-end justify-between border-b;
+  }
+
+  .books-tabs__list {
+    @apply mt-4 flex-1;
+  }
+
+  .books-tabs__trigger {
+    @apply cursor-pointer;
+  }
+
+  .books-search {
+    @apply flex-1 gap-1.5;
+  }
+
+  .books-search__content {
+    @apply relative ml-auto;
+  }
+
+  .books-search__icon {
+    @apply pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground;
+  }
+
+  .books-search__input {
+    @apply ml-auto h-8 pl-9;
+  }
+
+  .books-grid__loading,
+  .books-grid__empty {
+    @apply rounded-md border border-border bg-background/72 p-6 text-center text-sm font-medium text-secondary-text;
+  }
+
+  .books-grid__list {
+    @apply grid gap-4;
+  }
+
+  .books-grid__drawer-title,
+  .books-grid__dialog-title {
+    @apply font-heading font-bold normal-case tracking-normal text-primary-text;
+  }
+
+  .books-grid__dialog-content {
+    @apply max-h-[calc(100vh-3rem)] w-[min(1160px,calc(100%-2rem))] max-w-[min(1160px,calc(100%-2rem))] gap-0 overflow-y-auto p-0;
+  }
+
+  .books-grid__dialog-header {
+    @apply border-b border-border px-6 py-7 text-center;
+  }
+
+  .book-card {
+    @apply flex h-full cursor-pointer flex-col rounded-lg border border-border bg-background/72 p-3 shadow-card transition-shadow hover:shadow-[0_4px_16px_rgba(77,62,44,0.18)];
+  }
+
+  .book-card__layout {
+    @apply mb-2.5 grid flex-1 grid-cols-[92px_1fr] gap-3;
+  }
+
+  .book-card__cover {
+    @apply h-35.5 w-23 rounded-md object-cover shadow-cover;
+  }
+
+  .book-card__content {
+    @apply min-w-0 pt-1;
+  }
+
+  .book-card__title {
+    @apply line-clamp-2 min-h-[2.25em] font-heading text-lg font-bold leading-tight text-primary-text;
+  }
+
+  .book-card__meta {
+    @apply mt-2;
+  }
+
+  .book-card__meta-label {
+    @apply text-xs font-bold leading-tight text-primary-text;
+  }
+
+  .book-card__meta-value {
+    @apply line-clamp-3 text-xxs leading-tight text-primary-text;
+  }
+
+  .book-card__year {
+    @apply mt-2 inline-flex h-6 items-center rounded bg-soft-accent px-2 text-xxs font-bold uppercase leading-none text-primary-text;
+  }
+
+  .book-card__action {
+    @apply mt-auto h-8 w-full rounded-md bg-primary-accent px-3 text-xs font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent;
+  }
+
+  .book-card__action-status {
+    @apply font-bold;
+  }
+
+  .book-detail {
+    @apply w-full overflow-y-scroll text-primary-text;
+  }
+
+  .book-detail__layout {
+    @apply grid gap-8 p-6;
+  }
+
+  .book-detail__cover {
+    @apply mx-auto aspect-2/3 w-full max-w-62 rounded-xl object-cover shadow-[0_8px_20px_rgba(77,62,44,0.2)];
+  }
+
+  .book-detail__content {
+    @apply flex min-w-0 flex-col;
+  }
+
+  .book-detail__status {
+    @apply inline-flex h-8 items-center rounded-md bg-soft-accent px-3 text-[14px] font-bold uppercase leading-none text-[#17131b];
+  }
+
+  .book-detail__headline {
+    @apply mt-3 flex flex-wrap items-end gap-x-5 gap-y-2;
+  }
+
+  .book-detail__title {
+    @apply font-heading text-[38px] font-bold leading-tight text-primary-text;
+  }
+
+  .book-detail__author {
+    @apply mt-1 text-heading leading-tight text-secondary-text;
+  }
+
+  .book-detail__year {
+    @apply mb-1 inline-flex h-8 items-center rounded-md bg-[#d7dde6] px-3 text-[14px] font-bold uppercase leading-none text-[#17131b];
+  }
+
+  .book-detail__synopsis {
+    @apply mt-12 border-t border-border pt-6;
+  }
+
+  .book-detail__section-title {
+    @apply text-[20px] font-bold leading-tight text-[#17131b];
+  }
+
+  .book-detail__synopsis-text {
+    @apply mt-2 text-[16px] leading-tight text-[#17131b];
+  }
+
+  .book-detail__note {
+    @apply mt-5;
+  }
+
+  .book-detail__note-label {
+    @apply mb-2 block text-[18px] font-bold leading-tight text-[#17131b];
+  }
+
+  .book-detail__note-control {
+    @apply relative;
+  }
+
+  .book-detail__note-input {
+    @apply min-h-textarea w-full resize-none rounded-md border border-primary-accent bg-background/70 px-3 py-2 pr-20 text-[16px] leading-snug text-primary-text outline-none focus:border-hover-accent focus:ring-2 focus:ring-primary-accent/30;
+  }
+
+  .book-detail__note-action {
+    @apply absolute bottom-3 right-4 rounded-full p-5 text-[15px] font-medium;
+  }
+
+  .book-detail__actions {
+    @apply mt-2 grid gap-2;
+  }
+
+  .book-detail__delete {
+    @apply rounded-md bg-[#c95b50] font-semibold normal-case tracking-normal text-white hover:bg-[#b7493f];
+  }
+
+  .book-detail__update {
+    @apply font-semibold normal-case tracking-normal;
+  }
+
+  .book-detail__status-action {
+    @apply rounded-md bg-primary-accent font-semibold normal-case tracking-normal text-white hover:bg-hover-accent;
+  }
+}
+

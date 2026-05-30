@@ -102,7 +102,7 @@ export default function BookForm({ onSuccess }) {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
-      <FieldGroup className="gap-4">
+      <FieldGroup className="book-form__group">
         <BookTitleField
           bookSearch={bookSearch}
           control={form.control}

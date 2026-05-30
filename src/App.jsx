@@ -9,15 +9,13 @@ function App() {
   const [booksRefreshKey, setBooksRefreshKey] = useState(0);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-background text-primary-text">
+    <main className="app-shell">
       <Header />
 
-      <section className="mx-auto w-full max-w-content px-6 pb-12 pt-7 lg:px-10">
+      <section className="app-content lg:px-10">
         <Tabs defaultValue="all">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <h1 className="font-heading text-display font-bold leading-none tracking-normal">
-              Koleksi Buku
-            </h1>
+          <div className="app-toolbar">
+            <h1 className="app-title">Koleksi Buku</h1>
 
             <FormBookDrawer setBooksRefreshKey={setBooksRefreshKey} />
           </div>

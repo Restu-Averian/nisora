@@ -85,7 +85,7 @@ export default function BookGrid({ refreshKey }) {
   if (isFetchingBooks) {
     return (
       <TabsContent
-        className="rounded-md border border-border bg-background/72 p-6 text-center text-sm font-medium text-secondary-text"
+        className="books-grid__loading"
         value="all"
       >
         Memuat buku...
@@ -105,7 +105,7 @@ export default function BookGrid({ refreshKey }) {
 
         return (
           <TabsContent
-            className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
+            className="books-grid__list sm:grid-cols-2 xl:grid-cols-3"
             key={tab?.value}
             value={tab?.value}
           >
@@ -122,7 +122,7 @@ export default function BookGrid({ refreshKey }) {
                 );
               })
             ) : (
-              <div className="rounded-md border border-border bg-background/72 p-6 text-center text-sm font-medium text-secondary-text sm:col-span-2 xl:col-span-3">
+              <div className="books-grid__empty sm:col-span-2 xl:col-span-3">
                 Belum ada buku.
               </div>
             )}
@@ -141,7 +141,7 @@ export default function BookGrid({ refreshKey }) {
         >
           <DrawerContent>
             <DrawerHeader>
-              <DrawerTitle className="font-heading font-bold normal-case tracking-normal text-primary-text">
+              <DrawerTitle className="books-grid__drawer-title">
                 Detail Buku
               </DrawerTitle>
               <DrawerDescription className="sr-only">
@@ -161,9 +161,9 @@ export default function BookGrid({ refreshKey }) {
             }
           }}
         >
-          <DialogContent className="max-h-[calc(100vh-3rem)] w-[min(1160px,calc(100%-2rem))] max-w-[min(1160px,calc(100%-2rem))] gap-0 overflow-y-auto p-0 sm:max-w-[min(1160px,calc(100%-2rem))]">
-            <DialogHeader className="border-b border-border px-6 py-7 text-center">
-              <DialogTitle className="font-heading font-bold normal-case tracking-normal text-primary-text">
+          <DialogContent className="books-grid__dialog-content sm:max-w-[min(1160px,calc(100%-2rem))]">
+            <DialogHeader className="books-grid__dialog-header">
+              <DialogTitle className="books-grid__dialog-title">
                 Detail Buku
               </DialogTitle>
               <DialogDescription className="sr-only">

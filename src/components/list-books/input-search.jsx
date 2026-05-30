@@ -5,15 +5,15 @@ import { useBreakpoint } from "@/js-toolkit/src/react";
 export default function InputSearch() {
   const { xs } = useBreakpoint();
   return (
-    <Field className="gap-1.5 flex-1 ">
+    <Field className="books-search">
       <FieldContent
-        className="relative ml-auto"
+        className="books-search__content"
         style={{ width: xs ? "100%" : 360 }}
       >
-        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="books-search__icon" />
 
         <input
-          className="form-control h-8 pl-9 ml-auto "
+          className="form-control books-search__input"
           id="search-book"
           placeholder="Cari Koleksi"
           type="text"

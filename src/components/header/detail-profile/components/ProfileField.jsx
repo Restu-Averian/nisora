@@ -13,13 +13,13 @@ export default function ProfileField({ control, id, label, name, type }) {
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <Field className="gap-1.5" data-invalid={fieldState.invalid}>
+        <Field className="profile-field" data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor={id}>{label}</FieldLabel>
           <FieldContent>
             <input
               {...field}
               aria-invalid={fieldState.invalid}
-              className="form-control h-9 text-center"
+              className="form-control profile-field__input"
               id={id}
               type={type}
             />

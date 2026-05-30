@@ -184,7 +184,7 @@ export default function DetailProfile({ onCloseHeaderInfo, user }) {
   }, [avatarPreview, avatarFile]);
 
   return (
-    <section className="w-full max-w-94 px-6 pb-6 pt-8 text-center text-primary-text ">
+    <section className="profile-detail">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ProfileAvatar
           avatarPreview={avatarPreview}
@@ -192,11 +192,9 @@ export default function DetailProfile({ onCloseHeaderInfo, user }) {
           onAvatarChange={onAvatarChange}
         />
 
-        <h2 className="mb-6 font-heading text-[28px] font-medium leading-none text-[#17131b]">
-          Profil Pengguna
-        </h2>
+        <h2 className="profile-detail__title">Profil Pengguna</h2>
 
-        <div className="space-y-5">
+        <div className="profile-detail__fields">
           <ProfileField
             control={form.control}
             id="profile-name"

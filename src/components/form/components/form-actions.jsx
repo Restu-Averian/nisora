@@ -4,16 +4,16 @@ import { DrawerClose } from "@/components/ui/drawer";
 
 export function FormActions({ isSubmitting, onCancel }) {
   return (
-    <div className="flex items-center gap-4 pt-1">
+    <div className="book-actions">
       <Button
-        className="h-8 flex-1 rounded-md bg-primary-accent text-xs font-semibold normal-case tracking-normal text-white hover:bg-hover-accent"
+        className="book-actions__submit"
         disabled={isSubmitting}
         type="submit"
       >
         {isSubmitting ? (
-          <LoaderCircle className="size-4 animate-spin" />
+          <LoaderCircle className="book-actions__icon book-actions__icon--loading" />
         ) : (
-          <Plus className="size-4" />
+          <Plus className="book-actions__icon" />
         )}
 
         {isSubmitting ? "Menambahkan..." : "Tambah Buku"}
@@ -21,7 +21,7 @@ export function FormActions({ isSubmitting, onCancel }) {
 
       <DrawerClose asChild>
         <button
-          className="h-8 px-2 text-13 font-medium text-secondary-text transition-colors hover:text-primary-text"
+          className="book-actions__cancel"
           disabled={isSubmitting}
           type="button"
           onClick={onCancel}

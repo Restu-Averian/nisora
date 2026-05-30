@@ -43,26 +43,21 @@ export default function Header() {
 
   return (
     <>
-      <header className="border-b border-border bg-background/90">
-        <div className="mx-auto flex h-header max-w-content items-center justify-between px-6 lg:px-10">
-          <div className="flex items-center gap-8">
-            <div className="flex items-center gap-2">
+      <header className="site-header">
+        <div className="site-header__inner lg:px-10">
+          <div className="site-header__brand-wrap">
+            <div className="site-header__brand">
               <Book />
-              <p className="font-heading text-3xl font-semibold italic leading-none">
-                Nisora
-              </p>
+              <p className="site-header__brand-text">Nisora</p>
             </div>
           </div>
 
-          <nav
-            aria-label="Navigasi halaman"
-            className="flex items-center gap-3"
-          >
+          <nav aria-label="Navigasi halaman" className="site-header__nav">
             {isLogin ? (
               avatarURL ? (
                 <img
                   alt="Foto profil pengguna"
-                  className="size-10 rounded-full border-4 border-background object-cover shadow-[0_0_0_2px_rgba(77,62,44,0.16)] cursor-pointer"
+                  className="site-header__avatar"
                   src={avatarURL}
                   onClick={() => {
                     setShowHeaderInfo(true);
@@ -71,14 +66,14 @@ export default function Header() {
               ) : (
                 <Button
                   aria-label="Profil"
-                  className="size-8 rounded-full border-0 bg-transparent p-0 text-primary-text shadow-none hover:bg-surface"
+                  className="site-header__profile-button"
                   size="icon"
                   variant="ghost"
                   onClick={() => {
                     setShowHeaderInfo(true);
                   }}
                 >
-                  <UserCircle className="size-7 fill-primary-text/20" />
+                  <UserCircle className="site-header__profile-icon" />
                 </Button>
               )
             ) : (

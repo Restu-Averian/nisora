@@ -4,13 +4,9 @@ import { useMemo } from "react";
 
 function BookMeta({ label, value }) {
   return (
-    <div className="mt-2">
-      <p className="text-xs font-bold leading-tight text-primary-text">
-        {label}
-      </p>
-      <p className="line-clamp-3 text-xxs leading-tight text-primary-text">
-        {value}
-      </p>
+    <div className="book-card__meta">
+      <p className="book-card__meta-label">{label}</p>
+      <p className="book-card__meta-value">{value}</p>
     </div>
   );
 }
@@ -22,39 +18,37 @@ export default function BookCard({ book, onClick }) {
 
   return (
     <article
-      className="flex h-full cursor-pointer flex-col rounded-lg border border-border bg-background/72 p-3 shadow-card transition-shadow hover:shadow-[0_4px_16px_rgba(77,62,44,0.18)]"
+      className="book-card"
       onClick={onClick}
     >
-      <div className="grid flex-1 grid-cols-[92px_1fr] gap-3 mb-2.5">
+      <div className="book-card__layout">
         <img
           alt={`Sampul ${book.title}`}
-          className="h-35.5 w-23 rounded-md object-cover shadow-cover"
+          className="book-card__cover"
           src={book.cover}
           loading="lazy"
         />
 
-        <div className="min-w-0 pt-1">
-          <h2 className="line-clamp-2 min-h-[2.25em] font-heading text-lg font-bold leading-tight text-primary-text">
-            {book.title}
-          </h2>
+        <div className="book-card__content">
+          <h2 className="book-card__title">{book.title}</h2>
 
           <BookMeta label="Sinopsis" value={book.synopsis} />
           <BookMeta label="Pengarang" value={book.author} />
 
-          <span className="mt-2 inline-flex h-6 items-center rounded bg-soft-accent px-2 text-xxs font-bold uppercase leading-none text-primary-text">
+          <span className="book-card__year">
             Tahun: {book.year}
           </span>
         </div>
       </div>
 
       <Button
-        className="mt-auto h-8 w-full rounded-md bg-primary-accent px-3 text-xs font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent"
+        className="book-card__action"
         onClick={(event) => {
           event.stopPropagation();
         }}
         type="button"
       >
-        Pindahkan ke <span className="font-bold">{statusText}</span>
+        Pindahkan ke <span className="book-card__action-status">{statusText}</span>
       </Button>
     </article>
   );
