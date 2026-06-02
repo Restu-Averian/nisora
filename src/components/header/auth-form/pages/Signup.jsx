@@ -1,4 +1,4 @@
-import AuthEmailForm from "../components/AuthEmailForm";
+import AuthEmailForm from "../components/auth-email-form";
 
 export default function Signup({ onLoginClick, onSuccess }) {
   return (

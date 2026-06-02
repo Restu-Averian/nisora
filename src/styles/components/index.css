@@ -147,8 +147,7 @@
   .book-drawer__content {
     @apply px-10;
   }
-  .book-drawer__title,
-  .book-drawer__description {
+  .book-drawer__title, .book-drawer__description {
     @apply text-center;
   }
   .book-form__group {
@@ -273,15 +272,13 @@
   .books-search__input {
     @apply ml-auto h-8 pl-9;
   }
-  .books-grid__loading,
-  .books-grid__empty {
+  .books-grid__loading, .books-grid__empty {
     @apply rounded-md border border-border bg-background/72 p-6 text-center text-sm font-medium text-secondary-text;
   }
   .books-grid__list {
     @apply grid gap-4;
   }
-  .books-grid__drawer-title,
-  .books-grid__dialog-title {
+  .books-grid__drawer-title, .books-grid__dialog-title {
     @apply font-heading font-bold normal-case tracking-normal text-primary-text;
   }
   .books-grid__dialog-content {

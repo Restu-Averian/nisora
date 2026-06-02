@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form";
 import { useBreakpoint } from "@/js-toolkit/src/react";
 import supabase from "@/lib/supabase";
 import { toast } from "sonner";
-import ProfileActions from "./components/ProfileActions";
-import ProfileAvatar from "./components/ProfileAvatar";
-import ProfileField from "./components/ProfileField";
-import ProfileJoinedDate from "./components/ProfileJoinedDate";
+import ProfileActions from "./components/profile-actions";
+import ProfileAvatar from "./components/profile-avatar";
+import ProfileField from "./components/profile-field";
+import ProfileJoinedDate from "./components/profile-joined-date";
 import {
   createAvatarPath,
   formatJoinDate,
