@@ -24,6 +24,7 @@ export default function ProfileActions({ isLoggingOut, isSaving, onLogout }) {
         disabled={isLoggingOut}
         type="button"
         onClick={onLogout}
+        variant="destructive"
       >
         {isLoggingOut ? (
           <>

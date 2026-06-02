@@ -101,7 +101,12 @@ export default function BookForm({ onSuccess }) {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      className={
+        xs ? "-mx-10 max-h-[calc(80vh-8rem)] overflow-y-auto px-6 pb-6" : ""
+      }
+      onSubmit={form.handleSubmit(onSubmit)}
+    >
       <FieldGroup className="book-form__group">
         <BookTitleField
           bookSearch={bookSearch}

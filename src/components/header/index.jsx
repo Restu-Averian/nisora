@@ -96,23 +96,23 @@ export default function Header() {
               <DrawerTitle className="sr-only">
                 {isLogin ? "Detail Profile" : "Authentication"}
               </DrawerTitle>
-
-              {isLogin ? (
-                <DetailProfile
-                  user={loginInfo}
-                  onCloseHeaderInfo={() => {
-                    setShowHeaderInfo(false);
-                  }}
-                />
-              ) : (
-                <AuthForm
-                  showHeaderInfo={showHeaderInfo}
-                  onSuccess={() => {
-                    setShowHeaderInfo(false);
-                  }}
-                />
-              )}
             </DrawerHeader>
+
+            {isLogin ? (
+              <DetailProfile
+                user={loginInfo}
+                onCloseHeaderInfo={() => {
+                  setShowHeaderInfo(false);
+                }}
+              />
+            ) : (
+              <AuthForm
+                showHeaderInfo={showHeaderInfo}
+                onSuccess={() => {
+                  setShowHeaderInfo(false);
+                }}
+              />
+            )}
           </DrawerContent>
         </Drawer>
       ) : (

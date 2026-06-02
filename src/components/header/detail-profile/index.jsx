@@ -184,7 +184,9 @@ export default function DetailProfile({ onCloseHeaderInfo, user }) {
   }, [avatarPreview, avatarFile]);
 
   return (
-    <section className="profile-detail">
+    <section
+      className={`profile-detail ${xs ? "max-h-[calc(80vh-4rem)] overflow-y-auto px-6" : ""}`}
+    >
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <ProfileAvatar
           avatarPreview={avatarPreview}
