@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Tabs } from "@/components/ui/tabs";
-import ListBooks from "./components/list-books";
+import ListBooks from "./components/books";
 import Header from "./components/header";
 import FormBookDrawer from "./components/form";
 import { Toaster } from "./components/ui/sonner";

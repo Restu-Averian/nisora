@@ -32,9 +32,7 @@ export default function BookDetail({ book }) {
                 <p className="book-detail__author">{book.author}</p>
               </div>
 
-              <span className="book-detail__year">
-                Tahun: {book.year}
-              </span>
+              <span className="book-detail__year">Tahun: {book.year}</span>
             </div>
           </div>
 
@@ -56,20 +54,14 @@ export default function BookDetail({ book }) {
                 id={`book-note-${book.id}`}
                 placeholder="Tambahkan catatan Anda di sini..."
               />
-              <Button
-                className="book-detail__note-action"
-                type="button"
-              >
+              <Button className="book-detail__note-action" type="button">
                 <Pencil />
               </Button>
             </div>
           </div>
 
           <div className="book-detail__actions sm:grid-cols-3">
-            <Button
-              className="book-detail__delete"
-              type="button"
-            >
+            <Button className="book-detail__delete" type="button">
               Delete
             </Button>
             <Button
@@ -79,10 +71,7 @@ export default function BookDetail({ book }) {
             >
               Update
             </Button>
-            <Button
-              className="book-detail__status-action"
-              type="button"
-            >
+            <Button className="book-detail__status-action" type="button">
               Update status '{statusText}'
             </Button>
           </div>

@@ -1,7 +1,7 @@
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TABS } from "@/data/books";
 import { useBreakpoint } from "@/js-toolkit/src/react";
-import InputSearch from "./input-search";
+import BookSearch from "./book-search";
 
 export default function BooksTabs() {
   const { xs } = useBreakpoint();
@@ -21,10 +21,10 @@ export default function BooksTabs() {
           ))}
         </TabsList>
 
-        {!xs && <InputSearch />}
+        {!xs && <BookSearch />}
       </div>
 
-      {xs && <InputSearch />}
+      {xs && <BookSearch />}
     </>
   );
 }

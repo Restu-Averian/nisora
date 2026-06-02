@@ -59,11 +59,17 @@ const booksStore = create((set) => {
   return {
     books: [],
     isFetchingBooks: true,
+    searchValue: "",
+
+    setSearchValue(searchValue) {
+      set({ searchValue });
+    },
 
     clearBooks() {
       set({
         books: [],
         isFetchingBooks: false,
+        searchValue: "",
       });
     },
 

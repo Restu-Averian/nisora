@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fzf } from "fzf";
 import { toast } from "sonner";
 
 import {
@@ -8,36 +9,58 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { TabsContent } from "@/components/ui/tabs";
-import { TABS } from "@/data/books";
-import BookCard from "./book-card";
-import BookDetail from "./book-detail";
-import { objKeys } from "@/js-toolkit/src";
-import { useBreakpoint } from "@/js-toolkit/src/react";
-import supabase from "@/lib/supabase";
-import useBooksStore from "@/store/booksStore";
 import {
   Drawer,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from "../ui/drawer";
+} from "@/components/ui/drawer";
+import { TabsContent } from "@/components/ui/tabs";
+import { TABS } from "@/data/books";
+import { isEmptyValue, objKeys, toLowerCase } from "@/js-toolkit/src";
+import { useBreakpoint } from "@/js-toolkit/src/react";
+import supabase from "@/lib/supabase";
+import useBooksStore from "@/store/booksStore";
 import { useShallow } from "zustand/shallow";
+import BookDetail from "../detail";
+import BookCard from "./book-card";
+
+function getBookSearchText(book) {
+  const statusLabel =
+    TABS.find((tab) => tab.value === book?.status)?.label ?? book?.status;
+
+  return [
+    book?.title,
+    book?.author,
+    book?.synopsis,
+    book?.year,
+    statusLabel,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
 
 export default function BookGrid({ refreshKey }) {
-  const { books, isFetchingBooks, fetchBooks, clearBooks, updateBookStatus } =
-    useBooksStore(
-      useShallow((state) => {
-        return {
-          books: state?.books,
-          isFetchingBooks: state?.isFetchingBooks,
-          fetchBooks: state?.fetchBooks,
-          clearBooks: state?.clearBooks,
-          updateBookStatus: state?.updateBookStatus,
-        };
-      }),
-    );
+  const {
+    books,
+    isFetchingBooks,
+    searchValue,
+    fetchBooks,
+    clearBooks,
+    updateBookStatus,
+  } = useBooksStore(
+    useShallow((state) => {
+      return {
+        books: state?.books,
+        isFetchingBooks: state?.isFetchingBooks,
+        searchValue: state?.searchValue,
+        fetchBooks: state?.fetchBooks,
+        clearBooks: state?.clearBooks,
+        updateBookStatus: state?.updateBookStatus,
+      };
+    }),
+  );
 
   const [selectedBook, setSelectedBook] = useState({});
   const initRefreshKeyRef = useRef(refreshKey);
@@ -45,6 +68,30 @@ export default function BookGrid({ refreshKey }) {
   const { xs } = useBreakpoint();
 
   const toastPosition = useMemo(() => (xs ? "top-center" : "top-right"), [xs]);
+
+  const fzfBooks = useMemo(() => {
+    return new Fzf(books || [], {
+      casing: "case-insensitive",
+      selector: getBookSearchText,
+    });
+  }, [books]);
+
+  const searchedBooks = useMemo(() => {
+    const search = toLowerCase(searchValue)?.trim() || "";
+
+    if (isEmptyValue(search)) {
+      return books;
+    }
+
+    return (
+      fzfBooks.find(search)?.map((result) => {
+        return {
+          ...result?.item,
+          positions: result?.positions || null,
+        };
+      }) || []
+    );
+  }, [books, fzfBooks, searchValue]);
 
   const onShowToastError = useCallback(
     ({ error }) => {
@@ -135,8 +182,8 @@ export default function BookGrid({ refreshKey }) {
       {TABS.map((tab) => {
         const filteredBooks =
           tab?.value === "all"
-            ? books
-            : books?.filter((book) => {
+            ? searchedBooks
+            : searchedBooks?.filter((book) => {
                 return book?.status === tab?.value;
               });
 
@@ -161,7 +208,9 @@ export default function BookGrid({ refreshKey }) {
               })
             ) : (
               <div className="books-grid__empty sm:col-span-2 xl:col-span-3">
-                Belum ada buku.
+                {isEmptyValue(searchValue?.trim())
+                  ? "Belum ada buku."
+                  : "Buku tidak ditemukan."}
               </div>
             )}
           </TabsContent>
@@ -187,7 +236,7 @@ export default function BookGrid({ refreshKey }) {
               </DrawerDescription>
             </DrawerHeader>
 
-            <BookDetail book={selectedBook}>{() => {}}</BookDetail>
+            <BookDetail book={selectedBook} />
           </DrawerContent>
         </Drawer>
       ) : (

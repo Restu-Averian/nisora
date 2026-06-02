@@ -1,5 +1,5 @@
-import BooksTabs from "./books-tabs";
-import BookGrid from "./book-grid";
+import BooksTabs from "./components/list/books-tabs";
+import BookGrid from "./components/list/book-grid";
 
 export default function ListBooks({ refreshKey }) {
   return (
