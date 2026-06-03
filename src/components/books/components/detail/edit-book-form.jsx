@@ -238,6 +238,7 @@ export default function EditBookForm({ book, onCancel, onSaveCallback }) {
               className="book-detail__delete"
               disabled={isBusy}
               type="button"
+              variant="destructive"
             >
               {isDeleting && <LoaderCircle className="size-4 animate-spin" />}
               {isDeleting ? "Menghapus..." : "Hapus Buku"}

@@ -32,7 +32,7 @@ export default function BookDetail({ book }) {
   );
   const statusText = useMemo(() => {
     return TABS.find((tab) => tab.value === currentBook?.status)?.label ?? "-";
-  }, [currentBook?.status]);
+  }, [currentBook]);
 
   async function onDelete() {
     setIsDeleting(true);
