@@ -17,6 +17,7 @@ function mapBookFromSupabase(book) {
     year: book.published_year ?? "-",
     status: book.status,
     cover: book.cover_url || FALLBACK_COVER_URL,
+    personal_note: book.personal_note ?? "",
   };
 }
 
@@ -24,7 +25,7 @@ async function loadBooksByUserId(userId) {
   const { data, error } = await supabase
     .from("books")
     .select(
-      "id,title,authors,synopsis,published_year,cover_url,status,created_at",
+      "id,title,authors,synopsis,published_year,cover_url,status,personal_note,created_at",
     )
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
@@ -153,7 +154,7 @@ const booksStore = create((set) => {
         .eq("id", bookId)
         .eq("user_id", session?.user.id)
         .select(
-          "id,title,authors,synopsis,published_year,cover_url,status,created_at",
+          "id,title,authors,synopsis,published_year,cover_url,status,personal_note,created_at",
         )
         .single();
 

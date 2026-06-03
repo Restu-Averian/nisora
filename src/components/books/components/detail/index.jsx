@@ -1,4 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
 import {
   AlertDialog,
@@ -13,23 +16,102 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { TABS } from "@/data/books";
 import useBooksStore from "@/store/booksStore";
 import { LoaderCircle, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useShallow } from "zustand/shallow";
-import EditBookForm from "./edit-book-form";
+import EditBookForm, { FieldRender } from "./edit-book-form";
+
+const personalNoteSchema = z.object({
+  personal_note: z.string().optional(),
+});
+
+function PersonalNoteForm({ book, onSaved, updateBook }) {
+  const form = useForm({
+    resolver: zodResolver(personalNoteSchema),
+    defaultValues: {
+      personal_note: book.personal_note ?? "",
+    },
+  });
+  const { reset, setError } = form;
+
+  useEffect(() => {
+    reset({
+      personal_note: book.personal_note ?? "",
+    });
+  }, [book.id, book.personal_note, reset]);
+
+  async function onSubmit(data) {
+    const { book: updatedBook, error } = await updateBook({
+      bookId: book.id,
+      payload: {
+        personal_note: data.personal_note ?? "",
+      },
+    });
+
+    if (error) {
+      setError("personal_note", {
+        message: error.message,
+      });
+      toast.error("Gagal memperbarui catatan", {
+        description: error.message,
+      });
+      return;
+    }
+
+    reset({
+      personal_note: updatedBook.personal_note ?? "",
+    });
+    onSaved(updatedBook);
+    toast.success("Catatan pribadi diperbarui");
+  }
+
+  return (
+    <form className="book-detail__note" onSubmit={form.handleSubmit(onSubmit)}>
+      <FieldRender
+        action={
+          <Button
+            aria-label="Simpan catatan pribadi"
+            className="book-detail__note-action"
+            disabled={form.formState.isSubmitting}
+            type="submit"
+          >
+            {form.formState.isSubmitting ? (
+              <LoaderCircle className="size-4 animate-spin" />
+            ) : (
+              <Pencil />
+            )}
+          </Button>
+        }
+        contentClassName="book-detail__note-control"
+        control={form.control}
+        controlClassName="book-detail__note-input"
+        id={`book-note-${book.id}`}
+        labelClassName="book-detail__note-label"
+        label="Catatan Pribadi"
+        name="personal_note"
+        Component={Textarea}
+        placeholder="Tambahkan catatan Anda di sini..."
+        rows={4}
+      />
+    </form>
+  );
+}
 
 export default function BookDetail({ book }) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentBook, setCurrentBook] = useState(book);
+  const [currentBookId, setCurrentBookId] = useState(book?.id);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const { deleteBook, updateBookStatus } = useBooksStore(
+  const { deleteBook, updateBook, updateBookStatus } = useBooksStore(
     useShallow((state) => {
       return {
         deleteBook: state.deleteBook,
+        updateBook: state.updateBook,
         updateBookStatus: state.updateBookStatus,
       };
     }),
@@ -95,10 +177,11 @@ export default function BookDetail({ book }) {
     setIsUpdatingStatus(false);
   }
 
-  useEffect(() => {
+  if (currentBookId !== book?.id) {
+    setCurrentBookId(book?.id);
     setCurrentBook(book);
     setIsEditing(false);
-  }, [book]);
+  }
 
   if (!currentBook) {
     return null;
@@ -159,24 +242,11 @@ export default function BookDetail({ book }) {
                 </p>
               </div>
 
-              <div className="book-detail__note">
-                <label
-                  className="book-detail__note-label"
-                  htmlFor={`book-note-${currentBook.id}`}
-                >
-                  Catatan Pribadi
-                </label>
-                <div className="book-detail__note-control">
-                  <textarea
-                    className="book-detail__note-input"
-                    id={`book-note-${currentBook.id}`}
-                    placeholder="Tambahkan catatan Anda di sini..."
-                  />
-                  <Button className="book-detail__note-action" type="button">
-                    <Pencil />
-                  </Button>
-                </div>
-              </div>
+              <PersonalNoteForm
+                book={currentBook}
+                onSaved={setCurrentBook}
+                updateBook={updateBook}
+              />
 
               <div className="book-detail__actions sm:grid-cols-3">
                 <AlertDialog

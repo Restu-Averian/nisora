@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import supabase from "@/lib/supabase";
+import { cn } from "@/lib/utils";
 import { BookCoverField } from "@/components/form/components/book-cover-field";
 import { useCoverPreview } from "@/components/form/hooks/use-cover-preview";
 import useBooksStore from "@/store/booksStore";
@@ -42,29 +43,38 @@ const bookSchema = z.object({
   cover: z.any().optional(),
 });
 
-const FieldRender = ({
+export const FieldRender = ({
   control,
+  contentClassName,
+  controlClassName,
   id,
   label,
+  labelClassName,
   name,
   Component,
   type = "text",
+  action,
+  ...props
 }) => (
   <Controller
     control={control}
     name={name}
     render={({ field, fieldState }) => (
       <Field data-invalid={fieldState.invalid}>
-        <FieldLabel htmlFor={id}>{label}</FieldLabel>
-        <FieldContent>
+        <FieldLabel className={labelClassName} htmlFor={id}>
+          {label}
+        </FieldLabel>
+        <FieldContent className={contentClassName}>
           <Component
             {...field}
+            {...props}
             id={id}
             type={type}
             aria-invalid={fieldState.invalid}
-            className="form-control"
+            className={cn("form-control", controlClassName)}
             value={field.value ?? ""}
           />
+          {action}
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </FieldContent>
       </Field>
