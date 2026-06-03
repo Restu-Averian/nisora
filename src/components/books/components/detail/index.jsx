@@ -24,15 +24,28 @@ export default function BookDetail({ book }) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentBook, setCurrentBook] = useState(book);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const deleteBook = useBooksStore(
+  const { deleteBook, updateBookStatus } = useBooksStore(
     useShallow((state) => {
-      return state.deleteBook;
+      return {
+        deleteBook: state.deleteBook,
+        updateBookStatus: state.updateBookStatus,
+      };
     }),
   );
-  const statusText = useMemo(() => {
-    return TABS.find((tab) => tab.value === currentBook?.status)?.label ?? "-";
+  const { statusText, nextStatusValue } = useMemo(() => {
+    return {
+      statusText:
+        TABS.find((tab) => tab.value === currentBook?.status)?.label ?? "-",
+      nextStatusValue:
+        currentBook?.status === "finished" ? "reading" : "finished",
+    };
   }, [currentBook]);
+
+  const nextStatusLabel = useMemo(() => {
+    return TABS.find((tab) => tab.value === nextStatusValue)?.label ?? "-";
+  }, [nextStatusValue]);
 
   async function onDelete() {
     setIsDeleting(true);
@@ -51,6 +64,35 @@ export default function BookDetail({ book }) {
     setCurrentBook(null);
     setIsDeleting(false);
     setIsDeleteDialogOpen(false);
+  }
+
+  async function onUpdateBookStatus() {
+    setIsUpdatingStatus(true);
+
+    const { error } = await updateBookStatus({
+      bookId: currentBook.id,
+      newStatusValue: nextStatusValue,
+    });
+
+    if (error) {
+      toast.error("Gagal mengubah status buku", {
+        description: error.message,
+      });
+      setIsUpdatingStatus(false);
+      return;
+    }
+
+    setCurrentBook((current) => {
+      return {
+        ...current,
+        status: nextStatusValue,
+      };
+    });
+
+    toast.success("Status buku diperbarui", {
+      description: `Buku dipindahkan ke ${nextStatusLabel}.`,
+    });
+    setIsUpdatingStatus(false);
   }
 
   useEffect(() => {
@@ -194,8 +236,18 @@ export default function BookDetail({ book }) {
                 >
                   Update
                 </Button>
-                <Button className="book-detail__status-action" type="button">
-                  Update status '{statusText}'
+                <Button
+                  className="book-detail__status-action"
+                  disabled={isUpdatingStatus}
+                  onClick={onUpdateBookStatus}
+                  type="button"
+                >
+                  {isUpdatingStatus && (
+                    <LoaderCircle className="size-4 animate-spin" />
+                  )}
+                  {isUpdatingStatus
+                    ? "Memindahkan..."
+                    : `Pindahkan ke '${nextStatusLabel}'`}
                 </Button>
               </div>
             </>
