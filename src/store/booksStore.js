@@ -139,6 +139,70 @@ const booksStore = create((set) => {
 
       return { error: null };
     },
+
+    async updateBook({ bookId, payload }) {
+      const { session, error: sessionError } = await getActiveSession();
+
+      if (sessionError) {
+        return { book: null, error: sessionError };
+      }
+
+      const { data, error } = await supabase
+        .from("books")
+        .update(payload)
+        .eq("id", bookId)
+        .eq("user_id", session?.user.id)
+        .select(
+          "id,title,authors,synopsis,published_year,cover_url,status,created_at",
+        )
+        .single();
+
+      if (error) {
+        return { book: null, error };
+      }
+
+      const updatedBook = mapBookFromSupabase(data);
+
+      set((state) => {
+        return {
+          books: state?.books.map((book) => {
+            if (book.id !== bookId) {
+              return book;
+            }
+
+            return updatedBook;
+          }),
+        };
+      });
+
+      return { book: updatedBook, error: null };
+    },
+
+    async deleteBook({ bookId }) {
+      const { session, error: sessionError } = await getActiveSession();
+
+      if (sessionError) {
+        return { error: sessionError };
+      }
+
+      const { error } = await supabase
+        .from("books")
+        .delete()
+        .eq("id", bookId)
+        .eq("user_id", session?.user.id);
+
+      if (error) {
+        return { error };
+      }
+
+      set((state) => {
+        return {
+          books: state?.books.filter((book) => book.id !== bookId),
+        };
+      });
+
+      return { error: null };
+    },
   };
 });
 

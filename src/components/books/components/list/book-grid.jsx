@@ -152,6 +152,20 @@ export default function BookGrid({ refreshKey }) {
   }, [fetchBooks, refreshKey, onShowToastError]);
 
   useEffect(() => {
+    if (!selectedBook?.id) {
+      return;
+    }
+
+    const isSelectedBookAvailable = books.some((book) => {
+      return book.id === selectedBook.id;
+    });
+
+    if (!isSelectedBookAvailable) {
+      setSelectedBook({});
+    }
+  }, [books, selectedBook?.id]);
+
+  useEffect(() => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {

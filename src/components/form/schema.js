@@ -5,7 +5,7 @@ export const BOOK_FORM_DEFAULT_VALUES = {
   synopsis: "",
   cover: undefined,
   author: "",
-  year: 1,
+  published_year: new Date().getFullYear(),
 };
 
 export const formSchema = z.object({
@@ -13,5 +13,5 @@ export const formSchema = z.object({
   synopsis: z.string().optional(),
   cover: z.union([z.instanceof(File), z.string().url()]).optional(),
   author: z.string().optional(),
-  year: z.number().int().positive().optional(),
+  published_year: z.coerce.number().int().positive().optional(),
 });

@@ -10,7 +10,7 @@ export function YearField({ control }) {
   return (
     <Controller
       control={control}
-      name="year"
+      name="published_year"
       render={({ field, fieldState }) => (
         <Field className="book-form__field" data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="book-year">Tahun Baca</FieldLabel>
@@ -20,16 +20,15 @@ export function YearField({ control }) {
               id="book-year"
               type="text"
               aria-invalid={fieldState.invalid}
+              name={field.name}
+              ref={field.ref}
               value={field.value ?? ""}
               onChange={(event) => {
                 const raw = event.target.value;
 
-                field.onChange(raw === "" ? undefined : Number(raw));
+                field.onChange(raw === "" ? undefined : raw);
               }}
-              // onBlur={field.onBlur}
-              // ref={field.ref}
-              // name={field.name}
-              {...field}
+              onBlur={field.onBlur}
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </FieldContent>

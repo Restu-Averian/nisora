@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -17,11 +17,13 @@ import { BOOK_FORM_DEFAULT_VALUES, formSchema } from "./schema";
 
 export default function BookForm({ onSuccess }) {
   const [coverFile, setCoverFile] = useState(null);
+  const coverUploadRef = useRef(null);
 
   const { xs } = useBreakpoint();
   const toastPosition = xs ? "top-center" : "top-right";
 
   const { bookSearch, handleBookSearch, resetBookSearch } = useBookSearch();
+
   const coverPreview = useCoverPreview(coverFile);
 
   const form = useForm({
@@ -32,6 +34,7 @@ export default function BookForm({ onSuccess }) {
   function resetFormState() {
     form.reset();
     setCoverFile(null);
+    coverUploadRef.current = null;
     resetBookSearch();
   }
 
@@ -45,13 +48,36 @@ export default function BookForm({ onSuccess }) {
 
     form.setValue("author", book.author ?? "", { shouldDirty: true });
 
-    form.setValue("year", book.year ?? undefined, { shouldDirty: true });
+    form.setValue("published_year", book.year ?? undefined, {
+      shouldDirty: true,
+    });
 
     form.setValue("cover", book.cover || undefined, { shouldDirty: true });
 
     setCoverFile(book.cover || null);
+    coverUploadRef.current = null;
 
     resetBookSearch();
+  }
+
+  async function uploadCoverFile({ file, session }) {
+    const fileExt = file.name.split(".").pop() || "jpg";
+    const fileName = `${crypto.randomUUID()}.${fileExt}`;
+    const filePath = `${session.user.id}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("books")
+      .upload(filePath, file);
+
+    if (uploadError) {
+      return { coverUrl: null, error: uploadError };
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("books")
+      .getPublicUrl(filePath);
+
+    return { coverUrl: publicUrlData?.publicUrl ?? null, error: null };
   }
 
   async function onSubmit(data) {
@@ -71,14 +97,33 @@ export default function BookForm({ onSuccess }) {
     const title = data.title.trim();
     const author = data.author?.trim();
     const synopsis = data.synopsis?.trim();
+    let coverUrl = typeof data.cover === "string" ? data.cover : null;
+
+    if (coverUploadRef.current) {
+      const { coverUrl: uploadedCoverUrl, error: uploadError } =
+        await uploadCoverFile({
+          file: coverUploadRef.current,
+          session,
+        });
+
+      if (uploadError) {
+        toast.error("Gagal mengunggah sampul", {
+          description: uploadError.message,
+          position: toastPosition,
+        });
+        return;
+      }
+
+      coverUrl = uploadedCoverUrl;
+    }
 
     const payload = {
       user_id: session.user.id,
       title,
       authors: author ? [author] : [],
       synopsis: synopsis || null,
-      published_year: data.year ?? null,
-      cover_url: typeof data.cover === "string" ? data.cover : null,
+      published_year: data.published_year ?? null,
+      cover_url: coverUrl,
     };
 
     const { error } = await supabase.from("books").insert(payload);
@@ -123,7 +168,10 @@ export default function BookForm({ onSuccess }) {
           control={form.control}
           coverFile={coverFile}
           coverPreview={coverPreview}
-          onCoverChange={setCoverFile}
+          onCoverChange={(file) => {
+            setCoverFile(file);
+            coverUploadRef.current = file instanceof File ? file : null;
+          }}
         />
 
         <TextField
