@@ -1,0 +1,14 @@
+@layer components {
+  .app-shell {
+    @apply min-h-screen overflow-hidden bg-background text-primary-text;
+  }
+  .app-content {
+    @apply mx-auto w-full max-w-content px-6 pb-12 pt-7;
+  }
+  .app-toolbar {
+    @apply flex flex-wrap items-center justify-between gap-4;
+  }
+  .app-title {
+    @apply font-heading text-display font-bold leading-none tracking-normal;
+  }
+}

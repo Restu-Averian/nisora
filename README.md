@@ -1,16 +1,29 @@
-# React + Vite
+# Nisora
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal book collection manager — a digital reading journal for tracking books you own or have read.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Book catalog** — grid view of books with cover, title, synopsis, author, and year
+- **Filter by status** — tabs to filter books: All, Currently Reading, Finished
+- **Book search** — search bar in the header (UI ready, filtering not yet wired)
+- **Add book form** — slide-in Vaul drawer with fields for title, synopsis, cover image, author, and year
+- **Cover image upload** — client-side file picker with preview
+- **Responsive design** — adapts across mobile, tablet, and desktop breakpoints
 
-## React Compiler
+## Design
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Warm, earthy color palette:
 
-## Expanding the ESLint configuration
+| Token          | Color     |
+| -------------- | --------- |
+| Background     | `#faf6f0` |
+| Surface / Card | `#f3ede4` |
+| Primary text   | `#4e4a56` |
+| Secondary text | `#7a7684` |
+| Primary accent | `#8fa8c7` |
+| Hover accent   | `#7693b7` |
+| Soft accent    | `#d9e4f2` |
+| Border         | `#e7e1d8` |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Typography uses Playfair Display for headings (serif, editorial feel) and Noto Sans for body text (clean, readable). Entire UI is in Bahasa Indonesia.

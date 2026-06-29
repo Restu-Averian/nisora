@@ -1,0 +1,158 @@
+@layer components {
+  .book-drawer {
+    &__trigger {
+      @apply fixed bottom-5 right-5 h-auto rounded-full bg-primary-accent px-5 py-5 text-xs font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent;
+    }
+
+    &__trigger-icon {
+      @apply size-6;
+    }
+
+    &__content {
+      @apply px-10;
+    }
+
+    &__title,
+    &__description {
+      @apply text-center;
+    }
+  }
+
+  .book-form {
+    &__group {
+      @apply gap-4;
+    }
+
+    &__field {
+      @apply gap-1.5;
+    }
+  }
+
+  .book-cover {
+    &__input {
+      @apply sr-only;
+    }
+
+    &__dropzone {
+      @apply flex min-h-upload w-full items-center justify-center gap-3 rounded-md border border-dashed border-border bg-background/60 p-3 text-secondary-text transition-colors hover:bg-surface;
+    }
+
+    &__preview {
+      @apply h-20 w-14 rounded object-cover shadow-cover;
+    }
+
+    &__text {
+      @apply min-w-0 text-sm;
+    }
+
+    &__name {
+      @apply block truncate font-semibold text-primary-text;
+    }
+
+    &__hint {
+      @apply block text-xs text-secondary-text;
+    }
+
+    &__empty {
+      @apply flex flex-col items-center gap-2;
+    }
+
+    &__icon {
+      @apply size-5;
+    }
+
+    &__empty-text {
+      @apply text-sm;
+    }
+  }
+
+  .book-search-item {
+    @apply items-start;
+
+    &__cover {
+      @apply h-14 w-10 rounded object-cover shadow-cover;
+    }
+
+    &__empty-cover {
+      @apply flex h-14 w-10 shrink-0 items-center justify-center rounded bg-surface text-xxs text-secondary-text shadow-cover;
+    }
+
+    &__text {
+      @apply min-w-0 text-left;
+    }
+
+    &__title {
+      @apply block truncate font-semibold text-primary-text;
+    }
+
+    &__meta {
+      @apply block truncate text-xs text-secondary-text;
+    }
+  }
+
+  .book-search-list {
+    @apply mt-2 rounded-md border border-border bg-background;
+
+    &--floating {
+      @apply absolute left-0 right-0 top-full z-20 shadow-sidebar;
+    }
+
+    &__loading {
+      @apply flex items-center justify-between;
+    }
+
+    &__loading-text {
+      @apply flex-1;
+    }
+
+    &__loading-icon {
+      @apply animate-spin;
+    }
+
+    &__empty {
+      @apply px-4 text-secondary-text;
+    }
+  }
+
+  .book-title-command {
+    @apply relative overflow-visible rounded-md bg-transparent text-primary-text;
+
+    &__input {
+      @apply h-8;
+    }
+  }
+
+  .book-actions {
+    @apply flex items-center gap-4 pt-1;
+
+    &__submit {
+      @apply h-8 flex-1 rounded-md bg-primary-accent text-xs font-semibold normal-case tracking-normal text-white hover:bg-hover-accent;
+    }
+
+    &__icon {
+      @apply size-4;
+
+      &--loading {
+        @apply animate-spin;
+      }
+    }
+
+    &__cancel {
+      @apply h-8 px-2 text-13 font-medium text-secondary-text transition-colors hover:text-primary-text;
+    }
+  }
+
+  .book-field {
+    &__text-input {
+      @apply h-8;
+    }
+
+    &__year-input {
+      @apply h-8 max-w-30;
+    }
+
+    &__textarea {
+      @apply min-h-textarea resize-none py-2;
+    }
+  }
+}

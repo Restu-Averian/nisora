@@ -1,17 +1,32 @@
-import * as React from "react"
 import { cva } from "class-variance-authority";
-import { Slot } from "radix-ui"
+import { Slot } from "radix-ui";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
+
+/**
+ * Button component with multiple variants and sizes.
+ * Uses Radix Slot.Root for polymorphic `asChild` support.
+ *
+ * @example
+ * <Button variant="outline" size="sm" onClick={handleClick}>
+ *   Kembali
+ * </Button>
+ *
+ * @example
+ * <Button asChild>
+ *   <a href="/profile">Profil</a>
+ * </Button>
+ * knrx kzfh monj vtjc
+ */
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-none border border-transparent bg-clip-padding text-xs font-semibold tracking-widest whitespace-nowrap uppercase transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+  "group/button cursor-pointer inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-xs font-semibold tracking-widest whitespace-nowrap uppercase transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/80",
         outline:
-          "border-border bg-transparent hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-input/30",
+          "border-border border-primary text-primary bg-transparent hover:bg-muted aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-input/30",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
@@ -36,9 +51,16 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
-)
+  },
+);
 
+/**
+ * @param {import("react").ComponentPropsWithoutRef<"button"> &
+ *   import("class-variance-authority").VariantProps<typeof buttonVariants> & {
+ *     asChild?: boolean
+ *   }} props
+ * @returns {React.JSX.Element}
+ */
 function Button({
   className,
   variant = "default",
@@ -46,7 +68,7 @@ function Button({
   asChild = false,
   ...props
 }) {
-  const Comp = asChild ? Slot.Root : "button"
+  const Comp = asChild ? Slot.Root : "button";
 
   return (
     <Comp
@@ -54,8 +76,9 @@ function Button({
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
-      {...props} />
+      {...props}
+    />
   );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

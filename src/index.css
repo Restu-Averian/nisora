@@ -3,6 +3,8 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/noto-sans";
 @import "@fontsource-variable/playfair-display";
+@import "./styles/library.css";
+@import "./styles/components/index.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -87,6 +89,11 @@
   --font-sans: "Noto Sans Variable", sans-serif;
   --font-heading: "Playfair Display Variable", serif;
 
+  --text-xxs: 11px;
+  --text-13: 13px;
+  --text-heading: 22px;
+  --text-display: 32px;
+
   --color-surface: var(--surface);
   --color-primary-text: var(--primary-text);
   --color-secondary-text: var(--secondary-text);
@@ -125,6 +132,20 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+
+  --spacing-header: 66px;
+  --spacing-upload: 78px;
+  --spacing-textarea: 82px;
+
+  --container-content: 1200px;
+
+  --grid-template-columns-sidebar: 1fr 292px;
+
+  --shadow-card: 0 2px 8px rgba(77, 62, 44, 0.12);
+  --shadow-sidebar: 0 2px 12px rgba(77, 62, 44, 0.08);
+  --shadow-inset-button: inset 0 1px rgba(255, 255, 255, 0.25);
+  --shadow-cover: 0 2px 6px rgba(20, 17, 24, 0.35);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -140,6 +161,15 @@
   }
   body {
     @apply bg-background text-foreground;
+    margin: 0;
+    min-width: 320px;
+    background:
+      radial-gradient(
+        circle at 88% 92%,
+        rgb(255 255 255 / 0.6),
+        transparent 10rem
+      ),
+      linear-gradient(115deg, #faf6f0 0%, #f8f2e9 48%, #f5ede2 100%);
   }
   html {
     @apply font-sans;
