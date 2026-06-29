@@ -25,18 +25,13 @@ import useBooksStore from "@/store/booksStore";
 import { useShallow } from "zustand/shallow";
 import BookDetail from "../detail";
 import BookCard from "./book-card";
+import BookListNotFound from "./book-list-not-found";
 
 function getBookSearchText(book) {
   const statusLabel =
     TABS.find((tab) => tab.value === book?.status)?.label ?? book?.status;
 
-  return [
-    book?.title,
-    book?.author,
-    book?.synopsis,
-    book?.year,
-    statusLabel,
-  ]
+  return [book?.title, book?.author, book?.synopsis, book?.year, statusLabel]
     .filter(Boolean)
     .join(" ");
 }
@@ -222,9 +217,11 @@ export default function BookGrid({ refreshKey }) {
               })
             ) : (
               <div className="books-grid__empty sm:col-span-2 xl:col-span-3">
-                {isEmptyValue(searchValue?.trim())
-                  ? "Belum ada buku."
-                  : "Buku tidak ditemukan."}
+                {isEmptyValue(searchValue?.trim()) ? (
+                  <BookListNotFound />
+                ) : (
+                  "Buku tidak ditemukan."
+                )}
               </div>
             )}
           </TabsContent>

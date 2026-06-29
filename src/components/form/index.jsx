@@ -1,5 +1,4 @@
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -11,17 +10,26 @@ import {
 } from "@/components/ui/drawer";
 import BookForm from "./book-form";
 import { useBreakpoint } from "@/js-toolkit/src/react";
+import useBooksStore from "@/store/booksStore";
+import { useShallow } from "zustand/shallow";
 
 export default function FormBookDrawer({ setBooksRefreshKey }) {
-  const [open, setOpen] = useState(false);
+  const { isFormDrawerOpen, setFormDrawerOpen } = useBooksStore(
+    useShallow((state) => {
+      return {
+        isFormDrawerOpen: state.isFormDrawerOpen,
+        setFormDrawerOpen: state.setFormDrawerOpen,
+      };
+    }),
+  );
 
   const { xs } = useBreakpoint();
 
   return (
     <Drawer
       direction={xs ? "bottom" : "right"}
-      open={open}
-      onOpenChange={setOpen}
+      open={isFormDrawerOpen}
+      onOpenChange={setFormDrawerOpen}
     >
       <DrawerTrigger asChild>
         <Button

@@ -23,7 +23,7 @@
     @apply flex items-center gap-8;
   }
   .site-header__brand {
-    @apply flex items-center gap-2;
+    @apply flex items-center gap-1;
   }
   .site-header__brand-text {
     @apply font-heading text-3xl font-semibold italic leading-none;

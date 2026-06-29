@@ -61,9 +61,14 @@ const booksStore = create((set) => {
     books: [],
     isFetchingBooks: true,
     searchValue: "",
+    isFormDrawerOpen: false,
 
     setSearchValue(searchValue) {
       set({ searchValue });
+    },
+
+    setFormDrawerOpen(isOpen) {
+      set({ isFormDrawerOpen: isOpen });
     },
 
     clearBooks() {

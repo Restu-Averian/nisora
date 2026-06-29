@@ -1,4 +1,4 @@
-import { Book, UserCircle } from "lucide-react";
+import { UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import supabase from "@/lib/supabase";
 import { useEffect, useMemo, useState } from "react";
@@ -47,7 +47,12 @@ export default function Header() {
         <div className="site-header__inner lg:px-10">
           <div className="site-header__brand-wrap">
             <div className="site-header__brand">
-              <Book />
+              <img
+                alt="Nisora"
+                className="site-header__brand-logo"
+                src="/icon-nisora-only.png"
+                width={80}
+              />
               <p className="site-header__brand-text">Nisora</p>
             </div>
           </div>
