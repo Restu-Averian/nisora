@@ -145,7 +145,7 @@
     @apply size-6;
   }
   .book-drawer__content {
-    @apply px-10;
+    @apply max-h-[80vh] overflow-hidden px-6 md:h-screen md:max-h-screen md:px-10;
   }
   .book-drawer__title, .book-drawer__description {
     @apply text-center;

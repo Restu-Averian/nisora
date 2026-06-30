@@ -147,9 +147,7 @@ export default function BookForm({ onSuccess }) {
 
   return (
     <form
-      className={
-        xs ? "-mx-10 max-h-[calc(80vh-8rem)] overflow-y-auto px-6 pb-6" : ""
-      }
+      className="min-h-0 flex-1 overflow-y-auto pb-6"
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <FieldGroup className="book-form__group">
