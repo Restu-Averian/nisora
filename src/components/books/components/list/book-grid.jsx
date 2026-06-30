@@ -18,13 +18,19 @@ import {
 } from "@/components/ui/drawer";
 import { TabsContent } from "@/components/ui/tabs";
 import { TABS } from "@/data/books";
-import { isEmptyValue, objKeys, toLowerCase } from "@/js-toolkit/src";
+import {
+  decryptStoredUserCookie,
+  isEmptyValue,
+  objKeys,
+  toLowerCase,
+} from "@/js-toolkit/src";
 import { useBreakpoint } from "@/js-toolkit/src/react";
 import supabase from "@/lib/supabase";
 import useBooksStore from "@/store/booksStore";
 import { useShallow } from "zustand/shallow";
 import BookDetail from "../detail";
 import BookCard from "./book-card";
+import BookLoginRequired from "./book-login-required";
 import BookListNotFound from "./book-list-not-found";
 
 function getBookSearchText(book) {
@@ -58,6 +64,9 @@ export default function BookGrid({ refreshKey }) {
   );
 
   const [selectedBook, setSelectedBook] = useState({});
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return Boolean(decryptStoredUserCookie(supabase));
+  });
   const initRefreshKeyRef = useRef(refreshKey);
 
   const { xs } = useBreakpoint();
@@ -164,6 +173,8 @@ export default function BookGrid({ refreshKey }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(Boolean(session));
+
       if (!session) {
         clearBooks();
         setSelectedBook({});
@@ -217,7 +228,9 @@ export default function BookGrid({ refreshKey }) {
               })
             ) : (
               <div className="books-grid__empty sm:col-span-2 xl:col-span-3">
-                {isEmptyValue(searchValue?.trim()) ? (
+                {!isAuthenticated ? (
+                  <BookLoginRequired />
+                ) : isEmptyValue(searchValue?.trim()) ? (
                   <BookListNotFound />
                 ) : (
                   "Buku tidak ditemukan."
