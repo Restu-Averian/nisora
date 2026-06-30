@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Login from "./pages/login";
-import Signup from "./pages/signup";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
-function AuthFormContent({ onSuccess }) {
+function AuthFormContent({ onSuccessCallback }) {
   const [authContent, setAuthContent] = useState("login");
 
   if (authContent === "signup") {
@@ -11,7 +11,7 @@ function AuthFormContent({ onSuccess }) {
         onLoginClick={() => {
           setAuthContent("login");
         }}
-        onSuccess={onSuccess}
+        onSuccessCallback={onSuccessCallback}
       />
     );
   }
@@ -21,16 +21,19 @@ function AuthFormContent({ onSuccess }) {
       onSignupClick={() => {
         setAuthContent("signup");
       }}
-      onSuccess={onSuccess}
+      onSuccessCallback={onSuccessCallback}
     />
   );
 }
 
-export default function AuthForm({ showHeaderInfo = false, onSuccess }) {
+export default function AuthForm({
+  showHeaderInfo = false,
+  onSuccessCallback,
+}) {
   return (
     <AuthFormContent
       key={showHeaderInfo ? "auth-open" : "auth-closed"}
-      onSuccess={onSuccess}
+      onSuccessCallback={onSuccessCallback}
     />
   );
 }

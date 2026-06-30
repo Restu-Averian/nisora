@@ -125,7 +125,7 @@ export default function Header() {
             ) : (
               <AuthForm
                 showHeaderInfo={showHeaderInfo}
-                onSuccess={() => {
+                onSuccessCallback={() => {
                   setShowHeaderInfo(false);
                 }}
               />
@@ -151,7 +151,7 @@ export default function Header() {
             ) : (
               <AuthForm
                 showHeaderInfo={showHeaderInfo}
-                onSuccess={() => {
+                onSuccessCallback={() => {
                   setShowHeaderInfo(false);
                 }}
               />

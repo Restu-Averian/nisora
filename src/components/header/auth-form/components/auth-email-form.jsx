@@ -31,7 +31,7 @@ export default function AuthEmailForm({
   shouldCreateUser,
   emailInputId,
   footer,
-  onSuccess,
+  onSuccessCallback,
 }) {
   const { xs } = useBreakpoint();
 
@@ -77,7 +77,7 @@ export default function AuthEmailForm({
     });
 
     form.reset();
-    onSuccess?.();
+    onSuccessCallback?.();
   };
 
   return (

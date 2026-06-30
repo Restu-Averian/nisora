@@ -1,6 +1,6 @@
 import AuthEmailForm from "../components/auth-email-form";
 
-export default function Signup({ onLoginClick, onSuccess }) {
+export default function Signup({ onLoginClick, onSuccessCallback }) {
   return (
     <AuthEmailForm
       description="Enter your email to start your personal reading space. We'll send you a link to continue."
@@ -19,7 +19,7 @@ export default function Signup({ onLoginClick, onSuccess }) {
         </div>
       }
       heading="Create your Nisora account"
-      onSuccess={onSuccess}
+      onSuccessCallback={onSuccessCallback}
       shouldCreateUser
       submitLabel="Continue with email"
       successTitle="Sign-up link sent"

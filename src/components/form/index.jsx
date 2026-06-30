@@ -52,7 +52,7 @@ export default function FormBookDrawer({ setBooksRefreshKey }) {
         </DrawerHeader>
 
         <BookForm
-          onSuccess={() => {
+          onSuccessCallback={() => {
             setBooksRefreshKey((prev) => prev + 1);
           }}
         />
