@@ -16,6 +16,7 @@ import {
   profileSchema,
 } from "./utils/profile";
 import { fmtToString } from "@/js-toolkit/src";
+import bookOrnament from "@/assets/book_ornament_icon.webp";
 
 export default function DetailProfile({ onCloseHeaderInfo, user }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -188,13 +189,19 @@ export default function DetailProfile({ onCloseHeaderInfo, user }) {
       className={`profile-detail ${xs ? "max-h-[calc(80vh-4rem)] overflow-y-auto px-6" : ""}`}
     >
       <form onSubmit={form.handleSubmit(onSubmit)}>
+        <h2 className="profile-detail__title">Profil Pengguna</h2>
+        
+        <div className="profile-detail__ornament">
+          <img src={bookOrnament} alt="" />
+        </div>
+
         <ProfileAvatar
           avatarPreview={avatarPreview}
           fileInputRef={fileInputRef}
           onAvatarChange={onAvatarChange}
         />
 
-        <h2 className="profile-detail__title">Profil Pengguna</h2>
+        <p className="profile-detail__subtitle">Kelola informasi akun dan preferensi Anda</p>
 
         <div className="profile-detail__fields">
           <ProfileField
@@ -203,6 +210,7 @@ export default function DetailProfile({ onCloseHeaderInfo, user }) {
             label="Nama Lengkap"
             name="name"
             type="text"
+            icon="User"
           />
 
           <ProfileField
@@ -211,6 +219,7 @@ export default function DetailProfile({ onCloseHeaderInfo, user }) {
             label="Email"
             name="email"
             type="email"
+            icon="Mail"
           />
 
           <ProfileJoinedDate joinedDate={joinedDate} />

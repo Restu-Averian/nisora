@@ -1,4 +1,5 @@
 import { Controller } from "react-hook-form";
+import * as Icons from "lucide-react";
 
 import {
   Field,
@@ -7,14 +8,19 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 
-export default function ProfileField({ control, id, label, name, type }) {
+export default function ProfileField({ control, id, label, name, type, icon }) {
+  const IconComponent = icon ? Icons[icon] : null;
+
   return (
     <Controller
       control={control}
       name={name}
       render={({ field, fieldState }) => (
         <Field className="profile-field" data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={id}>{label}</FieldLabel>
+          <div className="profile-field__label-wrap">
+            {IconComponent && <IconComponent className="profile-field__label-icon" />}
+            <FieldLabel htmlFor={id}>{label}</FieldLabel>
+          </div>
           <FieldContent>
             <input
               {...field}

@@ -8,7 +8,7 @@ const booksRequest = {
   current: 0,
 };
 
-function mapBookFromSupabase(book) {
+export function mapBookFromSupabase(book) {
   return {
     id: book.id,
     title: book.title,
@@ -60,8 +60,13 @@ const booksStore = create((set) => {
   return {
     books: [],
     isFetchingBooks: true,
+    isSearching: false,
     searchValue: "",
     isFormDrawerOpen: false,
+
+    setIsSearching(isSearching) {
+      set({ isSearching });
+    },
 
     setSearchValue(searchValue) {
       set({ searchValue });

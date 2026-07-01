@@ -1,4 +1,4 @@
-import { Loader2 } from "lucide-react";
+import { Loader2, Bookmark, LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -12,11 +12,14 @@ export default function ProfileActions({ isLoggingOut, isSaving, onLogout }) {
       >
         {isSaving ? (
           <>
-            Menyimpan...
             <Loader2 className="profile-actions__icon" />
+            Menyimpan...
           </>
         ) : (
-          "Simpan Perubahan"
+          <>
+            <Bookmark className="profile-actions__icon profile-actions__icon--static" />
+            Simpan Perubahan
+          </>
         )}
       </Button>
       <Button
@@ -28,11 +31,14 @@ export default function ProfileActions({ isLoggingOut, isSaving, onLogout }) {
       >
         {isLoggingOut ? (
           <>
-            Keluar...
             <Loader2 className="profile-actions__icon" />
+            Keluar...
           </>
         ) : (
-          "Keluar (Logout)"
+          <>
+            <LogOut className="profile-actions__icon profile-actions__icon--static" />
+            Keluar (Logout)
+          </>
         )}
       </Button>
     </div>

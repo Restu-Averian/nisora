@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Fzf } from "fzf";
 import { toast } from "sonner";
 
 import {
@@ -18,14 +17,10 @@ import {
 } from "@/components/ui/drawer";
 import { TabsContent } from "@/components/ui/tabs";
 import { TABS } from "@/data/books";
-import {
-  decryptStoredUserCookie,
-  isEmptyValue,
-  toLowerCase,
-} from "@/js-toolkit/src";
+import { decryptStoredUserCookie, isEmptyValue } from "@/js-toolkit/src";
 import { useBreakpoint } from "@/js-toolkit/src/react";
 import supabase from "@/lib/supabase";
-import useBooksStore from "@/store/booksStore";
+import useBooksStore, { mapBookFromSupabase } from "@/store/booksStore";
 import { useShallow } from "zustand/shallow";
 import BookDetail from "../detail";
 import BookCard from "./book-card";
@@ -38,15 +33,6 @@ const detailDialogContentClassName =
   "max-h-[calc(100vh-3rem)] w-[min(1160px,calc(100%-2rem))] max-w-[min(1160px,calc(100%-2rem))] gap-0 overflow-y-auto rounded-3xl border border-white/70 bg-[#fffaf4] p-0 shadow-[0_24px_80px_rgba(47,35,24,0.24)] sm:max-w-[min(1160px,calc(100%-2rem))]";
 const detailDialogHeaderClassName = "border-b-0 px-6 pt-7 pb-0 text-center";
 
-function getBookSearchText(book) {
-  const statusLabel =
-    TABS.find((tab) => tab.value === book?.status)?.label ?? book?.status;
-
-  return [book?.title, book?.author, book?.synopsis, book?.year, statusLabel]
-    .filter(Boolean)
-    .join(" ");
-}
-
 export default function BookGrid({ refreshKey }) {
   const {
     books,
@@ -55,6 +41,7 @@ export default function BookGrid({ refreshKey }) {
     fetchBooks,
     clearBooks,
     updateBookStatus,
+    setIsSearching,
   } = useBooksStore(
     useShallow((state) => {
       return {
@@ -64,6 +51,7 @@ export default function BookGrid({ refreshKey }) {
         fetchBooks: state?.fetchBooks,
         clearBooks: state?.clearBooks,
         updateBookStatus: state?.updateBookStatus,
+        setIsSearching: state?.setIsSearching,
       };
     }),
   );
@@ -78,38 +66,65 @@ export default function BookGrid({ refreshKey }) {
 
   const toastPosition = useMemo(() => (xs ? "top-center" : "top-right"), [xs]);
 
-  const fzfBooks = useMemo(() => {
-    return new Fzf(books || [], {
-      casing: "case-insensitive",
-      selector: getBookSearchText,
-    });
-  }, [books]);
-
-  const searchedBooks = useMemo(() => {
-    const search = toLowerCase(searchValue)?.trim() || "";
+  const [searchedBooks, setSearchedBooks] = useState(books || []);
+  useEffect(() => {
+    const search = searchValue?.trim();
 
     if (isEmptyValue(search)) {
-      return books;
+      queueMicrotask(() => {
+        setSearchedBooks(books || []);
+      });
+      return;
     }
 
-    return (
-      fzfBooks.find(search)?.map((result) => {
-        return {
-          ...result?.item,
-          positions: result?.positions || null,
-        };
-      }) || []
-    );
-  }, [books, fzfBooks, searchValue]);
+    const fetchSearch = async () => {
+      setIsSearching(true);
+      
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        setSearchedBooks([]);
+        setIsSearching(false);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("books")
+        .select(
+          "id,title,authors,synopsis,published_year,cover_url,status,personal_note,created_at",
+        )
+        .eq("user_id", session.user.id)
+        .or(`title.ilike.%${search}%,synopsis.ilike.%${search}%`)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        toast.error("Gagal mencari buku", {
+          description: error?.message,
+          position: toastPosition,
+        });
+      } else {
+        setSearchedBooks((data || []).map(mapBookFromSupabase));
+      }
+
+      setIsSearching(false);
+    };
+
+    const timeoutId = setTimeout(fetchSearch, 300);
+    return () => clearTimeout(timeoutId);
+  }, [books, searchValue, toastPosition]);
 
   const selectedBook = useMemo(() => {
     if (!selectedBookId) {
       return null;
     }
 
-    return (books || []).find((book) => {
-      return book.id === selectedBookId;
-    }) ?? null;
+    return (
+      (books || []).find((book) => {
+        return book.id === selectedBookId;
+      }) ?? null
+    );
   }, [books, selectedBookId]);
 
   const onShowToastError = useCallback(
@@ -142,9 +157,9 @@ export default function BookGrid({ refreshKey }) {
         return;
       }
 
-      const statusLabel = TABS.find(
-        (tab) => tab.value === newStatusValue,
-      )?.label ?? "status baru";
+      const statusLabel =
+        TABS.find((tab) => tab.value === newStatusValue)?.label ??
+        "status baru";
 
       try {
         const { error } = await updateBookStatus({
