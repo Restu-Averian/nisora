@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -15,9 +15,8 @@ import { useBookSearch } from "./hooks/use-book-search";
 import { useCoverPreview } from "./hooks/use-cover-preview";
 import { BOOK_FORM_DEFAULT_VALUES, formSchema } from "./schema";
 
-export default function BookForm({ onSuccess }) {
+export default function BookForm({ onSuccessCallback }) {
   const [coverFile, setCoverFile] = useState(null);
-  const coverUploadRef = useRef(null);
 
   const { xs } = useBreakpoint();
   const toastPosition = xs ? "top-center" : "top-right";
@@ -34,7 +33,6 @@ export default function BookForm({ onSuccess }) {
   function resetFormState() {
     form.reset();
     setCoverFile(null);
-    coverUploadRef.current = null;
     resetBookSearch();
   }
 
@@ -55,7 +53,6 @@ export default function BookForm({ onSuccess }) {
     form.setValue("cover", book.cover || undefined, { shouldDirty: true });
 
     setCoverFile(book.cover || null);
-    coverUploadRef.current = null;
 
     resetBookSearch();
   }
@@ -99,10 +96,10 @@ export default function BookForm({ onSuccess }) {
     const synopsis = data.synopsis?.trim();
     let coverUrl = typeof data.cover === "string" ? data.cover : null;
 
-    if (coverUploadRef.current) {
+    if (data.cover instanceof File) {
       const { coverUrl: uploadedCoverUrl, error: uploadError } =
         await uploadCoverFile({
-          file: coverUploadRef.current,
+          file: data.cover,
           session,
         });
 
@@ -142,14 +139,12 @@ export default function BookForm({ onSuccess }) {
     });
 
     resetFormState();
-    onSuccess?.();
+    onSuccessCallback?.();
   }
 
   return (
     <form
-      className={
-        xs ? "-mx-10 max-h-[calc(80vh-8rem)] overflow-y-auto px-6 pb-6" : ""
-      }
+      className="min-h-0 flex-1 overflow-y-auto pb-6"
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <FieldGroup className="book-form__group">
@@ -170,7 +165,6 @@ export default function BookForm({ onSuccess }) {
           coverPreview={coverPreview}
           onCoverChange={(file) => {
             setCoverFile(file);
-            coverUploadRef.current = file instanceof File ? file : null;
           }}
         />
 

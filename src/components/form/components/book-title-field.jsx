@@ -15,10 +15,19 @@ import {
 } from "@/components/ui/field";
 import { LoaderCircle } from "lucide-react";
 
+const searchItemClassName = "items-start";
+const searchListClassName = "mt-2 rounded-md border border-border bg-background";
+const floatingSearchListClassName =
+  "absolute left-0 right-0 top-full z-20 shadow-sidebar";
+const loadingItemClassName = "flex items-center justify-between";
+const commandClassName =
+  "relative overflow-visible rounded-md bg-transparent text-primary-text";
+const commandInputClassName = "h-8";
+
 function BookSearchItem({ book, onBookSelect }) {
   return (
     <CommandItem
-      className="book-search-item"
+      className={searchItemClassName}
       value={book.title}
       onSelect={() => {
         onBookSelect(book);
@@ -64,8 +73,8 @@ function BookSearchLists({ bookSearch, isMobile, onBookSelect, title }) {
       }}
       className={
         isMobile
-          ? "book-search-list"
-          : "book-search-list book-search-list--floating"
+          ? searchListClassName
+          : `${searchListClassName} ${floatingSearchListClassName}`
       }
     >
       {title?.trim().length < 2 && (
@@ -77,7 +86,7 @@ function BookSearchLists({ bookSearch, isMobile, onBookSelect, title }) {
       {bookSearch.isSearching && (
         <CommandItem
           disabled
-          className="book-search-list__loading"
+          className={loadingItemClassName}
           showCheckIcon={false}
         >
           <p className="book-search-list__loading-text">Mencari buku...</p>
@@ -91,7 +100,7 @@ function BookSearchLists({ bookSearch, isMobile, onBookSelect, title }) {
       )}
 
       {notFoundSearch && (
-        <CommandEmpty className="book-search-list__empty">
+        <CommandEmpty className="px-4 text-secondary-text">
           Buku tidak ditemukan. Input ini akan menjadi data baru.
         </CommandEmpty>
       )}
@@ -128,14 +137,11 @@ export function BookTitleField({
           <FieldLabel htmlFor="book-title">Nama Buku</FieldLabel>
 
           <FieldContent>
-            <Command
-              className="book-title-command"
-              shouldFilter={false}
-            >
+            <Command className={commandClassName} shouldFilter={false}>
               <CommandInput
                 id="book-title"
                 aria-invalid={fieldState.invalid}
-                className="book-title-command__input"
+                className={commandInputClassName}
                 name={field.name}
                 placeholder="Nama Buku"
                 value={field.value}

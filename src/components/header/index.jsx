@@ -41,6 +41,18 @@ export default function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    const openAuth = () => {
+      setShowHeaderInfo(true);
+    };
+
+    window.addEventListener("nisora:open-auth", openAuth);
+
+    return () => {
+      window.removeEventListener("nisora:open-auth", openAuth);
+    };
+  }, []);
+
   return (
     <>
       <header className="site-header">
@@ -113,7 +125,7 @@ export default function Header() {
             ) : (
               <AuthForm
                 showHeaderInfo={showHeaderInfo}
-                onSuccess={() => {
+                onSuccessCallback={() => {
                   setShowHeaderInfo(false);
                 }}
               />
@@ -139,7 +151,7 @@ export default function Header() {
             ) : (
               <AuthForm
                 showHeaderInfo={showHeaderInfo}
-                onSuccess={() => {
+                onSuccessCallback={() => {
                   setShowHeaderInfo(false);
                 }}
               />

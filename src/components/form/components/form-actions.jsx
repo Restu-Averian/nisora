@@ -2,11 +2,14 @@ import { LoaderCircle, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DrawerClose } from "@/components/ui/drawer";
 
+const submitButtonClassName =
+  "h-8 flex-1 rounded-md bg-primary-accent text-xs font-semibold normal-case tracking-normal text-white hover:bg-hover-accent";
+
 export function FormActions({ isSubmitting, onCancel }) {
   return (
     <div className="book-actions">
       <Button
-        className="book-actions__submit"
+        className={submitButtonClassName}
         disabled={isSubmitting}
         type="submit"
       >

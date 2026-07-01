@@ -4,6 +4,9 @@ import { isEmptyValue } from "@/js-toolkit/src";
 import { LoaderCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 
+const actionButtonClassName =
+  "mt-auto h-8 w-full rounded-md bg-primary-accent px-3 text-xs font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent";
+
 function BookMeta({ label, value }) {
   return (
     <div className="book-card__meta">
@@ -73,7 +76,7 @@ export default function BookCard({ book, onClick, onStatusChange }) {
       </div>
 
       <Button
-        className="book-card__action"
+        className={actionButtonClassName}
         disabled={isUpdatingStatus || !onStatusChange}
         onClick={handleStatusChange}
         type="button"
