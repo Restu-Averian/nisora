@@ -1,29 +1,161 @@
-# Nisora
+# Nisora - Personal Book Collection Manager
 
-A personal book collection manager — a digital reading journal for tracking books you own or have read.
+[![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite_8-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)](https://vitejs.dev/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+[![Zustand](https://img.shields.io/badge/Zustand-4A4A55?style=for-the-badge&logo=react&logoColor=white)](https://zustand-demo.pmnd.rs/)
 
-## Features
+# Nisora - Personal Book Collection Manager
 
-- **Book catalog** — grid view of books with cover, title, synopsis, author, and year
-- **Filter by status** — tabs to filter books: All, Currently Reading, Finished
-- **Book search** — search bar in the header (UI ready, filtering not yet wired)
-- **Add book form** — slide-in Vaul drawer with fields for title, synopsis, cover image, author, and year
-- **Cover image upload** — client-side file picker with preview
-- **Responsive design** — adapts across mobile, tablet, and desktop breakpoints
+[![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite_8-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)](https://vitejs.dev/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+[![Zustand](https://img.shields.io/badge/Zustand-4A4A55?style=for-the-badge&logo=react&logoColor=white)](https://zustand-demo.pmnd.rs/)
 
-## Design
+<details open>
+<summary><h2>🇮🇩 Bahasa Indonesia</h2></summary>
 
-Warm, earthy color palette:
+Nisora adalah aplikasi manajemen koleksi buku pribadi (*digital reading journal*) yang dirancang untuk melacak buku-buku yang sedang atau telah selesai dibaca. Dibangun dengan antarmuka yang modern, responsif, dan estetik, aplikasi ini menawarkan pengalaman pengguna yang mulus dalam mengelola perpustakaan pribadi.
 
-| Token          | Color     |
-| -------------- | --------- |
-| Background     | `#faf6f0` |
-| Surface / Card | `#f3ede4` |
-| Primary text   | `#4e4a56` |
-| Secondary text | `#7a7684` |
-| Primary accent | `#8fa8c7` |
-| Hover accent   | `#7693b7` |
-| Soft accent    | `#d9e4f2` |
-| Border         | `#e7e1d8` |
+### ✨ Fitur Utama
 
-Typography uses Playfair Display for headings (serif, editorial feel) and Noto Sans for body text (clean, readable). Entire UI is in Bahasa Indonesia.
+- **Katalog Buku Responsif** — Tampilan *grid* elegan yang menampilkan sampul buku, judul, sinopsis, penulis, dan tahun terbit. Beradaptasi dengan mulus di perangkat *mobile*, *tablet*, dan *desktop*.
+- **Filter Berdasarkan Status** — Navigasi *tab* interaktif untuk menyaring buku berdasarkan kategori: *Semua*, *Sedang Dibaca*, dan *Selesai*.
+- **Manajemen Data Buku** — Form penambahan buku interaktif menggunakan **Vaul drawer** dengan validasi sisi klien (**Zod** & **React Hook Form**).
+- **Unggah Gambar Sampul** — Integrasi *file picker* dengan *preview* gambar langsung di sisi klien sebelum diunggah ke *storage* Supabase.
+- **Pencarian Cerdas (UI)** — Fitur *search bar* pada *header* yang didesain secara intuitif untuk kemudahan akses (siap untuk integrasi *filtering* dinamis).
+- **Notifikasi *Real-time*** — Sistem *toast notification* yang informatif menggunakan **Sonner**.
+
+### 🛠️ Tech Stack & Arsitektur
+
+Nisora dibangun menggunakan teknologi web modern untuk memastikan performa maksimal dan skalabilitas:
+
+- **Frontend Framework:** React 19 dengan Vite 8 untuk eksekusi yang sangat cepat.
+- **Styling & UI:**
+  - Tailwind CSS v4 & Sass untuk penyusunan *style* yang fleksibel dan terstruktur.
+  - shadcn/ui & Radix UI untuk komponen *accessible* dan kustomisasi tanpa batas.
+  - Vaul untuk laci interaktif (*drawer*) yang memberikan pengalaman *native-like* di *mobile*.
+- **State Management:** Zustand untuk pengelolaan *state* global yang ringan dan reaktif.
+- **Form & Validasi:** React Hook Form dikombinasikan dengan Zod untuk *type-safe schema validation*.
+- **Backend & Database (BaaS):** Supabase (SSR & Client JS) untuk penyimpanan data relasional dan manajemen *storage* aset gambar.
+
+### 🎨 Design System
+
+Aplikasi ini mengusung palet warna *warm & earthy* untuk menciptakan nuansa membaca yang nyaman dan menenangkan:
+
+| Token          | Kode Warna | Preview |
+| -------------- | --------- | :---: |
+| **Background** | `#faf6f0` | ⚪ |
+| **Surface**    | `#f3ede4` | 🌫️ |
+| **Primary Text**| `#4e4a56` | 🌑 |
+| **Secondary Text**| `#7a7684` | 🪨 |
+| **Accent**     | `#8fa8c7` | 🧊 |
+
+**Tipografi:**
+- **Playfair Display (Serif):** Digunakan untuk *heading*, memberikan kesan editorial yang klasik dan mewah.
+- **Noto Sans (Sans-serif):** Digunakan untuk teks tubuh (*body text*), memastikan tingkat keterbacaan yang tinggi.
+
+*(Antarmuka aplikasi dirancang khusus untuk lokalisasi Bahasa Indonesia).*
+
+### 🚀 Cara Menjalankan Secara Lokal
+
+1. **Kloning repositori ini:**
+   ```bash
+   git clone https://github.com/username/nisora.git
+   cd nisora
+   ```
+2. **Instal dependensi:**
+   ```bash
+   npm install
+   ```
+3. **Konfigurasi Environment:**
+   Buat file `.env.local` di *root* direktori dan tambahkan kredensial Supabase (merujuk pada `.env.example`):
+   ```env
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+   ```
+4. **Jalankan *development server*:**
+   ```bash
+   npm run dev
+   ```
+   *Aplikasi dapat diakses melalui `http://localhost:5173`*
+
+---
+*Dibuat dengan ❤️ untuk para pecinta buku.*
+
+</details>
+
+<details>
+<summary><h2>🇬🇧 English</h2></summary>
+
+Nisora is a personal book collection manager (a digital reading journal) designed to track books you are currently reading or have finished. Built with a modern, responsive, and aesthetic interface, this application offers a seamless user experience in managing a personal library.
+
+### ✨ Key Features
+
+- **Responsive Book Catalog** — An elegant grid view displaying book covers, titles, synopses, authors, and publication years. Adapts smoothly across mobile, tablet, and desktop devices.
+- **Filter by Status** — Interactive tab navigation to filter books by categories: *All*, *Currently Reading*, and *Finished*.
+- **Book Data Management** — An interactive book addition form using a **Vaul drawer** with client-side validation (**Zod** & **React Hook Form**).
+- **Cover Image Upload** — File picker integration with real-time client-side image previews before uploading to Supabase storage.
+- **Smart Search (UI)** — Intuitively designed search bar in the header for easy access (UI ready for dynamic filtering integration).
+- **Real-time Notifications** — Informative toast notification system powered by **Sonner**.
+
+### 🛠️ Tech Stack & Architecture
+
+Nisora is built using modern web technologies to ensure maximum performance and scalability:
+
+- **Frontend Framework:** React 19 with Vite 8 for blazing fast execution.
+- **Styling & UI:**
+  - Tailwind CSS v4 & Sass for flexible and structured styling.
+  - shadcn/ui & Radix UI for highly accessible, endlessly customizable components.
+  - Vaul for interactive drawers providing a native-like experience on mobile.
+- **State Management:** Zustand for lightweight and reactive global state management.
+- **Form & Validation:** React Hook Form combined with Zod for type-safe schema validation.
+- **Backend & Database (BaaS):** Supabase (SSR & Client JS) for relational data storage and image asset management.
+
+### 🎨 Design System
+
+This app embraces a warm & earthy color palette to create a comfortable and calming reading atmosphere:
+
+| Token          | Color Code | Preview |
+| -------------- | ---------- | :---: |
+| **Background** | `#faf6f0`  | ⚪ |
+| **Surface**    | `#f3ede4`  | 🌫️ |
+| **Primary Text**| `#4e4a56` | 🌑 |
+| **Secondary Text**| `#7a7684`| 🪨 |
+| **Accent**     | `#8fa8c7`  | 🧊 |
+
+**Typography:**
+- **Playfair Display (Serif):** Used for headings, giving a classic and luxurious editorial feel.
+- **Noto Sans (Sans-serif):** Used for body text, ensuring high readability.
+
+*(The application interface is exclusively localized in Indonesian).*
+
+### 🚀 How to Run Locally
+
+1. **Clone this repository:**
+   ```bash
+   git clone https://github.com/username/nisora.git
+   cd nisora
+   ```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Environment Configuration:**
+   Create a `.env.local` file in the root directory and add your Supabase credentials (refer to `.env.example`):
+   ```env
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+   ```
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   *The application will be available at `http://localhost:5173`*
+
+---
+*Built with ❤️ for book lovers.*
+
+</details>
