@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npm run styles:build && vite",
+    "dev": "npm run styles:build && sh -c 'npm run styles:watch & SASS_PID=$!; trap \"kill $SASS_PID\" EXIT; vite \"$@\"' sh",
     "build": "npm run styles:build && vite build",
     "lint": "eslint .",
     "preview": "vite preview",

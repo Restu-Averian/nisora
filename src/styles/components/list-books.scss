@@ -1,14 +1,6 @@
 @layer components {
   .books-tabs {
     @apply flex items-end justify-between border-b;
-
-    &__list {
-      @apply mt-4 flex-1;
-    }
-
-    &__trigger {
-      @apply cursor-pointer;
-    }
   }
 
   .books-search {
@@ -35,19 +27,6 @@
 
     &__list {
       @apply grid gap-4;
-    }
-
-    &__drawer-title,
-    &__dialog-title {
-      @apply font-heading font-bold normal-case tracking-normal text-primary-text;
-    }
-
-    &__dialog-content {
-      @apply max-h-[calc(100vh-3rem)] w-[min(1160px,calc(100%-2rem))] max-w-[min(1160px,calc(100%-2rem))] gap-0 overflow-y-auto p-0;
-    }
-
-    &__dialog-header {
-      @apply border-b border-border px-6 py-7 text-center;
     }
   }
 
@@ -86,96 +65,118 @@
       @apply mt-2 inline-flex h-6 items-center rounded bg-soft-accent px-2 text-xxs font-bold uppercase leading-none text-primary-text;
     }
 
-    &__action {
-      @apply mt-auto h-8 w-full rounded-md bg-primary-accent px-3 text-xs font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent;
-    }
-
-    &__action-status {
-      @apply font-bold;
-    }
   }
 
   .book-detail {
-    @apply w-full overflow-y-scroll text-primary-text;
+    @apply relative w-full overflow-hidden text-primary-text;
+
+    &::before {
+      @apply pointer-events-none absolute right-0 top-0 h-36 w-44 opacity-70;
+      content: "";
+      background:
+        radial-gradient(
+          ellipse at 70% 25%,
+          rgb(228 202 174 / 0.42),
+          transparent 34%
+        ),
+        radial-gradient(
+          ellipse at 36% 48%,
+          rgb(228 202 174 / 0.3),
+          transparent 32%
+        );
+      border-bottom-left-radius: 999px;
+    }
 
     &__layout {
-      @apply grid gap-8 p-6;
+      @apply relative grid gap-8 px-6 pb-6 pt-8 md:grid-cols-[290px_1fr] md:gap-14 md:px-14 md:pb-8 md:pt-12;
+
+      &.is-editing {
+        @apply block;
+      }
+    }
+
+    &__cover-wrap {
+      @apply flex items-start justify-center md:pt-14;
     }
 
     &__cover {
-      @apply mx-auto aspect-2/3 w-full max-w-62 rounded-xl object-cover shadow-[0_8px_20px_rgba(77,62,44,0.2)];
+      @apply aspect-2/3 w-full max-w-64 rounded-lg object-cover shadow-[0_14px_26px_rgba(20,17,24,0.38)];
+    }
+
+    &__cover-fallback {
+      @apply flex aspect-2/3 w-full max-w-64 items-center justify-center rounded-lg bg-soft-accent font-heading text-7xl font-bold text-primary-text shadow-[0_14px_26px_rgba(20,17,24,0.18)];
     }
 
     &__content {
       @apply flex min-w-0 flex-col;
     }
 
+    &__header {
+      @apply min-w-0;
+    }
+
     &__status {
-      @apply inline-flex h-8 items-center rounded-md bg-soft-accent px-3 text-[14px] font-bold uppercase leading-none text-[#17131b];
+      @apply inline-flex h-9 items-center gap-2 rounded-lg bg-soft-accent px-4 text-[14px] font-bold uppercase leading-none text-[#17131b];
+
+      svg {
+        @apply size-5 text-hover-accent;
+      }
     }
 
     &__headline {
-      @apply mt-3 flex flex-wrap items-end gap-x-5 gap-y-2;
+      @apply mt-5 flex flex-wrap items-end gap-x-5 gap-y-2;
     }
 
     &__title {
-      @apply font-heading text-[38px] font-bold leading-tight text-primary-text;
+      @apply break-words font-heading text-[34px] font-bold leading-tight text-[#2f2530] md:text-[44px];
     }
 
     &__author {
-      @apply mt-1 text-heading leading-tight text-secondary-text;
+      @apply mt-3 flex items-center gap-2 text-heading leading-tight text-secondary-text;
+
+      svg {
+        @apply size-5 text-[#b89172];
+      }
     }
 
-    &__year {
-      @apply mb-1 inline-flex h-8 items-center rounded-md bg-[#d7dde6] px-3 text-[14px] font-bold uppercase leading-none text-[#17131b];
+    &__meta {
+      @apply mt-6 flex flex-wrap items-center gap-3 border-b border-[#e9d8c3] pb-7 text-[14px] font-semibold text-[#5d4b40];
+    }
+
+    &__meta-item {
+      @apply inline-flex min-w-0 items-center gap-2;
+
+      svg {
+        @apply size-5 shrink-0 text-[#b89172];
+      }
+    }
+
+    &__meta-separator {
+      @apply text-[#b89172];
     }
 
     &__synopsis {
-      @apply mt-12 border-t border-border pt-6;
+      @apply mt-6 border-t-0 pt-0;
     }
 
     &__section-title {
-      @apply text-[20px] font-bold leading-tight text-[#17131b];
+      @apply flex items-center gap-3 text-[15px] font-bold uppercase leading-tight tracking-widest text-[#17131b];
+
+      span {
+        @apply block h-px w-8 bg-[#d2a87c];
+      }
     }
 
     &__synopsis-text {
-      @apply mt-2 text-[16px] leading-tight text-[#17131b];
+      @apply mt-3 max-w-2xl text-[17px] leading-relaxed text-[#17131b];
     }
 
     &__note {
-      @apply mt-5;
-    }
-
-    &__note-label {
-      @apply mb-2 block text-[18px] font-bold leading-tight text-[#17131b];
-    }
-
-    &__note-control {
-      @apply relative;
-    }
-
-    &__note-input {
-      @apply min-h-textarea w-full resize-none rounded-md border border-primary-accent bg-background/70 px-3 py-2 pr-20 text-[16px] leading-snug text-primary-text outline-none focus:border-hover-accent focus:ring-2 focus:ring-primary-accent/30;
-    }
-
-    &__note-action {
-      @apply absolute bottom-3 right-4 rounded-full p-5 text-[15px] font-medium;
+      @apply mt-6;
     }
 
     &__actions {
-      @apply mt-2 grid gap-2;
-    }
-
-    &__delete {
-      @apply rounded-md bg-[#c95b50] font-semibold normal-case tracking-normal text-white hover:bg-[#b7493f];
-    }
-
-    &__update {
-      @apply font-semibold normal-case tracking-normal;
-    }
-
-    &__status-action {
-      @apply rounded-md bg-primary-accent font-semibold normal-case tracking-normal text-white hover:bg-hover-accent;
+      @apply mt-8 grid gap-3 border-t border-[#e9d8c3] pt-6 sm:grid-cols-3;
     }
   }
 }

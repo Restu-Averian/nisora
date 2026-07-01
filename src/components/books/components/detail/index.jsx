@@ -19,7 +19,16 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { TABS } from "@/data/books";
 import useBooksStore from "@/store/booksStore";
-import { LoaderCircle, Pencil, Trash2 } from "lucide-react";
+import {
+  BookOpen,
+  Calendar,
+  CheckCircle2,
+  LoaderCircle,
+  Pencil,
+  Tag,
+  Trash2,
+  UserRound,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useShallow } from "zustand/shallow";
 import EditBookForm, { FieldRender } from "./edit-book-form";
@@ -27,6 +36,18 @@ import EditBookForm, { FieldRender } from "./edit-book-form";
 const personalNoteSchema = z.object({
   personal_note: z.string().optional(),
 });
+
+const noteInputClassName =
+  "min-h-[124px] w-full resize-none rounded-xl border border-[#ead8c2] bg-white/42 px-5 py-7 text-[17px] leading-relaxed text-primary-text shadow-[0_10px_26px_rgba(77,62,44,0.08)] outline-none focus-visible:border-[#d2a87c] focus-visible:ring-2 focus-visible:ring-[#d2a87c]/30";
+const noteLabelClassName =
+  "mb-3 block text-[15px] font-bold uppercase leading-tight tracking-widest text-[#17131b]";
+const noteActionClassName =
+  "absolute bottom-6 right-6 rounded-full bg-[#f2dec8] text-[#6d3f22] shadow-[0_8px_18px_rgba(77,62,44,0.12)] hover:bg-[#ead2b7]";
+const detailActionBaseClassName =
+  "h-12 gap-3 rounded-lg text-[15px] font-semibold normal-case tracking-normal";
+const deleteActionClassName = `${detailActionBaseClassName} border border-[#d85763] bg-transparent text-[#d85763] hover:bg-[#d85763]/10`;
+const updateActionClassName = `${detailActionBaseClassName} border-[#d2a87c] text-[#6d3f22] hover:bg-[#f6eadc]`;
+const statusActionClassName = `${detailActionBaseClassName} bg-[#7b4627] text-white shadow-[0_8px_16px_rgba(77,42,21,0.24)] hover:bg-[#66381f]`;
 
 function PersonalNoteForm({ book, onSaved, updateBook }) {
   const form = useForm({
@@ -44,28 +65,61 @@ function PersonalNoteForm({ book, onSaved, updateBook }) {
   }, [book.id, book.personal_note, reset]);
 
   async function onSubmit(data) {
-    const { book: updatedBook, error } = await updateBook({
-      bookId: book.id,
-      payload: {
-        personal_note: data.personal_note ?? "",
-      },
-    });
-
-    if (error) {
-      setError("personal_note", {
-        message: error.message,
-      });
+    if (!book?.id) {
       toast.error("Gagal memperbarui catatan", {
-        description: error.message,
+        description: "Data buku tidak lengkap.",
       });
       return;
     }
 
-    reset({
-      personal_note: updatedBook.personal_note ?? "",
-    });
-    onSaved(updatedBook);
-    toast.success("Catatan pribadi diperbarui");
+    if (typeof updateBook !== "function") {
+      toast.error("Gagal memperbarui catatan", {
+        description: "Aksi pembaruan tidak tersedia.",
+      });
+      return;
+    }
+
+    try {
+      const payload = {
+        personal_note: data.personal_note ?? "",
+      };
+      const { book: updatedBook, error } = await updateBook({
+        bookId: book.id,
+        payload,
+      });
+
+      if (error) {
+        setError("personal_note", {
+          message: error.message,
+        });
+        toast.error("Gagal memperbarui catatan", {
+          description: error.message,
+        });
+        return;
+      }
+
+      const nextBook = updatedBook ?? {
+        ...book,
+        personal_note: payload.personal_note,
+      };
+
+      reset({
+        personal_note: nextBook.personal_note ?? "",
+      });
+      onSaved?.(nextBook);
+      toast.success("Catatan pribadi diperbarui");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Terjadi kesalahan.";
+
+      setError("personal_note", {
+        message,
+      });
+      toast.error("Gagal memperbarui catatan", {
+        description: message,
+      });
+      return;
+    }
   }
 
   return (
@@ -74,8 +128,9 @@ function PersonalNoteForm({ book, onSaved, updateBook }) {
         action={
           <Button
             aria-label="Simpan catatan pribadi"
-            className="book-detail__note-action"
+            className={noteActionClassName}
             disabled={form.formState.isSubmitting}
+            size="icon"
             type="submit"
           >
             {form.formState.isSubmitting ? (
@@ -85,11 +140,11 @@ function PersonalNoteForm({ book, onSaved, updateBook }) {
             )}
           </Button>
         }
-        contentClassName="book-detail__note-control"
+        contentClassName="relative"
         control={form.control}
-        controlClassName="book-detail__note-input"
+        controlClassName={noteInputClassName}
         id={`book-note-${book.id}`}
-        labelClassName="book-detail__note-label"
+        labelClassName={noteLabelClassName}
         label="Catatan Pribadi"
         name="personal_note"
         Component={Textarea}
@@ -102,8 +157,9 @@ function PersonalNoteForm({ book, onSaved, updateBook }) {
 
 export default function BookDetail({ book }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [currentBook, setCurrentBook] = useState(book);
-  const [currentBookId, setCurrentBookId] = useState(book?.id);
+  const [updatedBook, setUpdatedBook] = useState(null);
+  const [deletedBookId, setDeletedBookId] = useState(null);
+  const [coverFailedBookId, setCoverFailedBookId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -116,6 +172,18 @@ export default function BookDetail({ book }) {
       };
     }),
   );
+  const currentBook = useMemo(() => {
+    if (!book?.id || deletedBookId === book.id) {
+      return null;
+    }
+
+    if (updatedBook?.id === book.id) {
+      return updatedBook;
+    }
+
+    return book;
+  }, [book, deletedBookId, updatedBook]);
+
   const { statusText, nextStatusValue } = useMemo(() => {
     return {
       statusText:
@@ -125,62 +193,125 @@ export default function BookDetail({ book }) {
     };
   }, [currentBook]);
 
+  const bookMeta = useMemo(() => {
+    const year = currentBook?.year ? `Tahun Terbit: ${currentBook.year}` : null;
+    const categories = [
+      currentBook?.category,
+      currentBook?.genre,
+      currentBook?.categories,
+      currentBook?.tags,
+    ]
+      .flat()
+      .filter(Boolean)
+      .join(", ");
+
+    return {
+      author: currentBook?.author || "Penulis tidak diketahui",
+      coverAlt: currentBook?.title
+        ? `Sampul ${currentBook.title}`
+        : "Sampul buku",
+      coverInitial: currentBook?.title?.trim()?.charAt(0)?.toUpperCase() || "?",
+      synopsis: currentBook?.synopsis || "Sinopsis belum tersedia.",
+      year,
+      categories: categories || "Kategori belum tersedia",
+    };
+  }, [currentBook]);
+
   const nextStatusLabel = useMemo(() => {
     return TABS.find((tab) => tab.value === nextStatusValue)?.label ?? "-";
   }, [nextStatusValue]);
 
   async function onDelete() {
-    setIsDeleting(true);
-
-    const { error } = await deleteBook({ bookId: currentBook.id });
-
-    if (error) {
+    if (!currentBook?.id) {
       toast.error("Gagal menghapus buku", {
-        description: error.message,
+        description: "Data buku tidak lengkap.",
       });
-      setIsDeleting(false);
       return;
     }
 
-    toast.success("Buku berhasil dihapus");
-    setCurrentBook(null);
-    setIsDeleting(false);
-    setIsDeleteDialogOpen(false);
+    if (typeof deleteBook !== "function") {
+      toast.error("Gagal menghapus buku", {
+        description: "Aksi hapus tidak tersedia.",
+      });
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      const { error } = await deleteBook({ bookId: currentBook.id });
+
+      if (error) {
+        toast.error("Gagal menghapus buku", {
+          description: error.message,
+        });
+        return;
+      }
+
+      toast.success("Buku berhasil dihapus");
+      setDeletedBookId(currentBook.id);
+      setIsDeleteDialogOpen(false);
+    } catch (error) {
+      toast.error("Gagal menghapus buku", {
+        description:
+          error instanceof Error ? error.message : "Terjadi kesalahan.",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   async function onUpdateBookStatus() {
-    setIsUpdatingStatus(true);
-
-    const { error } = await updateBookStatus({
-      bookId: currentBook.id,
-      newStatusValue: nextStatusValue,
-    });
-
-    if (error) {
+    if (!currentBook?.id) {
       toast.error("Gagal mengubah status buku", {
-        description: error.message,
+        description: "Data buku tidak lengkap.",
       });
-      setIsUpdatingStatus(false);
       return;
     }
 
-    setCurrentBook((current) => {
-      return {
-        ...current,
-        status: nextStatusValue,
-      };
-    });
+    if (typeof updateBookStatus !== "function") {
+      toast.error("Gagal mengubah status buku", {
+        description: "Aksi pembaruan status tidak tersedia.",
+      });
+      return;
+    }
 
-    toast.success("Status buku diperbarui", {
-      description: `Buku dipindahkan ke ${nextStatusLabel}.`,
-    });
-    setIsUpdatingStatus(false);
-  }
+    setIsUpdatingStatus(true);
 
-  if (currentBookId !== book?.id) {
-    setCurrentBookId(book?.id);
-    setCurrentBook(book);
-    setIsEditing(false);
+    try {
+      const { error } = await updateBookStatus({
+        bookId: currentBook.id,
+        newStatusValue: nextStatusValue,
+      });
+
+      if (error) {
+        toast.error("Gagal mengubah status buku", {
+          description: error.message,
+        });
+        return;
+      }
+
+      setUpdatedBook((current) => {
+        const targetBook =
+          current?.id === currentBook.id ? current : currentBook;
+
+        return {
+          ...targetBook,
+          status: nextStatusValue,
+        };
+      });
+
+      toast.success("Status buku diperbarui", {
+        description: `Buku dipindahkan ke ${nextStatusLabel}.`,
+      });
+    } catch (error) {
+      toast.error("Gagal mengubah status buku", {
+        description:
+          error instanceof Error ? error.message : "Terjadi kesalahan.",
+      });
+    } finally {
+      setIsUpdatingStatus(false);
+    }
   }
 
   if (!currentBook) {
@@ -189,17 +320,25 @@ export default function BookDetail({ book }) {
 
   return (
     <section className="book-detail md:overflow-y-visible">
-      <div
-        className={`book-detail__layout md:p-8 ${
-          isEditing ? "" : "md:grid-cols-[330px_1fr]"
-        }`}
-      >
+      <div className={`book-detail__layout ${isEditing ? "is-editing" : ""}`}>
         {!isEditing && (
-          <img
-            alt={`Sampul ${currentBook.title}`}
-            className="book-detail__cover"
-            src={currentBook.cover}
-          />
+          <div className="book-detail__cover-wrap">
+            {currentBook.cover && coverFailedBookId !== currentBook.id ? (
+              <img
+                alt={bookMeta.coverAlt}
+                className="book-detail__cover"
+                onError={() => setCoverFailedBookId(currentBook.id)}
+                src={currentBook.cover}
+              />
+            ) : (
+              <div
+                aria-label={bookMeta.coverAlt}
+                className="book-detail__cover-fallback"
+              >
+                {bookMeta.coverInitial}
+              </div>
+            )}
+          </div>
         )}
 
         <div className="book-detail__content">
@@ -209,42 +348,64 @@ export default function BookDetail({ book }) {
               onCancel={() => setIsEditing(false)}
               onSaveCallback={(data) => {
                 if (!data) {
-                  setCurrentBook(null);
+                  setDeletedBookId(currentBook.id);
                   setIsEditing(false);
                   return;
                 }
 
-                setCurrentBook(data);
+                setUpdatedBook(data);
+                setCoverFailedBookId(null);
                 setIsEditing(false);
               }}
             />
           ) : (
             <>
-              <div>
-                <span className="book-detail__status">{statusText}</span>
+              <div className="book-detail__header">
+                <span className="book-detail__status">
+                  <BookOpen />
+                  {statusText}
+                </span>
 
                 <div className="book-detail__headline">
                   <div>
-                    <h2 className="book-detail__title">{currentBook.title}</h2>
-                    <p className="book-detail__author">{currentBook.author}</p>
+                    <h2 className="book-detail__title">
+                      {currentBook.title || "Judul tidak tersedia"}
+                    </h2>
+                    <p className="book-detail__author">
+                      <UserRound />
+                      {bookMeta.author}
+                    </p>
                   </div>
+                </div>
 
-                  <span className="book-detail__year">
-                    Tahun: {currentBook.year}
+                <div className="book-detail__meta">
+                  {bookMeta.year && (
+                    <span className="book-detail__meta-item">
+                      <Calendar />
+                      {bookMeta.year}
+                    </span>
+                  )}
+                  <span className="book-detail__meta-separator">•</span>
+                  <span className="book-detail__meta-item">
+                    <Tag />
+                    {bookMeta.categories}
                   </span>
                 </div>
               </div>
 
               <div className="book-detail__synopsis">
-                <h3 className="book-detail__section-title">Sinopsis</h3>
+                <h3 className="book-detail__section-title">
+                  Sinopsis
+                  <span />
+                </h3>
                 <p className="book-detail__synopsis-text">
-                  {currentBook.synopsis}
+                  {bookMeta.synopsis}
                 </p>
               </div>
 
               <PersonalNoteForm
                 book={currentBook}
-                onSaved={setCurrentBook}
+                onSaved={setUpdatedBook}
                 updateBook={updateBook}
               />
 
@@ -255,14 +416,15 @@ export default function BookDetail({ book }) {
                 >
                   <AlertDialogTrigger asChild>
                     <Button
-                      className="book-detail__delete"
+                      className={deleteActionClassName}
                       disabled={isDeleting}
                       type="button"
                     >
                       {isDeleting && (
                         <LoaderCircle className="size-4 animate-spin" />
                       )}
-                      {isDeleting ? "Menghapus..." : "Delete"}
+                      {!isDeleting && <Trash2 />}
+                      {isDeleting ? "Menghapus..." : "Hapus Buku"}
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -299,15 +461,16 @@ export default function BookDetail({ book }) {
                   </AlertDialogContent>
                 </AlertDialog>
                 <Button
-                  className="book-detail__update"
+                  className={updateActionClassName}
                   onClick={() => setIsEditing(true)}
                   type="button"
                   variant="outline"
                 >
-                  Update
+                  <Pencil />
+                  Perbarui Informasi
                 </Button>
                 <Button
-                  className="book-detail__status-action"
+                  className={statusActionClassName}
                   disabled={isUpdatingStatus}
                   onClick={onUpdateBookStatus}
                   type="button"
@@ -315,9 +478,12 @@ export default function BookDetail({ book }) {
                   {isUpdatingStatus && (
                     <LoaderCircle className="size-4 animate-spin" />
                   )}
+                  {!isUpdatingStatus && <CheckCircle2 />}
                   {isUpdatingStatus
                     ? "Memindahkan..."
-                    : `Pindahkan ke '${nextStatusLabel}'`}
+                    : currentBook.status === "finished"
+                      ? "Tandai Dibaca Lagi"
+                      : "Tandai Selesai"}
                 </Button>
               </div>
             </>

@@ -43,6 +43,13 @@ const bookSchema = z.object({
   cover: z.any().optional(),
 });
 
+const editFieldInputClassName =
+  "h-10 rounded-md border border-[#d6cbbd] bg-background/75 px-3 py-2 text-[15px] text-[#141118] shadow-[0_1px_2px_rgba(20,17,24,0.05)] placeholder:text-[#8f8880] focus-visible:border-primary-accent focus-visible:ring-2 focus-visible:ring-primary-accent/25";
+const editTextareaClassName =
+  "min-h-textarea resize-none rounded-md border border-[#d6cbbd] bg-background/75 px-3 py-2 text-[15px] text-[#141118] shadow-[0_1px_2px_rgba(20,17,24,0.05)] placeholder:text-[#8f8880] focus-visible:border-primary-accent focus-visible:ring-2 focus-visible:ring-primary-accent/25";
+const deleteButtonClassName =
+  "border border-[#d85763] bg-transparent text-[#d85763] hover:bg-[#d85763]/10";
+
 export const FieldRender = ({
   control,
   contentClassName,
@@ -113,88 +120,130 @@ export default function EditBookForm({ book, onCancel, onSaveCallback }) {
   );
 
   async function onSubmit(data) {
-    let coverUrl = book.cover;
-
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
-
-    if (sessionError || !session) {
-      toast.error("Sesi berakhir", {
-        description: "Silakan login ulang untuk menyimpan perubahan.",
+    if (!book?.id) {
+      toast.error("Gagal memperbarui buku", {
+        description: "Data buku tidak lengkap.",
       });
       return;
     }
 
-    if (data.cover instanceof File) {
-      const fileExt = data.cover.name.split(".").pop() || "jpg";
-      const fileName = `${book.id}.${fileExt}`;
-      const filePath = `${session.user.id}/${fileName}`;
+    if (typeof updateBook !== "function") {
+      toast.error("Gagal memperbarui buku", {
+        description: "Aksi pembaruan tidak tersedia.",
+      });
+      return;
+    }
 
-      const { error: uploadError } = await supabase.storage
-        .from("books")
-        .upload(filePath, data.cover, { upsert: true });
+    try {
+      let coverUrl = book.cover;
 
-      if (uploadError) {
-        toast.error("Gagal mengunggah sampul", {
-          description: uploadError.message,
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        toast.error("Sesi berakhir", {
+          description: "Silakan login ulang untuk menyimpan perubahan.",
         });
         return;
       }
 
-      const { data: publicUrlData } = supabase.storage
-        .from("books")
-        .getPublicUrl(filePath);
+      if (data.cover instanceof File) {
+        const fileExt = data.cover.name.split(".").pop() || "jpg";
+        const fileName = `${book.id}.${fileExt}`;
+        const filePath = `${session.user.id}/${fileName}`;
 
-      coverUrl = `${publicUrlData?.publicUrl}?v=${data.cover.lastModified}`;
-    } else if (typeof data.cover === "string") {
-      coverUrl = data.cover;
-    }
+        const { error: uploadError } = await supabase.storage
+          .from("books")
+          .upload(filePath, data.cover, { upsert: true });
 
-    const title = data.title.trim();
-    const author = data.author.trim();
-    const synopsis = data.synopsis.trim();
+        if (uploadError) {
+          toast.error("Gagal mengunggah sampul", {
+            description: uploadError.message,
+          });
+          return;
+        }
 
-    const { book: updatedBook, error } = await updateBook({
-      bookId: book.id,
-      payload: {
-        title,
-        authors: author ? [author] : [],
-        published_year: data.published_year,
-        synopsis,
-        cover_url: coverUrl,
-      },
-    });
+        const { data: publicUrlData } = supabase.storage
+          .from("books")
+          .getPublicUrl(filePath);
 
-    if (error) {
-      toast.error("Gagal memperbarui buku", {
-        description: error.message,
+        coverUrl = `${publicUrlData?.publicUrl}?v=${data.cover.lastModified}`;
+      } else if (typeof data.cover === "string") {
+        coverUrl = data.cover;
+      }
+
+      const title = data.title.trim();
+      const author = data.author.trim();
+      const synopsis = data.synopsis.trim();
+
+      const { book: updatedBook, error } = await updateBook({
+        bookId: book.id,
+        payload: {
+          title,
+          authors: author ? [author] : [],
+          published_year: data.published_year,
+          synopsis,
+          cover_url: coverUrl,
+        },
       });
-      return;
-    }
 
-    toast.success("Buku berhasil diperbarui");
-    onSaveCallback?.(updatedBook);
+      if (error) {
+        toast.error("Gagal memperbarui buku", {
+          description: error.message,
+        });
+        return;
+      }
+
+      toast.success("Buku berhasil diperbarui");
+      onSaveCallback?.(updatedBook);
+    } catch (error) {
+      toast.error("Gagal memperbarui buku", {
+        description:
+          error instanceof Error ? error.message : "Terjadi kesalahan.",
+      });
+    }
   }
 
   async function onDelete() {
-    setIsDeleting(true);
-
-    const { error } = await deleteBook({ bookId: book.id });
-
-    if (error) {
+    if (!book?.id) {
       toast.error("Gagal menghapus buku", {
-        description: error.message,
+        description: "Data buku tidak lengkap.",
       });
-      setIsDeleting(false);
       return;
     }
 
-    toast.success("Buku berhasil dihapus");
-    setIsDeleting(false);
-    setIsDeleteDialogOpen(false);
-    onSaveCallback?.(null);
+    if (typeof deleteBook !== "function") {
+      toast.error("Gagal menghapus buku", {
+        description: "Aksi hapus tidak tersedia.",
+      });
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      const { error } = await deleteBook({ bookId: book.id });
+
+      if (error) {
+        toast.error("Gagal menghapus buku", {
+          description: error.message,
+        });
+        return;
+      }
+
+      toast.success("Buku berhasil dihapus");
+      setIsDeleteDialogOpen(false);
+      onSaveCallback?.(null);
+    } catch (error) {
+      toast.error("Gagal menghapus buku", {
+        description:
+          error instanceof Error ? error.message : "Terjadi kesalahan.",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   return (
@@ -208,6 +257,7 @@ export default function EditBookForm({ book, onCancel, onSaveCallback }) {
 
       <FieldRender
         control={form.control}
+        controlClassName={editFieldInputClassName}
         id="title"
         label="Judul Buku"
         name="title"
@@ -216,6 +266,7 @@ export default function EditBookForm({ book, onCancel, onSaveCallback }) {
 
       <FieldRender
         control={form.control}
+        controlClassName={editFieldInputClassName}
         id="author"
         label="Penulis"
         name="author"
@@ -224,6 +275,7 @@ export default function EditBookForm({ book, onCancel, onSaveCallback }) {
 
       <FieldRender
         control={form.control}
+        controlClassName={editFieldInputClassName}
         id="published-year"
         label="Tahun"
         name="published_year"
@@ -232,6 +284,7 @@ export default function EditBookForm({ book, onCancel, onSaveCallback }) {
       />
       <FieldRender
         control={form.control}
+        controlClassName={editTextareaClassName}
         id="synopsis"
         label="Sinopsis"
         name="synopsis"
@@ -245,7 +298,7 @@ export default function EditBookForm({ book, onCancel, onSaveCallback }) {
         >
           <AlertDialogTrigger asChild>
             <Button
-              className="book-detail__delete"
+              className={deleteButtonClassName}
               disabled={isBusy}
               type="button"
               variant="destructive"

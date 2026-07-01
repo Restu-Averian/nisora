@@ -1,23 +1,4 @@
 @layer components {
-  .book-drawer {
-    &__trigger {
-      @apply fixed bottom-5 right-5 h-auto rounded-full bg-primary-accent px-5 py-5 text-xs font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent;
-    }
-
-    &__trigger-icon {
-      @apply size-6;
-    }
-
-    &__content {
-      @apply px-10;
-    }
-
-    &__title,
-    &__description {
-      @apply text-center;
-    }
-  }
-
   .book-form {
     &__group {
       @apply gap-4;
@@ -67,8 +48,6 @@
   }
 
   .book-search-item {
-    @apply items-start;
-
     &__cover {
       @apply h-14 w-10 rounded object-cover shadow-cover;
     }
@@ -91,16 +70,6 @@
   }
 
   .book-search-list {
-    @apply mt-2 rounded-md border border-border bg-background;
-
-    &--floating {
-      @apply absolute left-0 right-0 top-full z-20 shadow-sidebar;
-    }
-
-    &__loading {
-      @apply flex items-center justify-between;
-    }
-
     &__loading-text {
       @apply flex-1;
     }
@@ -108,26 +77,10 @@
     &__loading-icon {
       @apply animate-spin;
     }
-
-    &__empty {
-      @apply px-4 text-secondary-text;
-    }
-  }
-
-  .book-title-command {
-    @apply relative overflow-visible rounded-md bg-transparent text-primary-text;
-
-    &__input {
-      @apply h-8;
-    }
   }
 
   .book-actions {
     @apply flex items-center gap-4 pt-1;
-
-    &__submit {
-      @apply h-8 flex-1 rounded-md bg-primary-accent text-xs font-semibold normal-case tracking-normal text-white hover:bg-hover-accent;
-    }
 
     &__icon {
       @apply size-4;

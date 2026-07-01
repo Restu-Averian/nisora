@@ -33,6 +33,12 @@ import BookCard from "./book-card";
 import BookLoginRequired from "./book-login-required";
 import BookListNotFound from "./book-list-not-found";
 
+const detailDrawerTitleClassName =
+  "font-heading font-bold normal-case tracking-normal text-primary-text";
+const detailDialogContentClassName =
+  "max-h-[calc(100vh-3rem)] w-[min(1160px,calc(100%-2rem))] max-w-[min(1160px,calc(100%-2rem))] gap-0 overflow-y-auto rounded-3xl border border-white/70 bg-[#fffaf4] p-0 shadow-[0_24px_80px_rgba(47,35,24,0.24)] sm:max-w-[min(1160px,calc(100%-2rem))]";
+const detailDialogHeaderClassName = "border-b-0 px-6 pt-7 pb-0 text-center";
+
 function getBookSearchText(book) {
   const statusLabel =
     TABS.find((tab) => tab.value === book?.status)?.label ?? book?.status;
@@ -165,7 +171,9 @@ export default function BookGrid({ refreshKey }) {
     });
 
     if (!isSelectedBookAvailable) {
-      setSelectedBook({});
+      queueMicrotask(() => {
+        setSelectedBook({});
+      });
     }
   }, [books, selectedBook?.id]);
 
@@ -252,7 +260,7 @@ export default function BookGrid({ refreshKey }) {
         >
           <DrawerContent>
             <DrawerHeader>
-              <DrawerTitle className="books-grid__drawer-title">
+              <DrawerTitle className={detailDrawerTitleClassName}>
                 Detail Buku
               </DrawerTitle>
               <DrawerDescription className="sr-only">
@@ -272,9 +280,9 @@ export default function BookGrid({ refreshKey }) {
             }
           }}
         >
-          <DialogContent className="books-grid__dialog-content sm:max-w-[min(1160px,calc(100%-2rem))]">
-            <DialogHeader className="books-grid__dialog-header">
-              <DialogTitle className="books-grid__dialog-title">
+          <DialogContent className={detailDialogContentClassName}>
+            <DialogHeader className={detailDialogHeaderClassName}>
+              <DialogTitle className={detailDrawerTitleClassName}>
                 Detail Buku
               </DialogTitle>
               <DialogDescription className="sr-only">
