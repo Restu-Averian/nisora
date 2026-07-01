@@ -21,7 +21,6 @@ import { TABS } from "@/data/books";
 import {
   decryptStoredUserCookie,
   isEmptyValue,
-  objKeys,
   toLowerCase,
 } from "@/js-toolkit/src";
 import { useBreakpoint } from "@/js-toolkit/src/react";
@@ -69,7 +68,7 @@ export default function BookGrid({ refreshKey }) {
     }),
   );
 
-  const [selectedBook, setSelectedBook] = useState({});
+  const [selectedBookId, setSelectedBookId] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return Boolean(decryptStoredUserCookie(supabase));
   });
@@ -103,6 +102,16 @@ export default function BookGrid({ refreshKey }) {
     );
   }, [books, fzfBooks, searchValue]);
 
+  const selectedBook = useMemo(() => {
+    if (!selectedBookId) {
+      return null;
+    }
+
+    return (books || []).find((book) => {
+      return book.id === selectedBookId;
+    }) ?? null;
+  }, [books, selectedBookId]);
+
   const onShowToastError = useCallback(
     ({ error }) => {
       if (error) {
@@ -117,38 +126,51 @@ export default function BookGrid({ refreshKey }) {
 
   const onUpdateBookStatus = useCallback(
     async (book, newStatusValue) => {
-      const statusLabel = TABS.find(
-        (tab) => tab.value === newStatusValue,
-      )?.label;
-
-      const { error } = await updateBookStatus({
-        bookId: book.id,
-        newStatusValue,
-      });
-
-      if (error) {
+      if (!book?.id) {
         toast.error("Gagal mengubah status buku", {
-          description: error?.message,
+          description: "Data buku tidak lengkap.",
           position: toastPosition,
         });
         return;
       }
 
-      setSelectedBook((currentBook) => {
-        if (currentBook?.id !== book.id) {
-          return currentBook;
+      if (typeof updateBookStatus !== "function") {
+        toast.error("Gagal mengubah status buku", {
+          description: "Aksi pembaruan status tidak tersedia.",
+          position: toastPosition,
+        });
+        return;
+      }
+
+      const statusLabel = TABS.find(
+        (tab) => tab.value === newStatusValue,
+      )?.label ?? "status baru";
+
+      try {
+        const { error } = await updateBookStatus({
+          bookId: book.id,
+          newStatusValue,
+        });
+
+        if (error) {
+          toast.error("Gagal mengubah status buku", {
+            description: error?.message,
+            position: toastPosition,
+          });
+          return;
         }
 
-        return {
-          ...currentBook,
-          status: newStatusValue,
-        };
-      });
-
-      toast.success("Status buku diperbarui", {
-        description: `Buku dipindahkan ke ${statusLabel}.`,
-        position: toastPosition,
-      });
+        toast.success("Status buku diperbarui", {
+          description: `Buku dipindahkan ke ${statusLabel}.`,
+          position: toastPosition,
+        });
+      } catch (error) {
+        toast.error("Gagal mengubah status buku", {
+          description:
+            error instanceof Error ? error.message : "Terjadi kesalahan.",
+          position: toastPosition,
+        });
+      }
     },
     [toastPosition, updateBookStatus],
   );
@@ -162,22 +184,6 @@ export default function BookGrid({ refreshKey }) {
   }, [fetchBooks, refreshKey, onShowToastError]);
 
   useEffect(() => {
-    if (!selectedBook?.id) {
-      return;
-    }
-
-    const isSelectedBookAvailable = books.some((book) => {
-      return book.id === selectedBook.id;
-    });
-
-    if (!isSelectedBookAvailable) {
-      queueMicrotask(() => {
-        setSelectedBook({});
-      });
-    }
-  }, [books, selectedBook?.id]);
-
-  useEffect(() => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -185,7 +191,7 @@ export default function BookGrid({ refreshKey }) {
 
       if (!session) {
         clearBooks();
-        setSelectedBook({});
+        setSelectedBookId(null);
         return;
       }
 
@@ -228,7 +234,7 @@ export default function BookGrid({ refreshKey }) {
                     book={book}
                     key={book.id}
                     onClick={() => {
-                      setSelectedBook(book);
+                      setSelectedBookId(book.id);
                     }}
                     onStatusChange={onUpdateBookStatus}
                   />
@@ -251,10 +257,10 @@ export default function BookGrid({ refreshKey }) {
 
       {xs ? (
         <Drawer
-          open={objKeys(selectedBook)?.length > 0}
+          open={Boolean(selectedBook)}
           onOpenChange={(open) => {
             if (!open) {
-              setSelectedBook({});
+              setSelectedBookId(null);
             }
           }}
         >
@@ -273,10 +279,10 @@ export default function BookGrid({ refreshKey }) {
         </Drawer>
       ) : (
         <Dialog
-          open={objKeys(selectedBook)?.length > 0}
+          open={Boolean(selectedBook)}
           onOpenChange={(open) => {
             if (!open) {
-              setSelectedBook({});
+              setSelectedBookId(null);
             }
           }}
         >
