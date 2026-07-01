@@ -8,7 +8,7 @@ const booksRequest = {
   current: 0,
 };
 
-function mapBookFromSupabase(book) {
+export function mapBookFromSupabase(book) {
   return {
     id: book.id,
     title: book.title,
