@@ -86,16 +86,25 @@
     @apply font-semibold text-primary-accent underline-offset-4 hover:text-hover-accent hover:underline;
   }
   .profile-detail {
-    @apply w-full max-w-94 px-6 pb-6 pt-8 text-center text-primary-text;
+    @apply w-full max-w-94 px-6 pb-6 pt-8 text-center text-primary-text bg-[#fcf8f3] rounded-lg;
   }
   .profile-detail__title {
-    @apply mb-6 font-heading text-[28px] font-medium leading-none text-[#17131b];
+    @apply font-heading text-[38px] font-medium leading-none text-[#17131b];
+  }
+  .profile-detail__ornament {
+    @apply mx-auto my-3 flex justify-center;
+  }
+  .profile-detail__ornament img {
+    @apply h-4;
+  }
+  .profile-detail__subtitle {
+    @apply mb-6 text-[14px] text-[#7a7266];
   }
   .profile-detail__fields {
-    @apply space-y-5;
+    @apply space-y-4 text-left;
   }
   .profile-avatar {
-    @apply mx-auto mb-5 flex w-fit items-end justify-center;
+    @apply mx-auto mb-3 flex w-fit items-end justify-center;
   }
   .profile-avatar__frame {
     @apply relative;
@@ -113,28 +122,43 @@
     @apply space-y-3 pt-6;
   }
   .profile-actions__submit {
-    @apply h-10 w-full rounded-md bg-primary-accent text-[15px] font-bold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent;
+    @apply flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary-accent text-[15px] font-bold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent;
   }
   .profile-actions__logout {
-    @apply h-10 w-full rounded-md bg-[#c92121] text-[15px] font-bold normal-case tracking-normal text-white hover:bg-[#a91616];
+    @apply flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#ffecec] text-[15px] font-bold normal-case tracking-normal text-[#d93f3f] hover:bg-[#ffdfdf];
   }
   .profile-actions__icon {
     @apply size-4 animate-spin;
   }
+  .profile-actions__icon--static {
+    @apply animate-none;
+  }
   .profile-field {
-    @apply gap-1.5;
+    @apply flex flex-col gap-1.5;
+  }
+  .profile-field__label-wrap {
+    @apply flex items-center gap-2 text-[14px] text-[#7a7266];
+  }
+  .profile-field__label-icon {
+    @apply size-4;
   }
   .profile-field__input {
-    @apply h-9 text-center;
+    @apply h-10 w-full rounded-md border border-[#e5dcd0] bg-[#f8f3eb] px-3 text-left text-[15px] text-[#17131b] focus:border-primary-accent focus:ring-1 focus:ring-primary-accent outline-none;
   }
   .profile-joined-date {
-    @apply text-center;
+    @apply flex items-center rounded-md bg-[#f6ead9] px-2 py-1 text-left border border-[#e6d6c3];
+  }
+  .profile-joined-date__icon {
+    @apply size-18;
+  }
+  .profile-joined-date__text {
+    @apply flex flex-col;
   }
   .profile-joined-date__label {
-    @apply text-[15px] leading-tight text-secondary-text;
+    @apply text-[14px] font-medium leading-tight text-primary-accent;
   }
   .profile-joined-date__value {
-    @apply mt-1 text-[16px] leading-tight text-[#17131b];
+    @apply mt-1 text-[15px] leading-tight text-[#17131b];
   }
 }
 @layer components {
