@@ -60,8 +60,13 @@ const booksStore = create((set) => {
   return {
     books: [],
     isFetchingBooks: true,
+    isSearching: false,
     searchValue: "",
     isFormDrawerOpen: false,
+
+    setIsSearching(isSearching) {
+      set({ isSearching });
+    },
 
     setSearchValue(searchValue) {
       set({ searchValue });

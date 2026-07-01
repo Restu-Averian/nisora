@@ -17,11 +17,7 @@ import {
 } from "@/components/ui/drawer";
 import { TabsContent } from "@/components/ui/tabs";
 import { TABS } from "@/data/books";
-import {
-  decryptStoredUserCookie,
-  isEmptyValue,
-  toLowerCase,
-} from "@/js-toolkit/src";
+import { decryptStoredUserCookie, isEmptyValue } from "@/js-toolkit/src";
 import { useBreakpoint } from "@/js-toolkit/src/react";
 import supabase from "@/lib/supabase";
 import useBooksStore, { mapBookFromSupabase } from "@/store/booksStore";
@@ -45,6 +41,7 @@ export default function BookGrid({ refreshKey }) {
     fetchBooks,
     clearBooks,
     updateBookStatus,
+    setIsSearching,
   } = useBooksStore(
     useShallow((state) => {
       return {
@@ -54,6 +51,7 @@ export default function BookGrid({ refreshKey }) {
         fetchBooks: state?.fetchBooks,
         clearBooks: state?.clearBooks,
         updateBookStatus: state?.updateBookStatus,
+        setIsSearching: state?.setIsSearching,
       };
     }),
   );
@@ -69,13 +67,13 @@ export default function BookGrid({ refreshKey }) {
   const toastPosition = useMemo(() => (xs ? "top-center" : "top-right"), [xs]);
 
   const [searchedBooks, setSearchedBooks] = useState(books || []);
-  const [isSearching, setIsSearching] = useState(false);
-
   useEffect(() => {
     const search = searchValue?.trim();
 
     if (isEmptyValue(search)) {
-      setSearchedBooks(books || []);
+      queueMicrotask(() => {
+        setSearchedBooks(books || []);
+      });
       return;
     }
 
@@ -85,7 +83,7 @@ export default function BookGrid({ refreshKey }) {
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      
+
       if (!session) {
         setSearchedBooks([]);
         setIsSearching(false);
@@ -94,7 +92,9 @@ export default function BookGrid({ refreshKey }) {
 
       const { data, error } = await supabase
         .from("books")
-        .select("id,title,authors,synopsis,published_year,cover_url,status,personal_note,created_at")
+        .select(
+          "id,title,authors,synopsis,published_year,cover_url,status,personal_note,created_at",
+        )
         .eq("user_id", session.user.id)
         .or(`title.ilike.%${search}%,synopsis.ilike.%${search}%`)
         .order("created_at", { ascending: false });
@@ -107,7 +107,7 @@ export default function BookGrid({ refreshKey }) {
       } else {
         setSearchedBooks((data || []).map(mapBookFromSupabase));
       }
-      
+
       setIsSearching(false);
     };
 
@@ -120,9 +120,11 @@ export default function BookGrid({ refreshKey }) {
       return null;
     }
 
-    return (books || []).find((book) => {
-      return book.id === selectedBookId;
-    }) ?? null;
+    return (
+      (books || []).find((book) => {
+        return book.id === selectedBookId;
+      }) ?? null
+    );
   }, [books, selectedBookId]);
 
   const onShowToastError = useCallback(
@@ -155,9 +157,9 @@ export default function BookGrid({ refreshKey }) {
         return;
       }
 
-      const statusLabel = TABS.find(
-        (tab) => tab.value === newStatusValue,
-      )?.label ?? "status baru";
+      const statusLabel =
+        TABS.find((tab) => tab.value === newStatusValue)?.label ??
+        "status baru";
 
       try {
         const { error } = await updateBookStatus({
