@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Calendar } from "lucide-react";
+import { Calendar, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -52,6 +53,8 @@ const YearPicker = React.forwardRef(function YearPicker(
   ref,
 ) {
   const [open, setOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const searchInputRef = React.useRef(null);
   const selectedButtonRef = React.useRef(null);
   const numericValue = value === "" || value == null ? NaN : Number(value);
   const selectedYear = Number.isInteger(numericValue) ? numericValue : undefined;
@@ -59,9 +62,27 @@ const YearPicker = React.forwardRef(function YearPicker(
     () => getYearOptions(startYear, endYear),
     [startYear, endYear],
   );
+  const filteredYears = React.useMemo(() => {
+    const normalizedQuery = searchQuery.trim();
+
+    if (!normalizedQuery) {
+      return years;
+    }
+
+    return years.filter((year) => String(year).includes(normalizedQuery));
+  }, [searchQuery, years]);
+
+  const handleOpenChange = React.useCallback((nextOpen) => {
+    setOpen(nextOpen);
+
+    if (!nextOpen) {
+      setSearchQuery("");
+    }
+  }, []);
 
   React.useEffect(() => {
     if (open) {
+      searchInputRef.current?.focus();
       selectedButtonRef.current?.scrollIntoView({
         block: "center",
       });
@@ -69,7 +90,7 @@ const YearPicker = React.forwardRef(function YearPicker(
   }, [open]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button
           ref={ref}
@@ -89,26 +110,46 @@ const YearPicker = React.forwardRef(function YearPicker(
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="max-h-72 w-72 overflow-y-auto p-2 overscroll-contain"
+        className="w-72 p-2"
         data-vaul-no-drag=""
         portal={false}
       >
-        <div className="grid grid-cols-3 gap-1">
-          {years.map((year) => (
-            <Button
-              key={year}
-              ref={year === selectedYear ? selectedButtonRef : undefined}
-              type="button"
-              variant={year === selectedYear ? "default" : "ghost"}
-              className="h-9 rounded-sm px-2 text-sm font-medium tracking-normal"
-              onClick={() => {
-                onChange?.(year);
-                setOpen(false);
-              }}
-            >
-              {year}
-            </Button>
-          ))}
+        <div className="relative mb-2">
+          <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            ref={searchInputRef}
+            type="search"
+            inputMode="numeric"
+            placeholder="Cari tahun"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            className="h-9 px-8 text-sm"
+          />
+        </div>
+        <div className="max-h-60 overflow-y-auto overscroll-contain">
+          {filteredYears.length > 0 ? (
+            <div className="grid grid-cols-3 gap-1">
+              {filteredYears.map((year) => (
+                <Button
+                  key={year}
+                  ref={year === selectedYear ? selectedButtonRef : undefined}
+                  type="button"
+                  variant={year === selectedYear ? "default" : "ghost"}
+                  className="h-9 rounded-sm px-2 text-sm font-medium tracking-normal"
+                  onClick={() => {
+                    onChange?.(year);
+                    handleOpenChange(false);
+                  }}
+                >
+                  {year}
+                </Button>
+              ))}
+            </div>
+          ) : (
+            <p className="px-2 py-6 text-center text-sm text-muted-foreground">
+              Tahun tidak ditemukan
+            </p>
+          )}
         </div>
       </PopoverContent>
     </Popover>
