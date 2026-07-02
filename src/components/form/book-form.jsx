@@ -15,6 +15,8 @@ import { useBookSearch } from "./hooks/use-book-search";
 import { useCoverPreview } from "./hooks/use-cover-preview";
 import { BOOK_FORM_DEFAULT_VALUES, formSchema } from "./schema";
 
+const fieldGroupClassName = "gap-4";
+
 export default function BookForm({ onSuccessCallback }) {
   const [coverFile, setCoverFile] = useState(null);
 
@@ -147,7 +149,7 @@ export default function BookForm({ onSuccessCallback }) {
       className="min-h-0 flex-1 overflow-y-auto pb-6"
       onSubmit={form.handleSubmit(onSubmit)}
     >
-      <FieldGroup className="book-form__group">
+      <FieldGroup className={fieldGroupClassName}>
         <BookTitleField
           bookSearch={bookSearch}
           control={form.control}

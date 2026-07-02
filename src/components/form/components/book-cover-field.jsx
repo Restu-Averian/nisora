@@ -7,6 +7,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 
+const fieldClassName = "gap-1.5";
+
 export function BookCoverField({
   control,
   coverFile,
@@ -18,7 +20,7 @@ export function BookCoverField({
       control={control}
       name="cover"
       render={({ field, fieldState }) => (
-        <Field className="book-form__field" data-invalid={fieldState.invalid}>
+        <Field className={fieldClassName} data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="book-cover">Upload Sampul Buku</FieldLabel>
           <FieldContent>
             <input

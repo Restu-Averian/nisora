@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Tabs } from "@/components/ui/tabs";
 import ListBooks from "./components/books";
 import Header from "./components/header";
-import FormBookDrawer from "./components/form";
 import { Toaster } from "./components/ui/sonner";
 
 function App() {
@@ -16,11 +15,12 @@ function App() {
         <Tabs defaultValue="all">
           <div className="app-toolbar">
             <h1 className="app-title">Koleksi Buku</h1>
-
-            <FormBookDrawer setBooksRefreshKey={setBooksRefreshKey} />
           </div>
 
-          <ListBooks refreshKey={booksRefreshKey} />
+          <ListBooks
+            refreshKey={booksRefreshKey}
+            setBooksRefreshKey={setBooksRefreshKey}
+          />
         </Tabs>
       </section>
 

@@ -1,44 +1,38 @@
 @layer components {
-  .books-tabs {
-    @apply flex items-end justify-between border-b;
+  .books-collection {
+    @apply flex flex-col gap-6;
   }
 
-  .books-search {
-    @apply flex-1 gap-1.5;
+  .books-collection__controls {
+    @apply flex min-w-0 flex-col gap-4 xl:flex-row xl:items-center xl:justify-between;
+  }
 
-    &__content {
-      @apply relative ml-auto;
-    }
-
-    &__icon {
-      @apply pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground;
-    }
-
-    &__input {
-      @apply ml-auto h-8 pl-9;
-    }
+  .books-collection__actions {
+    @apply flex min-w-0 w-full flex-col flex-nowrap gap-4 sm:flex-row sm:items-center md:flex-wrap xl:w-auto;
   }
 
   .books-grid {
     &__loading,
     &__empty {
-      @apply rounded-md border border-border bg-background/72 p-6 text-center text-sm font-medium text-secondary-text;
+      @apply rounded-lg border border-border bg-background/72 p-6 text-center text-sm font-medium text-secondary-text;
+      grid-column: 1 / -1;
     }
 
     &__list {
-      @apply grid gap-4;
+      @apply grid gap-5;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 34rem), 1fr));
     }
   }
 
   .book-card {
-    @apply flex h-full cursor-pointer flex-col rounded-lg border border-border bg-background/72 p-3 shadow-card transition-shadow hover:shadow-[0_4px_16px_rgba(77,62,44,0.18)];
+    @apply flex h-full cursor-pointer flex-col rounded-xl border border-border bg-background/78 p-5 shadow-[0_10px_30px_rgba(70,55,35,0.10)] transition-shadow hover:shadow-[0_14px_36px_rgba(70,55,35,0.16)];
 
     &__layout {
-      @apply mb-2.5 grid flex-1 grid-cols-[92px_1fr] gap-3;
+      @apply mb-5 grid flex-1 gap-5 sm:grid-cols-[180px_1fr] lg:grid-cols-[200px_1fr];
     }
 
     &__cover {
-      @apply h-35.5 w-23 rounded-md object-cover shadow-cover;
+      @apply aspect-2/3 w-full max-w-48 justify-self-center rounded-lg object-cover shadow-[0_9px_18px_rgba(20,17,24,0.30)] sm:justify-self-start;
     }
 
     &__content {
@@ -46,23 +40,47 @@
     }
 
     &__title {
-      @apply line-clamp-2 min-h-[2.25em] font-heading text-lg font-bold leading-tight text-primary-text;
+      @apply line-clamp-3 font-heading text-[28px] font-bold leading-tight text-primary-text;
+    }
+
+    &__meta-list {
+      @apply mt-5 flex flex-col gap-4;
     }
 
     &__meta {
-      @apply mt-2;
+      @apply grid grid-cols-[44px_1fr] items-start gap-3;
+    }
+
+    &__meta-icon {
+      @apply flex size-9 items-center justify-center rounded-lg bg-soft-accent text-primary-text;
+
+      svg {
+        @apply size-5;
+      }
+    }
+
+    &__meta-text {
+      @apply min-w-0;
     }
 
     &__meta-label {
-      @apply text-xs font-bold leading-tight text-primary-text;
+      @apply text-[15px] font-bold leading-tight text-primary-text;
     }
 
     &__meta-value {
-      @apply line-clamp-3 text-xxs leading-tight text-primary-text;
+      @apply mt-1 line-clamp-2 text-sm font-medium leading-snug text-primary-text;
+    }
+
+    &__year-row {
+      @apply flex flex-wrap items-center gap-3;
+    }
+
+    &__year-label {
+      @apply text-[15px] font-bold leading-tight text-primary-text;
     }
 
     &__year {
-      @apply mt-2 inline-flex h-6 items-center rounded bg-soft-accent px-2 text-xxs font-bold uppercase leading-none text-primary-text;
+      @apply inline-flex h-9 items-center rounded-lg bg-soft-accent px-4 text-base font-semibold leading-none text-primary-text;
     }
 
   }
@@ -76,12 +94,12 @@
       background:
         radial-gradient(
           ellipse at 70% 25%,
-          rgb(228 202 174 / 0.42),
+          rgb(143 168 199 / 0.32),
           transparent 34%
         ),
         radial-gradient(
           ellipse at 36% 48%,
-          rgb(228 202 174 / 0.3),
+          rgb(217 228 242 / 0.55),
           transparent 32%
         );
       border-bottom-left-radius: 999px;
@@ -116,7 +134,7 @@
     }
 
     &__status {
-      @apply inline-flex h-9 items-center gap-2 rounded-lg bg-soft-accent px-4 text-[14px] font-bold uppercase leading-none text-[#17131b];
+      @apply inline-flex h-9 items-center gap-2 rounded-lg bg-soft-accent px-4 text-[14px] font-bold uppercase leading-none text-primary-text;
 
       svg {
         @apply size-5 text-hover-accent;
@@ -128,31 +146,31 @@
     }
 
     &__title {
-      @apply break-words font-heading text-[34px] font-bold leading-tight text-[#2f2530] md:text-[44px];
+      @apply break-words font-heading text-[34px] font-bold leading-tight text-primary-text md:text-[44px];
     }
 
     &__author {
       @apply mt-3 flex items-center gap-2 text-heading leading-tight text-secondary-text;
 
       svg {
-        @apply size-5 text-[#b89172];
+        @apply size-5 text-primary-accent;
       }
     }
 
     &__meta {
-      @apply mt-6 flex flex-wrap items-center gap-3 border-b border-[#e9d8c3] pb-7 text-[14px] font-semibold text-[#5d4b40];
+      @apply mt-6 flex flex-wrap items-center gap-3 border-b border-border pb-7 text-[14px] font-semibold text-secondary-text;
     }
 
     &__meta-item {
       @apply inline-flex min-w-0 items-center gap-2;
 
       svg {
-        @apply size-5 shrink-0 text-[#b89172];
+        @apply size-5 shrink-0 text-primary-accent;
       }
     }
 
     &__meta-separator {
-      @apply text-[#b89172];
+      @apply text-primary-accent;
     }
 
     &__synopsis {
@@ -160,15 +178,15 @@
     }
 
     &__section-title {
-      @apply flex items-center gap-3 text-[15px] font-bold uppercase leading-tight tracking-widest text-[#17131b];
+      @apply flex items-center gap-3 text-[15px] font-bold uppercase leading-tight tracking-widest text-primary-text;
 
       span {
-        @apply block h-px w-8 bg-[#d2a87c];
+        @apply block h-px w-8 bg-primary-accent;
       }
     }
 
     &__synopsis-text {
-      @apply mt-3 max-w-2xl text-[17px] leading-relaxed text-[#17131b];
+      @apply mt-3 max-w-2xl text-[17px] leading-relaxed text-primary-text;
     }
 
     &__note {
@@ -176,7 +194,7 @@
     }
 
     &__actions {
-      @apply mt-8 grid gap-3 border-t border-[#e9d8c3] pt-6 sm:grid-cols-3;
+      @apply mt-8 grid gap-3 border-t border-border pt-6 sm:grid-cols-3;
     }
   }
 }

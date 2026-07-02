@@ -38,16 +38,16 @@ const personalNoteSchema = z.object({
 });
 
 const noteInputClassName =
-  "min-h-[124px] w-full resize-none rounded-xl border border-[#ead8c2] bg-white/42 px-5 py-7 text-[17px] leading-relaxed text-primary-text shadow-[0_10px_26px_rgba(77,62,44,0.08)] outline-none focus-visible:border-[#d2a87c] focus-visible:ring-2 focus-visible:ring-[#d2a87c]/30";
+  "min-h-[124px] w-full resize-none rounded-xl border border-border bg-background/70 px-5 py-7 text-[17px] leading-relaxed text-primary-text shadow-[0_10px_26px_rgba(78,74,86,0.08)] outline-none focus-visible:border-primary-accent focus-visible:ring-2 focus-visible:ring-primary-accent/30";
 const noteLabelClassName =
-  "mb-3 block text-[15px] font-bold uppercase leading-tight tracking-widest text-[#17131b]";
+  "mb-3 block text-[15px] font-bold uppercase leading-tight tracking-widest text-primary-text";
 const noteActionClassName =
-  "absolute bottom-6 right-6 rounded-full bg-[#f2dec8] text-[#6d3f22] shadow-[0_8px_18px_rgba(77,62,44,0.12)] hover:bg-[#ead2b7]";
+  "absolute bottom-6 right-6 rounded-full bg-soft-accent text-primary-text shadow-[0_8px_18px_rgba(78,74,86,0.12)] hover:bg-primary-accent hover:text-primary-foreground";
 const detailActionBaseClassName =
   "h-12 gap-3 rounded-lg text-[15px] font-semibold normal-case tracking-normal";
 const deleteActionClassName = `${detailActionBaseClassName} border border-[#d85763] bg-transparent text-[#d85763] hover:bg-[#d85763]/10`;
-const updateActionClassName = `${detailActionBaseClassName} border-[#d2a87c] text-[#6d3f22] hover:bg-[#f6eadc]`;
-const statusActionClassName = `${detailActionBaseClassName} bg-[#7b4627] text-white shadow-[0_8px_16px_rgba(77,42,21,0.24)] hover:bg-[#66381f]`;
+const updateActionClassName = `${detailActionBaseClassName} border-primary-accent text-primary-text hover:bg-soft-accent hover:text-primary-text`;
+const statusActionClassName = `${detailActionBaseClassName} bg-primary-accent text-primary-foreground shadow-[0_8px_16px_rgba(118,147,183,0.24)] hover:bg-hover-accent`;
 
 function PersonalNoteForm({ book, onSaved, updateBook }) {
   const form = useForm({

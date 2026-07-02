@@ -1,17 +1,30 @@
 import { Button } from "@/components/ui/button";
 import { TABS } from "@/data/books";
 import { isEmptyValue } from "@/js-toolkit/src";
-import { LoaderCircle } from "lucide-react";
+import {
+  BookOpen,
+  CalendarDays,
+  LoaderCircle,
+  LogIn,
+  UserRound,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 
 const actionButtonClassName =
-  "mt-auto h-8 w-full rounded-md bg-primary-accent px-3 text-xs font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent";
+  "mt-auto h-12 w-full gap-3 rounded-lg bg-primary-accent px-4 text-sm font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent";
+const statusIconClassName = "size-5";
 
-function BookMeta({ label, value }) {
+function BookMeta({ icon: Icon, label, value }) {
   return (
     <div className="book-card__meta">
-      <p className="book-card__meta-label">{label}</p>
-      <p className="book-card__meta-value">{value}</p>
+      <span className="book-card__meta-icon">
+        <Icon />
+      </span>
+
+      <div className="book-card__meta-text">
+        <p className="book-card__meta-label">{label}</p>
+        <p className="book-card__meta-value">{value}</p>
+      </div>
     </div>
   );
 }
@@ -22,11 +35,18 @@ export default function BookCard({ book, onClick, onStatusChange }) {
   const { btnText, newStatusValue } = useMemo(() => {
     const newStatusValue = book?.status === "finished" ? "reading" : "finished";
 
+    if (isUpdatingStatus) {
+      return {
+        btnText: "Memindahkan...",
+        newStatusValue,
+      };
+    }
+
     const nextStatusLabel = TABS?.find(
       (tab) => tab?.value === newStatusValue,
     )?.label;
 
-    const statusText = isUpdatingStatus ? "" : nextStatusLabel;
+    const statusText = nextStatusLabel;
 
     if (isEmptyValue(statusText)) {
       return {
@@ -36,10 +56,10 @@ export default function BookCard({ book, onClick, onStatusChange }) {
     }
 
     return {
-      btnText: `${isUpdatingStatus ? "Memindahkan..." : "Pindahkan ke"} ${statusText}`,
+      btnText: `Pindahkan ke ${statusText}`,
       newStatusValue,
     };
-  }, [isUpdatingStatus]);
+  }, [book?.status, isUpdatingStatus]);
 
   const handleStatusChange = async (event) => {
     event.stopPropagation();
@@ -68,10 +88,19 @@ export default function BookCard({ book, onClick, onStatusChange }) {
         <div className="book-card__content">
           <h2 className="book-card__title">{book.title}</h2>
 
-          <BookMeta label="Sinopsis" value={book.synopsis} />
-          <BookMeta label="Pengarang" value={book.author} />
+          <div className="book-card__meta-list">
+            <BookMeta icon={BookOpen} label="Sinopsis" value={book.synopsis} />
+            <BookMeta icon={UserRound} label="Pengarang" value={book.author} />
 
-          <span className="book-card__year">Tahun: {book.year}</span>
+            <div className="book-card__year-row">
+              <span className="book-card__meta-icon">
+                <CalendarDays />
+              </span>
+
+              <span className="book-card__year-label">Tahun</span>
+              <span className="book-card__year">{book.year}</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -81,7 +110,10 @@ export default function BookCard({ book, onClick, onStatusChange }) {
         onClick={handleStatusChange}
         type="button"
       >
-        {isUpdatingStatus && <LoaderCircle className="animate-spin" />}
+        {isUpdatingStatus && (
+          <LoaderCircle className={`${statusIconClassName} animate-spin`} />
+        )}
+        {!isUpdatingStatus && <LogIn className={statusIconClassName} />}
 
         {btnText}
       </Button>

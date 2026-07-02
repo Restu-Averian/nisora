@@ -6,13 +6,15 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 
+const fieldClassName = "gap-1.5";
+
 export function TextField({ control, id, label, name, placeholder }) {
   return (
     <Controller
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <Field className="book-form__field" data-invalid={fieldState.invalid}>
+        <Field className={fieldClassName} data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor={id}>{label}</FieldLabel>
           <FieldContent>
             <input

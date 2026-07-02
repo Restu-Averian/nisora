@@ -23,6 +23,7 @@ const loadingItemClassName = "flex items-center justify-between";
 const commandClassName =
   "relative overflow-visible rounded-md bg-transparent text-primary-text";
 const commandInputClassName = "h-8";
+const fieldClassName = "gap-1.5";
 
 function BookSearchItem({ book, onBookSelect }) {
   return (
@@ -133,7 +134,7 @@ export function BookTitleField({
       control={control}
       name="title"
       render={({ field, fieldState }) => (
-        <Field className="book-form__field" data-invalid={fieldState.invalid}>
+        <Field className={fieldClassName} data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="book-title">Nama Buku</FieldLabel>
 
           <FieldContent>

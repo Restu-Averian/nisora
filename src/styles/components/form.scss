@@ -1,14 +1,4 @@
 @layer components {
-  .book-form {
-    &__group {
-      @apply gap-4;
-    }
-
-    &__field {
-      @apply gap-1.5;
-    }
-  }
-
   .book-cover {
     &__input {
       @apply sr-only;
