@@ -6,13 +6,15 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 
+const fieldClassName = "gap-1.5";
+
 export function SynopsisField({ control }) {
   return (
     <Controller
       control={control}
       name="synopsis"
       render={({ field, fieldState }) => (
-        <Field className="book-form__field" data-invalid={fieldState.invalid}>
+        <Field className={fieldClassName} data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="book-synopsis">Sinopsis</FieldLabel>
           <FieldContent>
             <textarea

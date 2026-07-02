@@ -17,7 +17,7 @@ import { decryptStoredUserCookie } from "@/js-toolkit/src";
 import supabase from "@/lib/supabase";
 
 const drawerTriggerClassName =
-  "fixed bottom-5 right-5 h-auto rounded-full bg-primary-accent px-5 py-5 text-xs font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent md:static md:h-9 md:rounded-md md:px-4 md:py-2";
+  "fixed bottom-5 right-5 z-40 h-auto rounded-full bg-primary-accent px-5 py-5 text-xs font-semibold normal-case tracking-normal text-white shadow-inset-button hover:bg-hover-accent md:static md:z-auto md:h-12 md:min-w-36 md:rounded-lg md:px-6 md:py-3 md:text-base";
 const drawerTriggerIconClassName = "size-6 md:size-4";
 const drawerContentClassName = "px-10";
 const drawerHeaderTextClassName = "text-center";

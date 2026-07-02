@@ -103,14 +103,14 @@
     }
 
     &__ornament {
-      @apply mx-auto my-3 flex justify-center;
+      @apply mx-auto mt-3 mb-8 flex justify-center;
       img {
         @apply h-4;
       }
     }
 
     &__subtitle {
-      @apply mb-6 text-[14px] text-[#7a7266];
+      @apply mb-6 text-[12px] text-[#7a7266];
     }
 
     &__fields {

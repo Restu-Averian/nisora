@@ -238,7 +238,7 @@ export default function BookGrid({ refreshKey }) {
 
         return (
           <TabsContent
-            className="books-grid__list sm:grid-cols-2 xl:grid-cols-3"
+            className="books-grid__list"
             key={tab?.value}
             value={tab?.value}
           >
@@ -256,7 +256,7 @@ export default function BookGrid({ refreshKey }) {
                 );
               })
             ) : (
-              <div className="books-grid__empty sm:col-span-2 xl:col-span-3">
+              <div className="books-grid__empty">
                 {!isAuthenticated ? (
                   <BookLoginRequired />
                 ) : isEmptyValue(searchValue?.trim()) ? (
