@@ -38,12 +38,12 @@ import useBooksStore from "@/store/booksStore";
 import {
   LoaderCircle,
   Trash2,
-  Calendar,
   BookOpen,
   Save,
   CloudUpload,
 } from "lucide-react";
 import { useShallow } from "zustand/shallow";
+import { YearPicker } from "@/components/ui/year-picker";
 
 const bookSchema = z.object({
   title: z.string().min(1, "Judul wajib diisi"),
@@ -88,14 +88,6 @@ function validateCoverFile(file) {
 
   return null;
 }
-
-const YearInput = React.forwardRef(({ className, ...props }, ref) => (
-  <div className="relative">
-    <Input ref={ref} className={cn(className, "pr-9")} {...props} />
-    <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8f8880] pointer-events-none" />
-  </div>
-));
-YearInput.displayName = "YearInput";
 
 const StatusSelect = React.forwardRef(
   (
@@ -490,8 +482,7 @@ export default function EditBookForm({ book, onCancel, onSaveCallback }) {
               label="Tahun"
               description="Tahun terbit buku."
               name="published_year"
-              Component={YearInput}
-              type="number"
+              Component={YearPicker}
             />
 
             <FieldRender

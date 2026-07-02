@@ -5,6 +5,7 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
+import { YearPicker } from "@/components/ui/year-picker";
 
 const fieldClassName = "gap-1.5";
 
@@ -17,19 +18,13 @@ export function YearField({ control }) {
         <Field className={fieldClassName} data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="book-year">Tahun Baca</FieldLabel>
           <FieldContent>
-            <input
+            <YearPicker
               className="form-control book-field__year-input"
+              disabled={field.disabled}
               id="book-year"
-              type="text"
               aria-invalid={fieldState.invalid}
-              name={field.name}
-              ref={field.ref}
-              value={field.value ?? ""}
-              onChange={(event) => {
-                const raw = event.target.value;
-
-                field.onChange(raw === "" ? undefined : raw);
-              }}
+              value={field.value}
+              onChange={field.onChange}
               onBlur={field.onBlur}
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
